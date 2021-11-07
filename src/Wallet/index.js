@@ -15,6 +15,10 @@ export default class Wallet {
     }
 
     getInfo() {
-        return axios.get("http://localhost:8090/v2/network/information")
+        let promise = axios.get("http://localhost:8090/v2/network/information")
+
+        let dataPromise = promise.then((response) => response.data)
+
+        return dataPromise
     }
 }

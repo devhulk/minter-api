@@ -11,11 +11,12 @@ import Wallet from "./src/Wallet";
 app.get('/v1/wallet/getInfo', function (req, res) {
     // TODO: Get all unminted puglies
     let wallet = new Wallet()
-
     wallet.getInfo()
-        .then((value) => {
-            res.send(value)
+        .then((data) => {
+            res.send(data)
         })
+        .catch(err => console.log(err))
+
 })
 
 

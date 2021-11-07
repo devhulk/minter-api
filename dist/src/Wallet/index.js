@@ -32,10 +32,14 @@ var Wallet = function () {
         }
     }, {
         key: "getInfo",
-        value: function getInfo(cb) {
-            _axios2.default.get("http://localhost:8090/v2/network/information").then(function () {
-                cb();
+        value: function getInfo() {
+            var promise = _axios2.default.get("http://localhost:8090/v2/network/information");
+
+            var dataPromise = promise.then(function (response) {
+                return response.data;
             });
+
+            return dataPromise;
         }
     }]);
 

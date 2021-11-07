@@ -22,9 +22,10 @@ app.use((0, _cors2.default)({
 app.get('/v1/wallet/getInfo', function (req, res) {
     // TODO: Get all unminted puglies
     var wallet = new _Wallet2.default();
-
-    wallet.getInfo(function (info) {
-        res.send(info);
+    wallet.getInfo().then(function (data) {
+        res.send(data);
+    }).catch(function (err) {
+        return console.log(err);
     });
 });
 
