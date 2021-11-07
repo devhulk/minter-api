@@ -1,17 +1,18 @@
 import axios from "axios"
+import bip39 from "bip39"
 
 export default class Wallet {
     constructor() {}
 
-    create() {
-        console.log("I'm creating a wallet")
-        axios.post('localhost', {
-            Name: 'Fred',
-            Age: '23'
+    create(options) {
+      // TODO : Take in name, mnemonic, and passphrase
+        let promise = axios.post('http://localhost:8090/v2/wallets', {
+            name: options.name,
+            mnemonic_sentence: options.mnemonic,
+            passphrase: options.passphrase
           })
-          .then(function (response) {
-            console.log(response);
-          })
+        
+          return promise 
     }
 
     getInfo() {
@@ -20,5 +21,11 @@ export default class Wallet {
         let dataPromise = promise.then((response) => response.data)
 
         return dataPromise
+    }
+
+    createMnemonic() {
+      const mnemonic = bip39.generateMnemonic()
+      console.log(mnemonic)
+      return mnemonic
     }
 }
