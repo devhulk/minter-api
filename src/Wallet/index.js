@@ -18,6 +18,17 @@ export default class Wallet {
         return dataPromise 
     }
 
+    getWalletAddress(options) {
+      let walletID = options.id
+
+      let promise = axios.get(`http://localhost:8090/v2/wallet/${walletID}addresses?state=unused`)
+
+      let dataPromise = promise.then((response) => response.data)
+
+      return dataPromise
+
+    }
+
     getInfo() {
         let promise = axios.get("http://localhost:8090/v2/network/information")
 
