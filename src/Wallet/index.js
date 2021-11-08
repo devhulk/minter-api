@@ -18,6 +18,12 @@ export default class Wallet {
         return dataPromise 
     }
 
+    createWallet(options) {
+      // Return walletID and a payment address
+      // composed of 2 api calls 
+
+    }
+
     getWalletAddress(options) {
       let walletID = options.id
 

@@ -30,17 +30,27 @@ app.get('/v1/wallet/:id/getAddress', function (req, res) {
 
 app.post('/v1/wallet/', function (req, res) {
     let mnemonic = wallet.createMnemonic()
+    let responseData = {}
     const options = {
-        name: "", // TODO: process.env("name")
+        name: "testWallet2", // TODO: process.env("name")
         mnemonic: mnemonic,
-        passphrase: "" // TODO: process.env("passphrase")
+        passphrase: "thisisatest" // TODO: process.env("passphrase")
     }
     wallet.create(options)
         .then(function (response) {
-            res.send(response);
+            // res.send(response);
+            responseData.wallet = response
+        })
+        .then(() => {
+            responseData.wallet.id
+            wallet.getWalletAddress(responseData.wallet)
+                .then((data) => {
+                    responseData.address = data[0].id
+                    res.send(responseData)
+                })
+            .catch(err => console.log(err))
         })
         .catch(err => console.log(err))
-
 })
 
 
