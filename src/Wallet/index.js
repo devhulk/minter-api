@@ -21,7 +21,7 @@ export default class Wallet {
     getWalletAddress(options) {
       let walletID = options.id
 
-      let promise = axios.get(`http://localhost:8090/v2/wallet/${walletID}/addresses?state=unused`)
+      let promise = axios.get(`http://localhost:8090/v2/wallets/${walletID}/addresses?state=unused`)
 
       let dataPromise = promise.then((response) => response.data)
 
