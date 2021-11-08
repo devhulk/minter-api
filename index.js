@@ -28,7 +28,7 @@ app.post('/v1/wallet/', function (req, res) {
     const options = {
         name: "testWallet",
         mnemonic: mnemonic,
-        passphrase: "test123"
+        passphrase: "test123456"
     }
     wallet.create(options)
         .then(function (response) {
