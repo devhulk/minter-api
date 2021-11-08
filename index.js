@@ -21,6 +21,10 @@ app.get('/v1/cardano/getInfo', function (req, res) {
 
 app.get('/v1/cardano/mint', function (req, res) {
     minter.getProtocolParams()
+    .then((data) => {
+        res.send(data)
+    })
+    .catch((e) => console.log(e))
 })
 
 app.get('/v1/cardano/wallet/:id/getAddress', function (req, res) {

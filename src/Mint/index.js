@@ -4,12 +4,24 @@ export default class Minter {
     constructor() {}
 
     getProtocolParams () {
-        let network = '--testnet-magic 1097911063'
-        const params = spawn('cardano-cli', ['query', 'protocol-parameters', network])
 
-        params.stdout.on('data', (data) => {
-            console.log(data)
+        let promise = new Promise((resolve, reject) => {
+
+            let network = '--testnet-magic 1097911063'
+            const params = spawn('cardano-cli', ['query', 'protocol-parameters', network])
+
+            params.stdout.on('data', (data) => {
+                console.log(data)
+                resolve(data)
+            })
+
+            params.stderr.on('data', (data) => {
+                console.error(data)
+                reject(data)
+            })
+
         })
+        return promise
     }
 
     // Steps to Mint
