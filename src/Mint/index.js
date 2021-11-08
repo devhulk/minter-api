@@ -11,12 +11,12 @@ export default class Minter {
             const params = spawn('cardano-cli', ['query', 'protocol-parameters', network])
 
             params.stdout.on('data', (data) => {
-                console.log(data)
+                console.log("Data: ", data)
                 resolve(data)
             })
 
             params.stderr.on('data', (data) => {
-                console.error(data)
+                console.error("Error: ", data)
                 reject(data)
             })
 
