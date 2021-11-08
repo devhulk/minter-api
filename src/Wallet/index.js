@@ -1,5 +1,6 @@
 import axios from "axios"
-import bip39 from "bip39"
+const bip39 = require('bip39')
+
 
 export default class Wallet {
     constructor() {}

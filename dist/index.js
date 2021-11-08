@@ -19,11 +19,31 @@ app.use((0, _cors2.default)({
     origin: '*'
 }));
 
+var wallet = new _Wallet2.default();
+
+//   .then(function (response) {
+//     console.log(response);
+//   })
 app.get('/v1/wallet/getInfo', function (req, res) {
     // TODO: Get all unminted puglies
-    var wallet = new _Wallet2.default();
     wallet.getInfo().then(function (data) {
         res.send(data);
+    }).catch(function (err) {
+        return console.log(err);
+    });
+});
+
+app.post('/v1/wallet/', function (req, res) {
+    // TODO: Get all unminted puglies
+    var mnemonic = wallet.createMnemonic();
+
+    var options = {
+        name: "testWallet",
+        mnemonic: mnemonic,
+        passphrase: "test123"
+    };
+    wallet.create(options).then(function (response) {
+        res.send(response);
     }).catch(function (err) {
         return console.log(err);
     });

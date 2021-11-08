@@ -1,12 +1,12 @@
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _axios = require("axios");
+var _axios = require('axios');
 
 var _axios2 = _interopRequireDefault(_axios);
 
@@ -14,36 +14,46 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var bip39 = require('bip39');
+
 var Wallet = function () {
-    function Wallet() {
-        _classCallCheck(this, Wallet);
+  function Wallet() {
+    _classCallCheck(this, Wallet);
+  }
+
+  _createClass(Wallet, [{
+    key: 'create',
+    value: function create(options) {
+      // TODO : Take in name, mnemonic, and passphrase
+      var promise = _axios2.default.post('http://localhost:8090/v2/wallets', {
+        name: options.name,
+        mnemonic_sentence: options.mnemonic,
+        passphrase: options.passphrase
+      });
+
+      return promise;
     }
+  }, {
+    key: 'getInfo',
+    value: function getInfo() {
+      var promise = _axios2.default.get("http://localhost:8090/v2/network/information");
 
-    _createClass(Wallet, [{
-        key: "create",
-        value: function create() {
-            console.log("I'm creating a wallet");
-            _axios2.default.post('localhost', {
-                Name: 'Fred',
-                Age: '23'
-            }).then(function (response) {
-                console.log(response);
-            });
-        }
-    }, {
-        key: "getInfo",
-        value: function getInfo() {
-            var promise = _axios2.default.get("http://localhost:8090/v2/network/information");
+      var dataPromise = promise.then(function (response) {
+        return response.data;
+      });
 
-            var dataPromise = promise.then(function (response) {
-                return response.data;
-            });
+      return dataPromise;
+    }
+  }, {
+    key: 'createMnemonic',
+    value: function createMnemonic() {
+      var mnemonic = bip39.generateMnemonic();
+      console.log(mnemonic);
+      return mnemonic;
+    }
+  }]);
 
-            return dataPromise;
-        }
-    }]);
-
-    return Wallet;
+  return Wallet;
 }();
 
 exports.default = Wallet;
