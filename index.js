@@ -25,7 +25,6 @@ app.get('/v1/wallet/getInfo', function (req, res) {
 app.post('/v1/wallet/', function (req, res) {
     // TODO: Get all unminted puglies
     let mnemonic = wallet.createMnemonic()
-
     const options = {
         name: "testWallet",
         mnemonic: mnemonic,

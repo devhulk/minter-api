@@ -13,7 +13,7 @@ export default class Wallet {
             passphrase: options.passphrase
           })
 
-        let dataPromise = promise.then((response) => response)
+        let dataPromise = promise.then((response) => response.data)
         
         return dataPromise 
     }
@@ -27,7 +27,7 @@ export default class Wallet {
     }
 
     createMnemonic() {
-      const mnemonic = bip39.generateMnemonic()
+      const mnemonic = bip39.generateMnemonic().split(" ")
       console.log(mnemonic)
       return mnemonic
     }
