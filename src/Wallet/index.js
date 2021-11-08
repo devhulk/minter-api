@@ -27,7 +27,7 @@ export default class Wallet {
     }
 
     createMnemonic() {
-      const mnemonic = bip39.generateMnemonic().split(" ")
+      const mnemonic = bip39.generateMnemonic(0,15).split(" ")
       console.log(mnemonic)
       return mnemonic
     }
