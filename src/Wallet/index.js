@@ -12,8 +12,10 @@ export default class Wallet {
             mnemonic_sentence: options.mnemonic,
             passphrase: options.passphrase
           })
+
+        let dataPromise = promise.then((response) => response.data)
         
-          return promise 
+        return dataPromise 
     }
 
     getInfo() {
