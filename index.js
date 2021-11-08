@@ -31,9 +31,9 @@ app.get('/v1/wallet/:id/getAddress', function (req, res) {
 app.post('/v1/wallet/', function (req, res) {
     let mnemonic = wallet.createMnemonic()
     const options = {
-        name: "testWallet",
+        name: "", // TODO: process.env("name")
         mnemonic: mnemonic,
-        passphrase: "test123456"
+        passphrase: "" // TODO: process.env("passphrase")
     }
     wallet.create(options)
         .then(function (response) {
