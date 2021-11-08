@@ -8,24 +8,16 @@ app.use(cors({
 import Wallet from "./src/Wallet";
 let wallet = new Wallet()
 
-
-        //   .then(function (response) {
-        //     console.log(response);
-        //   })
 app.get('/v1/wallet/getInfo', function (req, res) {
-    // TODO: Get all unminted puglies
     wallet.getInfo()
         .then((data) => {
             res.send(data)
         })
         .catch(err => console.log(err))
-
 })
 
 app.get('/v1/wallet/:id/getAddress', function (req, res) {
-    // TODO: Get all unminted puglies
     const options = {
-        // id: "b1fe9af3acb918de081154b3b12a78c64351fd9d"
         id: req.params.id
     }
     wallet.getWalletAddress(options)
@@ -37,7 +29,6 @@ app.get('/v1/wallet/:id/getAddress', function (req, res) {
 })
 
 app.post('/v1/wallet/', function (req, res) {
-    // TODO: Get all unminted puglies
     let mnemonic = wallet.createMnemonic()
     const options = {
         name: "testWallet",
