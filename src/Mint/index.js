@@ -7,8 +7,8 @@ export default class Minter {
 
         let promise = new Promise((resolve, reject) => {
 
-            let network = '--testnet-magic 1097911063'
-            const params = spawn('cardano-cli', ['query', 'protocol-parameters', network])
+            let network = '--testnet-magic'
+            const params = spawn('cardano-cli', ['query', 'protocol-parameters', network, '1097911063'])
 
             params.stdout.on('data', (data) => {
                 console.log("Data: ", data)
