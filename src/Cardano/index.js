@@ -2,11 +2,10 @@ import axios from "axios"
 const bip39 = require('bip39')
 
 
-export default class Wallet {
+export default class Cardano {
     constructor() {}
 
-    create(options) {
-      // TODO : Take in name, mnemonic, and passphrase
+    createWallet(options) {
         let promise = axios.post('http://localhost:8090/v2/wallets', {
             name: options.name,
             mnemonic_sentence: options.mnemonic,
@@ -16,12 +15,6 @@ export default class Wallet {
         let dataPromise = promise.then((response) => response.data)
         
         return dataPromise 
-    }
-
-    createWallet(options) {
-      // Return walletID and a payment address
-      // composed of 2 api calls 
-
     }
 
     getWalletAddress(options) {

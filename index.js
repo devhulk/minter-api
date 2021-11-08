@@ -5,22 +5,29 @@ app.use(cors({
     origin: '*'
 }))
 
-import Wallet from "./src/Wallet";
-let wallet = new Wallet()
+import Cardano from "./src/Cardano";
+import Minter from "./src/Mint"
 
-app.get('/v1/wallet/getInfo', function (req, res) {
-    wallet.getInfo()
+let client = new Cardano()
+let minter = new Minter()
+
+app.get('/v1/cardano/getInfo', function (req, res) {
+    client.getInfo()
         .then((data) => {
             res.send(data)
         })
         .catch(err => console.log(err))
 })
 
-app.get('/v1/wallet/:id/getAddress', function (req, res) {
+app.get('/v1/cardano/mint', function (req, res) {
+    minter.getProtocolParams()
+})
+
+app.get('/v1/cardano/wallet/:id/getAddress', function (req, res) {
     const options = {
         id: req.params.id
     }
-    wallet.getWalletAddress(options)
+    client.getWalletAddress(options)
         .then((data) => {
             res.send(data[0].id)
         })
@@ -28,22 +35,22 @@ app.get('/v1/wallet/:id/getAddress', function (req, res) {
 
 })
 
-app.post('/v1/wallet/', function (req, res) {
-    let mnemonic = wallet.createMnemonic()
+app.post('/v1/cardano/wallet/', function (req, res) {
+    let mnemonic = client.createMnemonic()
     let responseData = {}
     const options = {
         name: "testWallet2", // TODO: process.env("name")
         mnemonic: mnemonic,
         passphrase: "thisisatest" // TODO: process.env("passphrase")
     }
-    wallet.create(options)
+    client.createWallet(options)
         .then(function (response) {
             // res.send(response);
             responseData.wallet = response
         })
         .then(() => {
             responseData.wallet.id
-            wallet.getWalletAddress(responseData.wallet)
+            client.getWalletAddress(responseData.wallet)
                 .then((data) => {
                     responseData.address = data[0].id
                     res.send(responseData)
