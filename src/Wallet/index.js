@@ -13,7 +13,7 @@ export default class Wallet {
             passphrase: options.passphrase
           })
 
-        let dataPromise = promise.then((response) => response.data)
+        let dataPromise = promise.then((response) => response)
         
         return dataPromise 
     }
