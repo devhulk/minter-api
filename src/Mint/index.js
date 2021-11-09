@@ -59,7 +59,7 @@ export default class Minter {
             let config = options.config
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
-            const params = spawn('cardano-cli', ['query', 'utxo', '--address', options.address, network, magic, '--out-file', 'txhashix.json'])
+            const params = spawn('cardano-cli', ['query', 'utxo', '--address', options.address, network, magic, '--out-file', '/dev/stdout'])
 
             params.stdout.on('data', (data) => {
                 console.log("Data: ", data)
