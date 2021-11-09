@@ -1,4 +1,5 @@
 const { spawn, exec } = require('child_process');
+import { stderr } from 'process';
 import Metadata from '../Metadata'
 
 export default class Minter {
@@ -54,25 +55,41 @@ export default class Minter {
     getHash(options) {
         // cardano-cli query utxo --address $address --mainnet
         // return txix and txHash
+        // let promise = new Promise((resolve, reject) => {
+
+        //     let config = options.config
+        //     let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
+        //     let magic = network == '--testnet-magic' ? '1097911063' : ''
+        //     const params = spawn('cardano-cli', ['query', 'utxo', '--address',  options.address, '--out-file=txixhash.json', network, magic])
+
+        //     params.stdout.on('data', (data) => {
+        //         console.log("Data: ", data)
+        //         resolve(data)
+        //     })
+
+        //     params.stderr.on('data', (data) => {
+        //         console.error("Error: ", data)
+        //         reject(data)
+        //     })
+
+        // })
+        // return promise
         let promise = new Promise((resolve, reject) => {
 
             let config = options.config
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
-            const params = spawn('cardano-cli', ['query', 'utxo', '--address',  options.address, '--out-file=txixhash.json', network, magic])
-
-            params.stdout.on('data', (data) => {
-                console.log("Data: ", data)
-                resolve(data)
+            exec(`cardano-cli query utxo --address ${options.address} ${network} ${magic} --out-file=/dev/stdout`, (err, stdout, stderr) => {
+                if (err) {
+                    reject(data)
+                    return;
+                }
+                resolve(stdout)
+                return;
             })
-
-            params.stderr.on('data', (data) => {
-                console.error("Error: ", data)
-                reject(data)
-            })
-
         })
         return promise
+
 
 
     }
