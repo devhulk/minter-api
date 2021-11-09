@@ -5,6 +5,8 @@ app.use(cors({
     origin: '*'
 }))
 
+app.use(bodyParser.json())
+
 import Cardano from "./src/Cardano";
 import Minter from "./src/Mint"
 
