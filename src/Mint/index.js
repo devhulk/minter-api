@@ -16,7 +16,7 @@ export default class Minter {
             const params = spawn('cardano-cli', ['query', 'protocol-parameters', network, magic])
 
             params.stdout.on('data', (data) => {
-                console.log("Data: ", data)
+                console.log("Data: ", JSON.parse(data))
                 fs.writeFile('protocol.json', data, err => {
                     if (err) {
                         reject(err)
