@@ -66,7 +66,7 @@ export default class Minter {
                 }
                 let file = fs.readFileSync('txixhash.json')
                 let data = JSON.parse(file)
-                let txixhash = Object.keys(data)[0]
+                let txixhash = {txixhash: Object.keys(data)[0], ada: Object.keys(data)[0].value.lovelace }
 
                 resolve(txixhash)
                 return;
