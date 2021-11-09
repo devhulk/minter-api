@@ -66,9 +66,11 @@ export default class Minter {
                 }
                 let file = fs.readFileSync('txixhash.json')
                 let data = JSON.parse(file)
-                let txixhash = {txixhash: Object.keys(data)[0], ada: file.value }
+                let balanceObj = data[`${Object.keys(data)[0]}`]
+                let balance = balanceObj.value
+                let returnObj = {txixhash: Object.keys(data)[0], balance }
 
-                resolve(txixhash)
+                resolve(returnObj)
                 return;
             })
         })
@@ -78,7 +80,7 @@ export default class Minter {
 
     }
 
-    submitTransaction() {
+    buildRawTransaction() {
     // 7. Build Raw TX -> Calculate Fee -> Sign TX -> Submit TX
     //     cardano-cli transaction build-raw \
     // --fee $fee  \
