@@ -9,7 +9,6 @@ import Cardano from "./src/Cardano";
 import Minter from "./src/Mint"
 
 let client = new Cardano()
-let minter = new Minter()
 
 app.get('/v1/cardano/getInfo', function (req, res) {
     client.getInfo()
@@ -18,14 +17,40 @@ app.get('/v1/cardano/getInfo', function (req, res) {
         })
         .catch(err => console.log(err))
 })
-
-app.get('/v1/cardano/mint', function (req, res) {
+app.get('/v1/cardano/mint/assets', function (req, res) {
+    console.log(req.body)
+    let minter = new Minter()
     minter.getProtocolParams()
     .then((data) => {
         res.send(data)
     })
     .catch((e) => console.log(e))
 })
+
+app.post('/v1/cardano/mint/getHash', function (req, res) {
+    // pull from req.body
+    let options = {
+        address: "addr_test1qzjy75c3tyyvl3t92y9404hdaqnhpcuxedqchyyuvg3phymryqfyt540zetndfm7u707afmn6ptg6vyuh7axve44sgwssgw298",
+        config: "testnet"
+    }
+    let minter = new Minter()
+    minter.getHash(options)
+    .then((data) => {
+        res.send(data)
+    })
+    .catch((e) => console.log(e))
+})
+
+app.post('/v1/cardano/mint', function (req, res) {
+    console.log(req.body)
+    // let minter = new Minter()
+    // minter.getProtocolParams()
+    // .then((data) => {
+    //     res.send(data)
+    // })
+    // .catch((e) => console.log(e))
+})
+
 
 app.get('/v1/cardano/wallet/:id/getAddress', function (req, res) {
     const options = {
