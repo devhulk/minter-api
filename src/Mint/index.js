@@ -79,7 +79,7 @@ export default class Minter {
             let config = options.config
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
-            exec(`cardano-cli query utxo --address ${options.address} ${network} ${magic} --out-file=/dev/stdout`, (err, stdout, stderr) => {
+            exec(`cardano-cli query utxo --address ${options.address} ${network} ${magic} --out-file=txix.json`, (err, stdout, stderr) => {
                 if (err) {
                     reject(err)
                     return;
