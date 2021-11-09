@@ -37,10 +37,11 @@ app.post('/v1/cardano/mint/getHash', function (req, res) {
     let minter = new Minter()
     minter.getHash(options)
     .then((data) => {
-        let txixhash = fs.readFileSync('txixhash.json')
-        JSON.parse(txixhash)
+        // let txixhash = fs.readFileSync('txixhash.json')
+        // JSON.parse(txixhash)
 
-        res.send(`stdout: ${data}, "txixhash": ${txixhash}`)
+        // res.send(`stdout: ${data}, "txixhash": ${txixhash}`)
+        res.send(data)
     })
     .catch((e) => res.send(`Error: ${e}`))
 })
