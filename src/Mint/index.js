@@ -17,7 +17,11 @@ export default class Minter {
 
             params.stdout.on('data', (data) => {
                 console.log("Data: ", data)
-                fs.writeFile('protocol.json', data)
+                fs.writeFile('protocol.json', data, err => {
+                    if (err) {
+                        reject(err)
+                    }
+                })
                 resolve(data)
             })
 
