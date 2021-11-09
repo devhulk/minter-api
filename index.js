@@ -30,20 +30,10 @@ app.get('/v1/cardano/mint/assets', function (req, res) {
 })
 
 app.post('/v1/cardano/mint/getHash', function (req, res) {
-    // pull from req.body
-    console.log(req.body)
-    // let options = {
-    //     address: "addr_test1qzjy75c3tyyvl3t92y9404hdaqnhpcuxedqchyyuvg3phymryqfyt540zetndfm7u707afmn6ptg6vyuh7axve44sgwssgw298",
-    //     config: "testnet"
-    // }
     let options = req.body
     let minter = new Minter()
     minter.getHash(options)
     .then((data) => {
-        // let txixhash = fs.readFileSync('txixhash.json')
-        // JSON.parse(txixhash)
-
-        // res.send(`stdout: ${data}, "txixhash": ${txixhash}`)
         res.send(data)
     })
     .catch((e) => res.send(`Error: ${e}`))

@@ -54,27 +54,6 @@ export default class Minter {
     }
 
     getHash(options) {
-        // cardano-cli query utxo --address $address --mainnet
-        // return txix and txHash
-        // let promise = new Promise((resolve, reject) => {
-
-        //     let config = options.config
-        //     let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
-        //     let magic = network == '--testnet-magic' ? '1097911063' : ''
-        //     const params = spawn('cardano-cli', ['query', 'utxo', '--address',  options.address, '--out-file=txixhash.json', network, magic])
-
-        //     params.stdout.on('data', (data) => {
-        //         console.log("Data: ", data)
-        //         resolve(data)
-        //     })
-
-        //     params.stderr.on('data', (data) => {
-        //         console.error("Error: ", data)
-        //         reject(data)
-        //     })
-
-        // })
-        // return promise
         let promise = new Promise((resolve, reject) => {
 
             let config = options.config
@@ -85,11 +64,11 @@ export default class Minter {
                     reject(err)
                     return;
                 }
-                let txixhash = fs.readFileSync('txixhash.json')
-                let data = JSON.parse(txixhash)
+                let file = fs.readFileSync('txixhash.json')
+                let data = JSON.parse(file)
+                let txixhash = Object.keys(data)[0]
 
-                // resolve(stdout)
-                resolve(data)
+                resolve(txixhash)
                 return;
             })
         })
