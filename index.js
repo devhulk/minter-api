@@ -38,7 +38,7 @@ app.post('/v1/cardano/mint/getHash', function (req, res) {
     .then((data) => {
         res.send(data)
     })
-    .catch((e) => res.send(e))
+    .catch((e) => res.send(`Error: ${e}`))
 })
 
 app.post('/v1/cardano/mint', function (req, res) {
