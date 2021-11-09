@@ -1,5 +1,6 @@
 import express from 'express'
 import cors from 'cors'
+const bodyParser = require('body-parser')
 const app = express()
 app.use(cors({
     origin: '*'
