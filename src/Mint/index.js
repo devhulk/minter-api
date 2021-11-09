@@ -81,7 +81,7 @@ export default class Minter {
             let magic = network == '--testnet-magic' ? '1097911063' : ''
             exec(`cardano-cli query utxo --address ${options.address} ${network} ${magic} --out-file=/dev/stdout`, (err, stdout, stderr) => {
                 if (err) {
-                    reject(data)
+                    reject(err)
                     return;
                 }
                 resolve(stdout)
