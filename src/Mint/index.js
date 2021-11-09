@@ -1,6 +1,5 @@
 const { spawn, exec } = require('child_process');
 import { stderr } from 'process';
-const fs = require('fs');
 import Metadata from '../Metadata'
 
 export default class Minter {
