@@ -37,15 +37,15 @@ app.post('/v1/cardano/mint/asset', function (req, res) {
         .then((data) => {
             mintData.mintWalletInfo = data
         })
+        .then(() => {
+            minter.getPolicyID()
+            .then((id) => {
+                mintData.policyid = id
+                res.send(mintData)
+            })
+            .catch((e) => res.send(`Error: ${e}`))
         .catch((e) => res.send(`Error: ${e}`))
-    })
-    .then(() => {
-        minter.getPolicyID()
-        .then((id) => {
-            mintData.policyid = id
-            res.send(mintData)
         })
-        .catch((e) => res.send(`Error: ${e}`))
     })
     .catch((e) => console.log(e))
 })
