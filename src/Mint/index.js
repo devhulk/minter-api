@@ -17,12 +17,14 @@ export default class Minter {
 
             params.stdout.on('data', (data) => {
                 console.log("Data: ", JSON.parse(data))
+                var file = {}
                 fs.writeFile('protocol.json', data, err => {
                     if (err) {
                         reject(err)
                     }
+                    file = fs.readFileSync('protocol.json')
                 })
-                resolve(data)
+                resolve(JSON.parse(file))
             })
 
             params.stderr.on('data', (data) => {
