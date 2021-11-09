@@ -41,7 +41,6 @@ export default class Minter {
                     reject(err)
                     return
                 }
-                console.log(data)
                 resolve(data)
             })
 

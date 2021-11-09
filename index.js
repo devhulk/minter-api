@@ -42,8 +42,8 @@ app.post('/v1/cardano/mint/asset', function (req, res) {
     .then(() => {
         minter.getPolicyID()
         .then((id) => {
-            let str = id.trim()
-            mintData.policyid = str 
+            mintData.policyid = id
+            console.log(id)
             res.send(mintData)
         })
     })
