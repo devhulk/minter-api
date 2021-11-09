@@ -85,9 +85,7 @@ export default class Minter {
                     reject(err)
                     return;
                 }
-                let txixhash = fs.readFileSync('txix.json')
-
-                resolve(JSON.parse(txixhash))
+                resolve(stdout)
                 return;
             })
         })
