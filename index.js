@@ -42,9 +42,6 @@ app.post('/v1/cardano/mint/asset', function (req, res) {
         .catch((e) => res.send(`Error: ${e}`))
 
     })
-    .then(() => {
-
-    })
     .catch((e) => console.log(e))
 })
 
