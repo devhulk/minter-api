@@ -70,7 +70,7 @@ export default class Minter {
                 let balanceObj = data[`${Object.keys(data)[0]}`]
                 let lovelace = balanceObj.value.lovelace
                 let ada = balanceObj.value.lovelace / 1000000
-                let returnObj = {txixhash: Object.keys(data)[0], balance: {lovelace, ada} }
+                let returnObj = {txixhash: Object.keys(data)[0], balance: {lovelace, ada}, address: options.address }
 
                 resolve(returnObj)
                 return;

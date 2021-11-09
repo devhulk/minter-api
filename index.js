@@ -31,7 +31,6 @@ app.post('/v1/cardano/mint/asset', function (req, res) {
     minter.getProtocolParams()
     .then((data) => {
         mintData.protocolParams = data
-
     })
     .then(() => {
         minter.getHash(body)
