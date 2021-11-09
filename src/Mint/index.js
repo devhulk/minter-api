@@ -1,5 +1,6 @@
 const { spawn, exec } = require('child_process');
 import { stderr } from 'process';
+const fs = require('fs');
 import Metadata from '../Metadata'
 
 export default class Minter {
@@ -79,12 +80,14 @@ export default class Minter {
             let config = options.config
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
-            exec(`cardano-cli query utxo --address ${options.address} ${network} ${magic} --out-file=txix.json`, (err, stdout, stderr) => {
+            exec(`cardano-cli query utxo --address ${options.address} ${network} ${magic} --out-file=txixhash.json`, (err, stdout, stderr) => {
                 if (err) {
                     reject(err)
                     return;
                 }
-                resolve(stdout)
+                let txixhash = fs.readFileSync('txix.json')
+
+                resolve(JSON.parse(txixhash))
                 return;
             })
         })
