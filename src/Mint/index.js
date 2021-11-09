@@ -16,13 +16,11 @@ export default class Minter {
             const params = spawn('cardano-cli', ['query', 'protocol-parameters', network, magic])
 
             params.stdout.on('data', (data) => {
-                console.log("Data: ", JSON.parse(data))
-                // var fileData = {}
+                console.log("ProtocolData: ", data)
                 fs.writeFile('protocol.json', data, err => {
                     if (err) {
                         reject(err)
                     }
-                    // fileData = fs.readFileSync('protocol.json')
                 })
                 resolve(JSON.parse(data))
             })
@@ -36,10 +34,19 @@ export default class Minter {
         return promise
     }
 
-    generatePolicy() {
+    getPolicyID() {
+        let promise = new Promise((resolve, reject) => {
+            fs.readFile('policy/policyID', 'utf8', (err, data) => {
+                if (err) {
+                    reject(err)
+                    return
+                }
+                console.log(data)
+                resolve(data)
+            })
 
-    // 4. Create Policy Keys and Policy Script
-    // 5. Generate PolicyID
+        })
+        return promise
 
     }
 

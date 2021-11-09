@@ -35,12 +35,16 @@ app.post('/v1/cardano/mint/asset', function (req, res) {
     .then(() => {
         minter.getHash(body)
         .then((data) => {
-            // res.send(data)
             mintData.mintWalletInfo = data
-            res.send(mintData)
         })
         .catch((e) => res.send(`Error: ${e}`))
-
+    })
+    .then(() => {
+        minter.getPolicyID()
+        .then((id) => {
+            mintData.policyid = id
+            res.send(mintData)
+        })
     })
     .catch((e) => console.log(e))
 })
