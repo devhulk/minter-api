@@ -67,8 +67,9 @@ export default class Minter {
                 let file = fs.readFileSync('txixhash.json')
                 let data = JSON.parse(file)
                 let balanceObj = data[`${Object.keys(data)[0]}`]
-                let balance = balanceObj.value
-                let returnObj = {txixhash: Object.keys(data)[0], balance }
+                let lovelace = balanceObj.value.lovelace
+                let ada = balanceObj.value.lovelace / 1000000
+                let returnObj = {txixhash: Object.keys(data)[0], balance: {lovelace, ada} }
 
                 resolve(returnObj)
                 return;
