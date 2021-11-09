@@ -18,7 +18,6 @@ app.get('/v1/cardano/getInfo', function (req, res) {
         .catch(err => console.log(err))
 })
 app.get('/v1/cardano/mint/assets', function (req, res) {
-    console.log(req.body)
     let minter = new Minter()
     minter.getProtocolParams()
     .then((data) => {
@@ -29,6 +28,7 @@ app.get('/v1/cardano/mint/assets', function (req, res) {
 
 app.post('/v1/cardano/mint/getHash', function (req, res) {
     // pull from req.body
+    console.log(req.body)
     let options = {
         address: "addr_test1qzjy75c3tyyvl3t92y9404hdaqnhpcuxedqchyyuvg3phymryqfyt540zetndfm7u707afmn6ptg6vyuh7axve44sgwssgw298",
         config: "testnet"
