@@ -1,5 +1,5 @@
 const { spawn, exec } = require('child_process');
-import { stderr } from 'process';
+import { exit, stderr } from 'process';
 const fs = require('fs');
 import Metadata from '../Metadata'
 
@@ -17,6 +17,7 @@ export default class Minter {
 
             params.stdout.on('data', (data) => {
                 console.log("Data: ", data)
+                fs.writeFile('protocol.json', data)
                 resolve(data)
             })
 
@@ -81,7 +82,7 @@ export default class Minter {
 
     }
 
-    buildRawTransaction() {
+    buildRawTransaction(options) {
     // 7. Build Raw TX -> Calculate Fee -> Sign TX -> Submit TX
     //     cardano-cli transaction build-raw \
     // --fee $fee  \
@@ -97,17 +98,16 @@ export default class Minter {
             // let config = 'testnet'
             // let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             // let magic = network == '--testnet-magic' ? '1097911063' : ''
-            const params = spawn('cardano-cli', ['transaction', 'build-raw', '--fee', `${this.calculateFee()}`, '--tx-in', `${this.txhash}#${this.txix}`])
+            exec(`cardano-cli transaction build-raw --fee 0 --tx-in ${options.txixhash} --tx-out ${options.address}+0+"${options.tokenamount} ${options.policyid}.${options.tokenname}" --mint="${options.tokenamount} ${options.policyid}.${options.tokenname}" --minting-script-file policy/policy.script --metadata-json-file ${options.metaDataFile} --invalid-hereafter ${options.slotNumber} --out-file ${option.tokenname}.raw` , (err, stdout, stderr) => {
+                if (err) {
+                    reject(err)
+                    return;
+                }
 
-            params.stdout.on('data', (data) => {
-                console.log("Data: ", data)
-                resolve(data)
+                resolve(stdout)
+
             })
 
-            params.stderr.on('data', (data) => {
-                console.error("Error: ", data)
-                reject(data)
-            })
 
         })
         return promise

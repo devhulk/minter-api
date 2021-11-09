@@ -22,32 +22,33 @@ app.get('/v1/cardano/getInfo', function (req, res) {
 })
 app.get('/v1/cardano/mint/assets', function (req, res) {
     let minter = new Minter()
+})
+
+app.post('/v1/cardano/mint/asset', function (req, res) {
+    let minter = new Minter()
+    let body = req.body
+    let mintData = {}
     minter.getProtocolParams()
     .then((data) => {
-        res.send(data)
+        mintData.protocolParams = data
+
+    })
+    .then(() => {
+        minter.getHash(body)
+        .then((data) => {
+            // res.send(data)
+            mintData.mintWalletInfo = data
+            res.send(mintData)
+        })
+        .catch((e) => res.send(`Error: ${e}`))
+
+    })
+    .then(() => {
+
     })
     .catch((e) => console.log(e))
 })
 
-app.post('/v1/cardano/mint/getHash', function (req, res) {
-    let options = req.body
-    let minter = new Minter()
-    minter.getHash(options)
-    .then((data) => {
-        res.send(data)
-    })
-    .catch((e) => res.send(`Error: ${e}`))
-})
-
-app.post('/v1/cardano/mint', function (req, res) {
-    console.log(req.body)
-    // let minter = new Minter()
-    // minter.getProtocolParams()
-    // .then((data) => {
-    //     res.send(data)
-    // })
-    // .catch((e) => console.log(e))
-})
 
 
 app.get('/v1/cardano/wallet/:id/getAddress', function (req, res) {
