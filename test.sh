@@ -6,7 +6,7 @@ curl -X POST -H "Content-Type: application/json" \
 
 # Test wallet endpoint
 curl -X POST -H "Content-Type: application/json" \
-    -d '{"address":"test"}' \
+    -d '{"address": "addr_test1qzjy75c3tyyvl3t92y9404hdaqnhpcuxedqchyyuvg3phymryqfyt540zetndfm7u707afmn6ptg6vyuh7axve44sgwssgw298", "config": "testnet"}' \
     http://localhost:3572/v1/cardano/mint/getHash
 
 # Test mint endpoint
