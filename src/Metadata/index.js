@@ -6,7 +6,7 @@ export default class Metadata {
         this.asset_name = data.asset_name
         this.ipfsLink = data.ipfsLink
         this.traits = data.traits
-        this.amount = data.ammount
+        this.amount = data.amount
     }
 
     format() {
