@@ -129,7 +129,7 @@ export default class Minter {
             let cmd = `
 #!/bin/bash
 
-cardano-cli transaction build-raw --fee "0" --tx-in "${options.mintWalletInfo.txixhash}"`+` --tx-out ${options.mintWalletInfo.address}+${output}+`+`"${options.request.metadata.amount}`+`${options.policy.id}${''}`+`.${''}${options.request.metadata.asset_id}"`+` --mint="${options.request.metadata.amount} ${options.policy.id}.${options.request.metadata.asset_id}"`
+cardano-cli transaction build-raw --fee "0" --tx-in "${options.mintWalletInfo.txixhash}"`+` --tx-out ${options.mintWalletInfo.address}+${output}+`+`"${options.request.metadata.amount}`+`${options.policy.id}${'.'}`+`${''}${options.request.metadata.asset_id}"`+` --mint="${options.request.metadata.amount} ${options.policy.id}.${options.request.metadata.asset_id}"`
             console.log(cmd)
         fs.writeFile('build-raw.sh', cmd, err => {
             if (err) {
