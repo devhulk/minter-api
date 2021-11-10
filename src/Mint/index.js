@@ -135,24 +135,24 @@ tokenname="${options.request.metadata.asset_id}"
 slotnumber="${options.policy.slotnumber}"
 
 cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$output+"$tokenamount $policyid.$tokenname" --mint="$tokenamount $policyid.$tokenname" --minting-script-file policy/policy.script --minting-script-file policy/policy.script --invalid-hereafter $slotnumber --out-file $tokenname.raw`
-            console.log(cmd)
-        fs.writeFile('build-raw.sh', cmd, err => {
-            if (err) {
-                reject(err)
-            }
+        console.log(cmd)
+        // fs.writeFile('build-raw.sh', cmd, err => {
+        //     if (err) {
+        //         reject(err)
+        //     }
             
-            resolve(cmd)
+        //     resolve(cmd)
+        // })
+
+        exec(cmd , (err, stdout, stderr) => {
+            if (err) {
+                // console.log(err)
+                reject(err)
+                return;
+            }
+            resolve(stdout)
+
         })
-
-            // exec(cmd , (err, stdout, stderr) => {
-            //     if (err) {
-            //         // console.log(err)
-            //         reject(err)
-            //         return;
-            //     }
-            //     resolve(stdout)
-
-            // })
 
 
 
