@@ -149,25 +149,14 @@ tokenname="${options.request.metadata.asset_id}"
 slotnumber="${options.policy.slotnumber}"
 
 cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$output+"$tokenamount $policyid.$tokenname" --mint="$tokenamount $policyid.$tokenname" --minting-script-file policy/policy.script --minting-script-file policy/policy.script --invalid-hereafter $slotnumber --out-file ./transactions/raw/$tokenname.raw`
+console.log(cmd)
         exec(cmd , (err, stdout, stderr) => {
             if (err) {
                 // console.log(err)
                 reject(err)
                 return;
             }
-            this.signTransaction(options)
-            .then((data) => {
-                console.log(data)
-                this.submitTransaction(options)
-                .then((data) => {
-                    console.log(data)
-                    resolve(stdout)
-                })
-                .catch(e => reject(e))
-                
-            })
-            .catch(e => reject(e))
-
+                resolve(stdout)
         })
 
 
@@ -178,7 +167,7 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
 
     }
 
-    signTransaction(options) {
+    finalizeTransaction(options) {
         let promise = new Promise((resolve, reject) => {
             let cmd = `cardano-cli transaction sign --signing-key-file payment.skey --signing-key-file policy/policy.skey --mainnet --tx-body-file ./transactions/raw/${options.request.metadata.asset_id}.raw --out-file ./transactions/signed/${options.request.metadata.asset_id}.signed`
             console.log(cmd)
@@ -188,6 +177,12 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
                     reject(err)
                     return;
                 }
+                this.submitTransaction(options)
+                .then((data) => {
+                    console.log(data)
+                    resolve(stdout)
+                })
+                .catch(e => reject(e))
                 resolve(stdout)
                 return
 
