@@ -1,4 +1,5 @@
 const { spawn, exec } = require('child_process');
+import { resolve } from 'dns';
 import { exit, stderr } from 'process';
 const fs = require('fs');
 import Metadata from '../Metadata'
@@ -81,19 +82,11 @@ export default class Minter {
     }
 
     calculateFee(options) {
-        // cardano-cli transaction calculate-min-fee \ 
-        // --tx-body-file /transactions/raw/$tokenname.raw \
-        // --tx-in-count 1 \
-        // --tx-out-count 1 \
-        // --witness-count 2 \
-        // --mainnet \
-        // --protocol-params-file protocol.json | cut -d " " -f1
         let promise = new Promise((resolve, reject) => {
             let config = options.request.config
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
             let cmd = `cardano-cli transaction calculate-min-fee --tx-body-file ./transactions/raw/${options.request.metadata.asset_id}.raw --tx-in-count 1 --tx-out-count 1 --witness-count 2 --protocol-params-file=protocol.json ${network} ${magic} | cut -d " " -f1`
-            console.log(cmd)
             exec(cmd, (err, stdout, stderr) => {
                 if (err) {
                     reject(err)
@@ -161,7 +154,12 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
                 reject(err)
                 return;
             }
-            resolve(stdout)
+            this.signTransaction(options)
+            .then((data) => {
+                console.log(data)
+                resolve(stdout)
+            })
+            .catch(e => reject(e))
 
         })
 
@@ -170,6 +168,24 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
 
         })
         return promise
+
+    }
+
+    signTransaction(options) {
+        let promise = new Promise((resolve, reject) => {
+            let cmd = `cardano-cli transaction sign --signing-key-file payment.skey --signing-key-file policy/policy.skey --mainnet --tx-body-file matx.raw --out-file ./transactions/signed/${options.request.metadata.asset_id}.signed`
+            exec(cmd , (err, stdout, stderr) => {
+                if (err) {
+                    // console.log(err)
+                    reject(err)
+                    return;
+                }
+                resolve(stdout)
+                return
+
+            })
+            
+        })
 
     }
 
