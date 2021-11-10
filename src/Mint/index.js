@@ -129,12 +129,12 @@ export default class Minter {
             let cmd = `
 #!/bin/bash
 
-$fee = "0"
+$fee="0"
 $txix="${options.mintWalletInfo.txixhash}"
 $address="${options.mintWalletInfo.address}"
 $output="${output}"
 $tokenamount="${options.request.metadata.amount}"
-$policyid="${options.policy.id}"
+$policyid="${options.policy.id.trim()}"
 $tokenname="${options.request.metadata.asset_id}"
 
 cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$output+"$tokenamount $policyid.$tokenname" --mint="$tokenamount $policyid.$tokenname"`
