@@ -120,7 +120,8 @@ export default class Minter {
 
     buildRawTransaction(options) {
         let promise = new Promise((resolve, reject) => {
-            let cmd = `cardano-cli transaction build-raw \
+            let cmd = `
+cardano-cli transaction build-raw \
              --fee "0" \ 
              --tx-in "${options.mintWalletInfo.txixhash}" \
              --tx-out ${options.address}+"0"+"${options.metadata.amount} ${options.policy.id}.${options.asset_id}" \ 
@@ -130,13 +131,14 @@ export default class Minter {
              --invalid-hereafter "${options.policy.slotnumber}" \
              --out-file /transactions/raw/${option.metadata.asset_id}.raw`
             console.log(cmd)
-        fs.writeFile('build-raw.sh', cmd, err => {
-            if (err) {
-                reject(err)
-            }
-            
             resolve(cmd)
-        })
+        // fs.writeFile('build-raw.sh', cmd, err => {
+        //     if (err) {
+        //         reject(err)
+        //     }
+            
+        //     resolve(cmd)
+        // })
 
             // exec(cmd , (err, stdout, stderr) => {
             //     if (err) {
