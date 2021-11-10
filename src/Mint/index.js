@@ -186,6 +186,7 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
             })
             
         })
+        return promise
 
     }
 
