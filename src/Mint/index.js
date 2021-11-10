@@ -132,13 +132,14 @@ export default class Minter {
     }
 
     buildRawTransaction(options) {
-        let output = "0"
+        let output = options.output == undefined ? "0" : options.mintWalletInfo.balance.lovelace - options.fee
+        let fee = options.fee == undefined ? "0" : options.fee
         let promise = new Promise((resolve, reject) => {
             //  --out-file /transactions/raw/${option.metadata.asset_id}.raw
             let cmd = `
 #!/bin/bash
 
-fee="0"
+fee="${fee}"
 txix="${options.mintWalletInfo.txixhash}"
 address="${options.mintWalletInfo.address}"
 output="${output}"
