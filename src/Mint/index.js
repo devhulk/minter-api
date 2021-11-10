@@ -127,10 +127,10 @@ export default class Minter {
             //  --invalid-hereafter "${options.policy.slotnumber}" \
             //  --out-file /transactions/raw/${option.metadata.asset_id}.raw
             let cmd = `
-cardano-cli transaction build-raw /
-             --fee "0" / 
-             --tx-in "${options.mintWalletInfo.txixhash}" /
-             --tx-out '${options.mintWalletInfo.address}+${output}+"${options.request.metadata.amount} ${options.policy.id}.${options.request.metadata.asset_id}"' / 
+cardano-cli transaction build-raw \
+             --fee "0" \ 
+             --tx-in "${options.mintWalletInfo.txixhash}" \
+             --tx-out '${options.mintWalletInfo.address}+${output}+"${options.request.metadata.amount} ${options.policy.id}.${options.request.metadata.asset_id}"' 
 `
             console.log(cmd)
             resolve(cmd)
