@@ -142,7 +142,7 @@ export default class Minter {
 
 fee="${fee}"
 txix="${options.mintWalletInfo.txixhash}"
-address="addr_test1qp3yf90tk5kf2pe7knpwpalwa6acdlpnje84ylc8p9z4fu2um8gd62tj3s2ds5s3ukcmuw6sz63l2p3r7ypxayxkpx0qggz6gu"
+address="${options.mintWalletInfo.address}"
 output="${output}"
 tokenamount="${options.request.metadata.amount}"
 policyid="${options.policy.id.trim()}"
