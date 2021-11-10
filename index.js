@@ -57,7 +57,8 @@ app.post('/v1/cardano/mint/asset', function (req, res) {
                     .then(() => {
                         minter.calculateFee(mintData)
                         .then((data) => {
-                            res.send(data)
+                            mintData.fee = data
+                            res.send(mintData)
                         })
                         .catch((e) => res.send(`Error: ${e}`))
                     })
