@@ -183,7 +183,6 @@ console.log(cmd)
                     resolve(stdout)
                 })
                 .catch(e => reject(e))
-                resolve(stdout)
                 return
 
             })
