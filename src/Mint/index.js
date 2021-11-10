@@ -66,9 +66,13 @@ export default class Minter {
         let id = data.policy.id.trim()
         let dataHandler = new Metadata({policy_id: id, asset_id: data.request.metadata.asset_id, asset_name: data.request.metadata.asset_name, ipfsLink: data.request.metadata.ipfsLink, traits: data.request.metadata.traits})
         let metadata = dataHandler.format()
-        console.log(metadata)
-        resolve(metadata)
-
+        fs.writeFile('metadata.json', metadata, err => {
+            if (err) {
+                reject(err)
+            }
+            
+            resolve(metadata)
+        })
     })
 
     return promise

@@ -48,8 +48,8 @@ app.post('/v1/cardano/mint/asset', function (req, res) {
                     mintData.metadata = metadata
                     res.send(mintData)
                 })
+                // next nest
             })
-            // next nest
             .catch((e) => res.send(`Error: ${e}`))
         .catch((e) => res.send(`Error: ${e}`))
         })
