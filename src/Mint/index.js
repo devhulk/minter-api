@@ -170,7 +170,10 @@ console.log(cmd)
 
     finalizeTransaction(options) {
         let promise = new Promise((resolve, reject) => {
-            let cmd = `cardano-cli transaction sign --signing-key-file payment.skey --signing-key-file policy/policy.skey --mainnet --tx-body-file ./transactions/raw/${options.request.metadata.asset_id}.raw --out-file ./transactions/signed/${options.request.metadata.asset_id}.signed`
+            let config = options.config
+            let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
+            let magic = network == '--testnet-magic' ? '1097911063' : ''
+            let cmd = `cardano-cli transaction sign --signing-key-file payment.skey --signing-key-file policy/policy.skey ${network} ${magic} --tx-body-file ./transactions/raw/${options.request.metadata.asset_id}.raw --out-file ./transactions/signed/${options.request.metadata.asset_id}.signed`
             console.log(cmd)
             exec(cmd , (err, stdout, stderr) => {
                 if (err) {
