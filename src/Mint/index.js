@@ -183,7 +183,7 @@ console.log(cmd)
                 }
                 this.submitTransaction(options)
                 .then((data) => {
-                    console.log(data)
+                    console.log(options)
                     resolve(stdout)
                 })
                 .catch(e => reject(e))
