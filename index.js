@@ -61,6 +61,7 @@ app.post('/v1/cardano/mint/asset', function (req, res) {
                             mintData.fee = data.trim()
                             minter.buildRawTransaction(mintData)
                             .then((data) => {
+                                mintData.output = mintData.mintWalletInfo.balance.lovelace - mintData.fee
                                 res.send(mintData)
                             })
                             .catch((e) => res.send(`Error: ${e}`))
