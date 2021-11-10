@@ -15,7 +15,7 @@ export default class Metadata {
                 "${this.asset_id}": {
                   "name": "${this.asset_name}",
                   "image": "${this.ipfsLink}",
-                  "traits": ${this.traits}
+                  "traits": ${JSON.stringify(this.traits)}
                 }
               }
             }
