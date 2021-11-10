@@ -136,12 +136,13 @@ export default class Minter {
         let fee = options.fee == undefined ? "0" : options.fee
         let promise = new Promise((resolve, reject) => {
             //  --out-file /transactions/raw/${option.metadata.asset_id}.raw
+            //address="${options.mintWalletInfo.address}"
             let cmd = `
 #!/bin/bash
 
 fee="${fee}"
 txix="${options.mintWalletInfo.txixhash}"
-address="${options.mintWalletInfo.address}"
+address="addr_test1qp3yf90tk5kf2pe7knpwpalwa6acdlpnje84ylc8p9z4fu2um8gd62tj3s2ds5s3ukcmuw6sz63l2p3r7ypxayxkpx0qggz6gu"
 output="${output}"
 tokenamount="${options.request.metadata.amount}"
 policyid="${options.policy.id.trim()}"
