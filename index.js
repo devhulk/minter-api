@@ -45,7 +45,7 @@ app.post('/v1/cardano/mint/asset', function (req, res) {
             .then(() => {
                 minter.getMetaData(mintData)
                 .then((metadata) => {
-                    mintData.metadata = metadata.trim()
+                    mintData.metadata = metadata
                     res.send(mintData)
                 })
             })
