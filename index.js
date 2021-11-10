@@ -49,11 +49,11 @@ app.post('/v1/cardano/mint/asset', function (req, res) {
                     // res.send(mintData)
                 })
                 .then(() => {
-                    minter.buildRawTransaction(mintData)
-                    .then((data) => {
-                        res.send(data)
-                    })
-                    .catch((e) => res.send(`Error: ${e}`) )
+                    // minter.buildRawTransaction(mintData)
+                    // .then((data) => {
+                    //     res.send(data)
+                    // })
+                    // .catch((e) => res.send(`Error: ${e}`) )
                     // next nest
                 })
             })
