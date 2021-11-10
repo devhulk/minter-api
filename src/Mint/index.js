@@ -129,7 +129,7 @@ export default class Minter {
 cardano-cli transaction build-raw /
              --fee "0" / 
              --tx-in "${options.mintWalletInfo.txixhash}" /
-             --tx-out ${options.address}+"0"+"${options.metadata.amount} ${options.policy.id}.${options.asset_id}" / 
+             --tx-out ${options.mintWalletInfo.address}+"0"+"${options.request.metadata.amount} ${options.policy.id}.${options.request.metadata.asset_id}" / 
 `
             console.log(cmd)
             resolve(cmd)
