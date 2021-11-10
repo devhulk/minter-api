@@ -14,6 +14,7 @@ export default class Metadata {
               "${this.policy_id}": {
                 "${this.asset_id}": {
                   "name": "${this.asset_name}",
+                  "mediaType": "image/png",
                   "image": "${this.ipfsLink}",
                   "traits": ${JSON.stringify(this.traits)}
                 }
