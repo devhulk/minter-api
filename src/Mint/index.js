@@ -181,9 +181,9 @@ console.log(cmd)
                     reject(err)
                     return;
                 }
+                console.log(options)
                 this.submitTransaction(options)
                 .then((data) => {
-                    console.log(options)
                     resolve(stdout)
                 })
                 .catch(e => reject(e))
