@@ -64,7 +64,7 @@ export default class Minter {
     // 6. Retrieve token Metadata
     let promise = new Promise((resolve, reject) => {
         let id = data.policy.id.trim()
-        let dataHandler = new Metadata({policy_id: id, asset_id: data.request.metadata.asset_id, ipfsLink: data.request.metadata.ipfsLink, traits: data.request.metadata.traits})
+        let dataHandler = new Metadata({policy_id: id, asset_id: data.request.metadata.asset_id, asset_name: data.request.metadata.asset_name, ipfsLink: data.request.metadata.ipfsLink, traits: data.request.metadata.traits})
         let metadata = dataHandler.format()
         console.log(metadata)
         resolve(metadata)
