@@ -60,9 +60,17 @@ export default class Minter {
 
     }
 
-    metaData(metadata) {
+    getMetaData(data) {
     // 6. Retrieve token Metadata
-    let dataHandler = new Metadata()
+    let promise = new Promise((resolve, reject) => {
+        let dataHandler = new Metadata({policy_id: data.policy.id, asset_id: data.metadata.asset_id, ipfsLink: data.metadata.ipfsLink, traits: data.metadata.traits})
+        let metadata = dataHandler.format()
+        console.log(metadata)
+        resolve(metadata)
+
+    })
+
+    return promise
 
 
     }
@@ -106,21 +114,8 @@ export default class Minter {
     }
 
     buildRawTransaction(options) {
-    // 7. Build Raw TX -> Calculate Fee -> Sign TX -> Submit TX
-    //     cardano-cli transaction build-raw \
-    // --fee $fee  \
-    // --tx-in $txhash#$txix  \
-    // --tx-out $address+$output+"$tokenamount $policyid.$tokenname" \
-    // --mint="$tokenamount $policyid.$tokenname" \
-    // --minting-script-file $script \
-    // --metadata-json-file metadata.json  \
-    // --invalid-hereafter $slotnumber \
-    // --out-file matx.raw
         let promise = new Promise((resolve, reject) => {
 
-            // let config = 'testnet'
-            // let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
-            // let magic = network == '--testnet-magic' ? '1097911063' : ''
             exec(`cardano-cli transaction build-raw --fee 0 --tx-in ${options.txixhash} --tx-out ${options.address}+0+"${options.tokenamount} ${options.policyid}.${options.tokenname}" --mint="${options.tokenamount} ${options.policyid}.${options.tokenname}" --minting-script-file policy/policy.script --metadata-json-file ${options.metaDataFile} --invalid-hereafter ${options.slotNumber} --out-file ${option.tokenname}.raw` , (err, stdout, stderr) => {
                 if (err) {
                     reject(err)

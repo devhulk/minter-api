@@ -27,7 +27,7 @@ app.get('/v1/cardano/mint/assets', function (req, res) {
 app.post('/v1/cardano/mint/asset', function (req, res) {
     let minter = new Minter()
     let body = req.body
-    let mintData = {}
+    let mintData = {request: req.body}
     minter.getProtocolParams()
     .then((data) => {
         mintData.protocolParams = data
@@ -41,7 +41,13 @@ app.post('/v1/cardano/mint/asset', function (req, res) {
             minter.getPolicyID()
             .then((policy) => {
                 mintData.policy = policy
-                res.send(mintData)
+            })
+            .then(() => {
+                minter.getMetaData(mintData)
+                .then((metadata) => {
+                    mintData.metadata = metadata
+                    res.send(mintData)
+                })
             })
             // next nest
             .catch((e) => res.send(`Error: ${e}`))
