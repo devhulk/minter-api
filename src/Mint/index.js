@@ -157,7 +157,13 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
             this.signTransaction(options)
             .then((data) => {
                 console.log(data)
-                resolve(stdout)
+                this.submitTransaction(options)
+                .then((data) => {
+                    console.log(data)
+                    resolve(stdout)
+                })
+                .catch(e => reject(e))
+                
             })
             .catch(e => reject(e))
 
@@ -174,6 +180,29 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
     signTransaction(options) {
         let promise = new Promise((resolve, reject) => {
             let cmd = `cardano-cli transaction sign --signing-key-file payment.skey --signing-key-file policy/policy.skey --mainnet --tx-body-file ./transactions/raw/${options.request.metadata.asset_id}.raw --out-file ./transactions/signed/${options.request.metadata.asset_id}.signed`
+            console.log(cmd)
+            exec(cmd , (err, stdout, stderr) => {
+                if (err) {
+                    console.log(err)
+                    reject(err)
+                    return;
+                }
+                resolve(stdout)
+                return
+
+            })
+            
+        })
+        return promise
+
+    }
+
+    submitTransaction(options) {
+        let promise = new Promise((resolve, reject) => {
+            let config = options.request.config
+            let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
+            let magic = network == '--testnet-magic' ? '1097911063' : ''
+            let cmd = `cardano-cli transaction submit --tx-file ./transactions/signed/${options.request.metadata.asset_id}.signed ${network} ${magic}`
             console.log(cmd)
             exec(cmd , (err, stdout, stderr) => {
                 if (err) {
