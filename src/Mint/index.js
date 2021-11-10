@@ -122,7 +122,7 @@ export default class Minter {
         let promise = new Promise((resolve, reject) => {
             let cmd = `cardano-cli transaction build-raw \
              --fee "0" \ 
-             --tx-in ${options.mintWalletInfo.txixhash} \
+             --tx-in "${options.mintWalletInfo.txixhash}" \
              --tx-out ${options.address}+"0"+"${options.metadata.amount} ${options.policy.id}.${options.asset_id}" \ 
              --mint="${options.metadata.amount} ${options.policy.id}.${options.metadata.asset_id}" \
              --minting-script-file policy/policy.script \
