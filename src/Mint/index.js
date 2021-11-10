@@ -119,6 +119,7 @@ export default class Minter {
     }
 
     buildRawTransaction(options) {
+        let output = 0
         let promise = new Promise((resolve, reject) => {
             //  --mint="${options.metadata.amount} ${options.policy.id}.${options.metadata.asset_id}" \
             //  --minting-script-file policy/policy.script \
@@ -129,7 +130,7 @@ export default class Minter {
 cardano-cli transaction build-raw /
              --fee "0" / 
              --tx-in "${options.mintWalletInfo.txixhash}" /
-             --tx-out "${options.mintWalletInfo.address}+"0"+"${options.request.metadata.amount} ${options.policy.id}.${options.request.metadata.asset_id}"" / 
+             --tx-out ${options.mintWalletInfo.address}${output}"${options.request.metadata.amount} ${options.policy.id}.${options.request.metadata.asset_id}" / 
 `
             console.log(cmd)
             resolve(cmd)
