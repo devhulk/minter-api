@@ -51,7 +51,6 @@ app.post('/v1/cardano/mint/asset', function (req, res) {
                 .then(() => {
                     minter.buildRawTransaction(mintData)
                     .then((data) => {
-                        console.log(data)
                         res.send(data)
                     })
                     .catch((e) => res.send(`Error: ${e}`) )
