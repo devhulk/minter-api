@@ -126,7 +126,6 @@ export default class Minter {
                     reject(err)
                     return;
                 }
-
                 resolve(stdout)
 
             })

@@ -46,9 +46,16 @@ app.post('/v1/cardano/mint/asset', function (req, res) {
                 minter.getMetaData(mintData)
                 .then((metadata) => {
                     mintData.metadata = metadata
-                    res.send(mintData)
+                    // res.send(mintData)
                 })
-                // next nest
+                .then(() => {
+                    minter.buildRawTransaction(mintData)
+                    .then((data) => {
+                        res.send(data)
+                    })
+                    .catch((e) => res.send(`Error: ${e}`) )
+                    // next nest
+                })
             })
             .catch((e) => res.send(`Error: ${e}`))
         .catch((e) => res.send(`Error: ${e}`))
