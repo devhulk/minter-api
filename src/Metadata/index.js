@@ -6,6 +6,7 @@ export default class Metadata {
         this.asset_name = data.asset_name
         this.ipfsLink = data.ipfsLink
         this.traits = data.traits
+        this.amount = data.ammount
     }
 
     format() {
@@ -16,7 +17,8 @@ export default class Metadata {
         "name": "${this.asset_name}",
         "mediaType": "image/png",
         "image": "${this.ipfsLink}",
-        "traits": ${JSON.stringify(this.traits)}
+        "traits": ${JSON.stringify(this.traits)},
+        "amount": "${this.amount}"
       }
     }
   }

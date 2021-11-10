@@ -64,14 +64,14 @@ export default class Minter {
     // 6. Retrieve token Metadata
     let promise = new Promise((resolve, reject) => {
         let id = data.policy.id.trim()
-        let dataHandler = new Metadata({policy_id: id, asset_id: data.request.metadata.asset_id, asset_name: data.request.metadata.asset_name, ipfsLink: data.request.metadata.ipfsLink, traits: data.request.metadata.traits})
+        let dataHandler = new Metadata({policy_id: id, asset_id: data.request.metadata.asset_id, asset_name: data.request.metadata.asset_name, ipfsLink: data.request.metadata.ipfsLink, traits: data.request.metadata.traits, tokenamount: data.request.metadata.amount})
         let metadata = dataHandler.format()
         fs.writeFile('metadata.json', metadata, err => {
             if (err) {
                 reject(err)
             }
             
-            resolve(metadata)
+            resolve(JSON.parse(metadata))
         })
     })
 
@@ -121,7 +121,7 @@ export default class Minter {
     buildRawTransaction(options) {
         let promise = new Promise((resolve, reject) => {
 
-            exec(`cardano-cli transaction build-raw --fee 0 --tx-in ${options.txixhash} --tx-out ${options.address}+0+"${options.tokenamount} ${options.policyid}.${options.asset_id}" --mint="${options.tokenamount} ${options.policyid}.${options.asset_id}" --minting-script-file policy/policy.script --metadata-json-file metadata.json --invalid-hereafter ${options.slotNumber} --out-file /transactions/raw/${option.asset_id}.raw` , (err, stdout, stderr) => {
+            exec(`cardano-cli transaction build-raw --fee 0 --tx-in ${options.mintWalletInfo.txixhash} --tx-out ${options.address}+0+"${options.metadata.amount} ${options.policy.id}.${options.asset_id}" --mint="${options.metadata.amount} ${options.policy.id}.${options.metadata.asset_id}" --minting-script-file policy/policy.script --metadata-json-file metadata.json --invalid-hereafter ${options.policy.slotnumber} --out-file /transactions/raw/${option.metadata.asset_id}.raw` , (err, stdout, stderr) => {
                 if (err) {
                     reject(err)
                     return;
