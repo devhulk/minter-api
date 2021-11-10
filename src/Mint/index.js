@@ -174,6 +174,7 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
     signTransaction(options) {
         let promise = new Promise((resolve, reject) => {
             let cmd = `cardano-cli transaction sign --signing-key-file payment.skey --signing-key-file policy/policy.skey --mainnet --tx-body-file matx.raw --out-file ./transactions/signed/${options.request.metadata.asset_id}.signed`
+            console.log(cmd)
             exec(cmd , (err, stdout, stderr) => {
                 if (err) {
                     // console.log(err)
