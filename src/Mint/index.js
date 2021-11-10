@@ -130,8 +130,13 @@ export default class Minter {
 #!/bin/bash
 
 $txix=${options.mintWalletInfo.txixhash}
+$address=${options.mintWalletInfo.address}
+$output=${output}
+$tokenamount=${options.request.metadata.amount}
+$policyid=${options.policy.id}
+$tokenname=${options.request.metadata.asset_id}
 
-cardano-cli transaction build-raw --fee "0" --tx-in "$txix"`+` --tx-out ${options.mintWalletInfo.address}+${output}+`+`"${options.request.metadata.amount}`+`${options.policy.id}`+`+'.'+${options.request.metadata.asset_id}"`+` --mint="${options.request.metadata.amount} ${options.policy.id}.${options.request.metadata.asset_id}"`
+cardano-cli transaction build-raw --fee "0" --tx-in "$txix"`+` --tx-out $address+$output+"$tokenamount $policyid.$tokenname" --mint="$tokenamount $policyid.$tokenname"`
             console.log(cmd)
         fs.writeFile('build-raw.sh', cmd, err => {
             if (err) {
