@@ -80,14 +80,32 @@ export default class Minter {
 
     }
 
-    calculateFee() {
+    calculateFee(options) {
         // cardano-cli transaction calculate-min-fee \ 
-        // --tx-body-file matx.raw \
+        // --tx-body-file /transactions/raw/$tokenname.raw \
         // --tx-in-count 1 \
         // --tx-out-count 1 \
         // --witness-count 2 \
         // --mainnet \
         // --protocol-params-file protocol.json | cut -d " " -f1
+        let promise = new Promise((resolve, reject) => {
+            let config = options.request.config
+            let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
+            let magic = network == '--testnet-magic' ? '1097911063' : ''
+            exec(`cardano-cli transaction calculate-min-fee --tx-body-file ./transactions/raw/${options.request.metadata.asset_id}.raw --tx-in-count 1 --tx-out-count 1 --witness-count 2 --protocol-params-file=protocol.json ${network} ${magic} | cut -d " " -f1`, (err, stdout, stderr) => {
+                if (err) {
+                    reject(err)
+                    return;
+                }
+
+                resolve(stdout)
+                return;
+            })
+
+        })
+
+        return promise
+
     }
 
     getHash(options) {
@@ -135,15 +153,6 @@ tokenname="${options.request.metadata.asset_id}"
 slotnumber="${options.policy.slotnumber}"
 
 cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$output+"$tokenamount $policyid.$tokenname" --mint="$tokenamount $policyid.$tokenname" --minting-script-file policy/policy.script --minting-script-file policy/policy.script --invalid-hereafter $slotnumber --out-file ./transactions/raw/$tokenname.raw`
-        console.log(cmd)
-        // fs.writeFile('build-raw.sh', cmd, err => {
-        //     if (err) {
-        //         reject(err)
-        //     }
-            
-        //     resolve(cmd)
-        // })
-
         exec(cmd , (err, stdout, stderr) => {
             if (err) {
                 // console.log(err)

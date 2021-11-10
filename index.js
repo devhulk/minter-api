@@ -53,8 +53,15 @@ app.post('/v1/cardano/mint/asset', function (req, res) {
                     .then((data) => {
                         res.send(data)
                     })
-                    .catch((e) => res.send(`Error: ${e}`) )
                     // next nest
+                    .then(() => {
+                        minter.calculateFee(mintData)
+                        .then((data) => {
+                            res.send(data)
+                        })
+                        .catch((e) => res.send(`Error: ${e}`))
+                    })
+                    .catch((e) => res.send(`Error: ${e}`) )
                 })
             })
             .catch((e) => res.send(`Error: ${e}`))
