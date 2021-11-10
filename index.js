@@ -39,10 +39,11 @@ app.post('/v1/cardano/mint/asset', function (req, res) {
         })
         .then(() => {
             minter.getPolicyID()
-            .then((id) => {
-                mintData.policyid = id
+            .then((policy) => {
+                mintData.policy = policy
                 res.send(mintData)
             })
+            // next nest
             .catch((e) => res.send(`Error: ${e}`))
         .catch((e) => res.send(`Error: ${e}`))
         })

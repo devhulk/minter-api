@@ -36,12 +36,23 @@ export default class Minter {
 
     getPolicyID() {
         let promise = new Promise((resolve, reject) => {
+            let policyObj = {}
             fs.readFile('policy/policyID', 'utf8', (err, data) => {
                 if (err) {
                     reject(err)
                     return
                 }
-                resolve(data)
+                policyObj.id = data
+                fs.readFile('policy/policy.script', 'utf8', (err, data) => {
+                    if (err) {
+                        reject(err)
+                        return
+                    }
+                    let file = JSON.parse(data)
+                    policyObj.slotnumber = file.scripts[0].slot
+                    
+                    resolve(policyObj)
+                })
             })
 
         })
