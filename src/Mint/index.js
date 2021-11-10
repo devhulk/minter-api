@@ -130,16 +130,25 @@ export default class Minter {
              --invalid-hereafter ${options.policy.slotnumber} \
              --out-file /transactions/raw/${option.metadata.asset_id}.raw`
             console.log(cmd)
+        fs.writeFile('build-raw.sh', cmd, err => {
+            if (err) {
+                reject(err)
+            }
+            
+            resolve(cmd)
+        })
 
-            exec(cmd , (err, stdout, stderr) => {
-                if (err) {
-                    // console.log(err)
-                    reject(err)
-                    return;
-                }
-                resolve(stdout)
+            // exec(cmd , (err, stdout, stderr) => {
+            //     if (err) {
+            //         // console.log(err)
+            //         reject(err)
+            //         return;
+            //     }
+            //     resolve(stdout)
 
-            })
+            // })
+
+
 
 
         })
