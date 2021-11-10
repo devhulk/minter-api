@@ -51,7 +51,7 @@ app.post('/v1/cardano/mint/asset', function (req, res) {
                 .then(() => {
                     minter.buildRawTransaction(mintData)
                     .then((data) => {
-                        res.send(data)
+                        // res.send(data)
                     })
                     // next nest
                     .then(() => {
