@@ -133,14 +133,13 @@ cardano-cli transaction build-raw \
              --tx-out '${options.mintWalletInfo.address}+${output}+"${options.request.metadata.amount} ${options.policy.id}.${options.request.metadata.asset_id}"' 
 `
             console.log(cmd)
-            resolve(cmd)
-        // fs.writeFile('build-raw.sh', cmd, err => {
-        //     if (err) {
-        //         reject(err)
-        //     }
+        fs.writeFile('build-raw.sh', cmd, err => {
+            if (err) {
+                reject(err)
+            }
             
-        //     resolve(cmd)
-        // })
+            resolve(cmd)
+        })
 
             // exec(cmd , (err, stdout, stderr) => {
             //     if (err) {
