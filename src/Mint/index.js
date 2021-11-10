@@ -119,7 +119,7 @@ export default class Minter {
     }
 
     buildRawTransaction(options) {
-        let output = 0
+        let output = "0"
         let promise = new Promise((resolve, reject) => {
             //  --mint="${options.metadata.amount} ${options.policy.id}.${options.metadata.asset_id}" \
             //  --minting-script-file policy/policy.script \
