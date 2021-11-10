@@ -177,7 +177,7 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
             console.log(cmd)
             exec(cmd , (err, stdout, stderr) => {
                 if (err) {
-                    // console.log(err)
+                    console.log(err)
                     reject(err)
                     return;
                 }
