@@ -121,10 +121,6 @@ export default class Minter {
     buildRawTransaction(options) {
         let output = "0"
         let promise = new Promise((resolve, reject) => {
-            //  --mint="${options.metadata.amount} ${options.policy.id}.${options.metadata.asset_id}" \
-            //  --minting-script-file policy/policy.script \
-            //  --metadata-json-file metadata.json \
-            //  --invalid-hereafter "${options.policy.slotnumber}" \
             //  --out-file /transactions/raw/${option.metadata.asset_id}.raw
             let cmd = `
 #!/bin/bash
@@ -136,8 +132,9 @@ $output="${output}"
 $tokenamount="${options.request.metadata.amount}"
 $policyid="${options.policy.id.trim()}"
 $tokenname="${options.request.metadata.asset_id}"
+$slotnumber="${options.policy.slotnumber}"
 
-cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$output+"$tokenamount $policyid.$tokenname" --mint="$tokenamount $policyid.$tokenname"`
+cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$output+"$tokenamount $policyid.$tokenname" --mint="$tokenamount $policyid.$tokenname" --minting-script-file policy/policy.script --minting-script-file policy/policy.script --invalid-hereafter $slotnumber --out-file /transactions/raw/$tokenname.raw`
             console.log(cmd)
         fs.writeFile('build-raw.sh', cmd, err => {
             if (err) {
