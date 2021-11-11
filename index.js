@@ -19,7 +19,7 @@ app.post('/v1/cardano/transactions', function (req, res) {
     let mintWallet = body.mintWalletAddr
     axios.get(`https://cardano-testnet.blockfrost.io/api/v0/addresses/${mintWallet}/utxos?order=desc`, {headers: {'project_id': 'testnetxR0g77qOcoQ9CZbE5TOrYstSzERzVFef'}})
     .then((response) => {
-        console.log(response)
+        console.log(response.data)
         res.send(response.data)
     })
     .catch(e => res.send(e))
