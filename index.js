@@ -18,7 +18,7 @@ app.post('/v1/cardano/transactions', function (req, res) {
     axios.get(`https://cardano-testnet.blockfrost.io/api/v0/addresses/addr_test1vpfvdy0rvkawm6zz4l3y5fykyagp5r7g300xv7dhrkxs4aq8mt5vq/transactions`, {headers: {'project_id': 'testnetxR0g77qOcoQ9CZbE5TOrYstSzERzVFef'}})
     .then((response) => {
         console.log(response)
-        res.send(response)
+        res.send(response.data)
     })
     .catch(e => res.send(e))
 
