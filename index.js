@@ -15,7 +15,7 @@ import axios from 'axios'
 // let client = new Cardano()
 // I need to be able to look at an address and see the recent txs, how much was sent to the addr, and who sent it. Also need to monitor this on a time increment. 
 app.post('/v1/cardano/transactions', function (req, res) {
-    let body = JSON.parse(req.body)
+    let body = req.body
     let mintWallet = body.mintWalletAddr
     axios.get(`https://cardano-testnet.blockfrost.io/api/v0/addresses/${mintWallet}/utxos?order=desc`, {headers: {'project_id': 'testnetxR0g77qOcoQ9CZbE5TOrYstSzERzVFef'}})
     .then((response) => {
