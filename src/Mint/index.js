@@ -35,6 +35,65 @@ export default class Minter {
         return promise
     }
 
+    getMintWalletHash(options) {
+        let promise = new Promise((resolve, reject) => {
+
+            let config = options.config
+            let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
+            let magic = network == '--testnet-magic' ? '1097911063' : ''
+            exec(`cardano-cli query utxo --address $(cat mintWallet/payment.addr) ${network} ${magic} --out-file=txixhash.json`, (err, stdout, stderr) => {
+                if (err) {
+                    reject(err)
+                    return;
+                }
+                let file = fs.readFileSync('txixhash.json')
+                let data = JSON.parse(file)
+                let balanceObj = data[`${Object.keys(data)[0]}`]
+                let lovelace = balanceObj.value.lovelace
+                let ada = balanceObj.value.lovelace / 1000000
+                let returnObj = {txixhash: Object.keys(data)[0], balance: {lovelace, ada}, address: options.address }
+
+                resolve(returnObj)
+                return;
+            })
+        })
+        return promise
+
+
+
+    }
+
+    getCustomerWalletHash(options) {
+        let promise = new Promise((resolve, reject) => {
+
+            let config = options.config
+            let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
+            let magic = network == '--testnet-magic' ? '1097911063' : ''
+            exec(`cardano-cli query utxo --address ${options.customerAddress} ${network} ${magic} --out-file=txixhash.json`, (err, stdout, stderr) => {
+                if (err) {
+                    reject(err)
+                    return;
+                }
+                let file = fs.readFileSync('txixhash.json')
+                let data = JSON.parse(file)
+                let balanceObj = data[`${Object.keys(data)[0]}`]
+                let lovelace = balanceObj.value.lovelace
+                let ada = balanceObj.value.lovelace / 1000000
+
+
+                let returnObj = {txixhash: Object.keys(data)[0], balance: {lovelace, ada}, address: options.address }
+
+                resolve(returnObj)
+                return;
+            })
+        })
+        return promise
+
+
+
+    }
+
+
     getPolicyID() {
         let promise = new Promise((resolve, reject) => {
             let policyObj = {}
@@ -103,33 +162,6 @@ export default class Minter {
 
     }
 
-    getHash(options) {
-        let promise = new Promise((resolve, reject) => {
-
-            let config = options.config
-            let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
-            let magic = network == '--testnet-magic' ? '1097911063' : ''
-            exec(`cardano-cli query utxo --address ${options.address} ${network} ${magic} --out-file=txixhash.json`, (err, stdout, stderr) => {
-                if (err) {
-                    reject(err)
-                    return;
-                }
-                let file = fs.readFileSync('txixhash.json')
-                let data = JSON.parse(file)
-                let balanceObj = data[`${Object.keys(data)[0]}`]
-                let lovelace = balanceObj.value.lovelace
-                let ada = balanceObj.value.lovelace / 1000000
-                let returnObj = {txixhash: Object.keys(data)[0], balance: {lovelace, ada}, address: options.address }
-
-                resolve(returnObj)
-                return;
-            })
-        })
-        return promise
-
-
-
-    }
 
     buildRawTransaction(options) {
         let output = options.output == undefined ? "0" : options.mintWalletInfo.balance.lovelace - options.fee
@@ -173,7 +205,7 @@ console.log(cmd)
             let config = options.config
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
-            let cmd = `cardano-cli transaction sign --signing-key-file payment.skey --signing-key-file policy/policy.skey ${network} ${magic} --tx-body-file ./transactions/raw/${options.request.metadata.asset_id}.raw --out-file ./transactions/signed/${options.request.metadata.asset_id}.signed`
+            let cmd = `cardano-cli transaction sign --signing-key-file mintWallet/payment.skey --signing-key-file policy/policy.skey ${network} ${magic} --tx-body-file ./transactions/raw/${options.request.metadata.asset_id}.raw --out-file ./transactions/signed/${options.request.metadata.asset_id}.signed`
             console.log(cmd)
             exec(cmd , (err, stdout, stderr) => {
                 if (err) {
@@ -216,6 +248,10 @@ console.log(cmd)
             
         })
         return promise
+
+    }
+
+    sendToken() {
 
     }
 

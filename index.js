@@ -8,18 +8,21 @@ app.use(cors({
 
 app.use(bodyParser.json())
 
-import Cardano from "./src/Cardano";
+// import Cardano from "./src/Cardano";
 import Minter from "./src/Mint"
+import axios from 'axios'
 
-let client = new Cardano()
+// let client = new Cardano()
 
-app.get('/v1/cardano/getInfo', function (req, res) {
-    client.getInfo()
-        .then((data) => {
-            res.send(data)
-        })
-        .catch(err => console.log(err))
+app.post('/v1/cardano/transactions', function (req, res) {
+    let network = req.body.network
+    axios.get(`https://cardano-${network}.blockfrost.io/api/v0/addresses/${req.body.address}/transactions`, {headers: {'project_id': 'testnetxR0g77qOcoQ9CZbE5TOrYstSzERzVFef'}})
+    .then((response) => {
+        res.send(response)
+    })
+
 })
+
 app.get('/v1/cardano/mint/assets', function (req, res) {
     let minter = new Minter()
 })
@@ -33,7 +36,7 @@ app.post('/v1/cardano/mint/asset', function (req, res) {
         mintData.protocolParams = data
     })
     .then(() => {
-        minter.getHash(body)
+        minter.getMintWalletHash(body)
         .then((data) => {
             mintData.mintWalletInfo = data
         })
@@ -46,15 +49,12 @@ app.post('/v1/cardano/mint/asset', function (req, res) {
                 minter.getMetaData(mintData)
                 .then((metadata) => {
                     mintData.metadata = metadata
-                    // res.send(mintData)
                 })
                 .then(() => {
                     minter.buildRawTransaction(mintData)
                     .then((data) => {
-                        // res.send(data)
                         mintData.output = 0
                     })
-                    // next nest
                     .then(() => {
                         minter.calculateFee(mintData)
                         .then((data) => {
@@ -65,9 +65,9 @@ app.post('/v1/cardano/mint/asset', function (req, res) {
                                 minter.finalizeTransaction(mintData)
                                 .then((data) => {
                                     res.send(mintData)
+                                    // send token to other wallet
                                 })
                                 .catch((e) => res.send(`Error: ${e}`))
-                                // res.send(mintData)
                             })
                             .catch((e) => res.send(`Error: ${e}`))
                         })
@@ -85,42 +85,42 @@ app.post('/v1/cardano/mint/asset', function (req, res) {
 
 
 
-app.get('/v1/cardano/wallet/:id/getAddress', function (req, res) {
-    const options = {
-        id: req.params.id
-    }
-    client.getWalletAddress(options)
-        .then((data) => {
-            res.send(data[0].id)
-        })
-        .catch(err => console.log(err))
+// app.get('/v1/cardano/wallet/:id/getAddress', function (req, res) {
+//     const options = {
+//         id: req.params.id
+//     }
+//     client.getWalletAddress(options)
+//         .then((data) => {
+//             res.send(data[0].id)
+//         })
+//         .catch(err => console.log(err))
 
-})
+// })
 
-app.post('/v1/cardano/wallet/', function (req, res) {
-    let mnemonic = client.createMnemonic()
-    let responseData = {}
-    const options = {
-        name: "testWallet2", // TODO: process.env("name")
-        mnemonic: mnemonic,
-        passphrase: "thisisatest" // TODO: process.env("passphrase")
-    }
-    client.createWallet(options)
-        .then(function (response) {
-            // res.send(response);
-            responseData.wallet = response
-        })
-        .then(() => {
-            responseData.wallet.id
-            client.getWalletAddress(responseData.wallet)
-                .then((data) => {
-                    responseData.address = data[0].id
-                    res.send(responseData)
-                })
-            .catch(err => console.log(err))
-        })
-        .catch(err => console.log(err))
-})
+// app.post('/v1/cardano/wallet/', function (req, res) {
+//     let mnemonic = client.createMnemonic()
+//     let responseData = {}
+//     const options = {
+//         name: "testWallet2", // TODO: process.env("name")
+//         mnemonic: mnemonic,
+//         passphrase: "thisisatest" // TODO: process.env("passphrase")
+//     }
+//     client.createWallet(options)
+//         .then(function (response) {
+//             // res.send(response);
+//             responseData.wallet = response
+//         })
+//         .then(() => {
+//             responseData.wallet.id
+//             client.getWalletAddress(responseData.wallet)
+//                 .then((data) => {
+//                     responseData.address = data[0].id
+//                     res.send(responseData)
+//                 })
+//             .catch(err => console.log(err))
+//         })
+//         .catch(err => console.log(err))
+// })
 
 
 app.listen(3572, ( ) => {
