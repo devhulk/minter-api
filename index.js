@@ -24,6 +24,16 @@ app.post('/v1/cardano/transactions', function (req, res) {
 
 })
 
+app.get('/v1/cardano/transaction/utxo', function (req, res) {
+    axios.get(`https://cardano-testnet.blockfrost.io/api/v0/addresses/1891adfc0abd66adfaaf4aa943a2e0e01b9b675b0bca9debdf8e2caa337f405f/utxos`, {headers: {'project_id': 'testnetxR0g77qOcoQ9CZbE5TOrYstSzERzVFef'}})
+    .then((response) => {
+        console.log(response)
+        res.send(response.data)
+    })
+    .catch(e => res.send(e))
+
+})
+
 app.get('/v1/cardano/mint/assets', function (req, res) {
     let minter = new Minter()
 })
