@@ -18,3 +18,8 @@ curl -X POST -H "Content-Type: application/json" \
 curl -X POST -H "Content-Type: application/json" \
     -d '{"policy_id": "", "policy_name": "", "asset_id": "", "asset_name": "", "ipfsLink": "", "traits": [] }' \
     http://localhost:3572/v1/mint
+
+# Test transaction endpoint
+curl -X POST -H "Content-Type: application/json" \
+    -d '{"mintWalletAddr": "addr_test1vpfvdy0rvkawm6zz4l3y5fykyagp5r7g300xv7dhrkxs4aq8mt5vq", "network": "testnet" }' \
+    http://localhost:3572/v1/cardano/transactions
