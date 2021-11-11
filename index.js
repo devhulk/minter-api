@@ -33,7 +33,8 @@ app.post('/v1/cardano/txs/utxos', function (req, res) {
     .then((response) => {
         console.log(response.data)
         let input = response.data.inputs[0]
-        res.send(input)
+        let amountRecieved = {address: input.address , amount: input.amount.quantity / 1000000 }
+        res.send(amountRecieved)
     })
     .catch(e => res.send(e))
 
