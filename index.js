@@ -32,7 +32,7 @@ app.post('/v1/cardano/txs/utxos', function (req, res) {
     axios.get(`https://cardano-testnet.blockfrost.io/api/v0/txs/${mintWalletTX}/utxos?order=desc`, {headers: {'project_id': 'testnetxR0g77qOcoQ9CZbE5TOrYstSzERzVFef'}})
     .then((response) => {
         console.log(response.data)
-        res.send(response.data)
+        res.send(response.data.inputs[0].address)
     })
     .catch(e => res.send(e))
 
