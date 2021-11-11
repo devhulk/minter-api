@@ -19,6 +19,7 @@ app.post('/v1/cardano/transactions', function (req, res) {
     .then((response) => {
         res.send(response)
     })
+    .catch(e => res.send(e))
 
 })
 
