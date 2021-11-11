@@ -19,7 +19,12 @@ curl -X POST -H "Content-Type: application/json" \
     -d '{"policy_id": "", "policy_name": "", "asset_id": "", "asset_name": "", "ipfsLink": "", "traits": [] }' \
     http://localhost:3572/v1/mint
 
-# Test transaction endpoint
+# Get utxos on address -> returns tx hash
 curl -X POST -H "Content-Type: application/json" \
-    -d '{"mintWalletAddr": "addr_test1vpfvdy0rvkawm6zz4l3y5fykyagp5r7g300xv7dhrkxs4aq8mt5vq", "network": "testnet" }' \
-    http://localhost:3572/v1/cardano/transactions
+    -d '{"mintWalletAddr": "addr_test1vpfvdy0rvkawm6zz4l3y5fykyagp5r7g300xv7dhrkxs4aq8mt5vq", "config": "testnet" }' \
+    http://localhost:3572/v1/cardano/address/utxos
+
+# Use tx hash to get inputs and outputs
+curl -X POST -H "Content-Type: application/json" \
+    -d '{"mintWalletTX": "68f1a29a214276792203373991150ab6e76ebb15c6861fec453cdb171c64622a", "config": "testnet" }' \
+    http://localhost:3572/v1/cardano/txs/utxos
