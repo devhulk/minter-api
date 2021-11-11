@@ -25,7 +25,7 @@ app.post('/v1/cardano/transactions', function (req, res) {
 })
 
 app.get('/v1/cardano/transaction/utxo', function (req, res) {
-    axios.get(`https://cardano-testnet.blockfrost.io/api/v0/txs/e963a473e36ab72f62e17c4c41efd66bd5d208cb8c9ac8ef8cbadb9ea1559305/utxos?order=asc`, {headers: {'project_id': 'testnetxR0g77qOcoQ9CZbE5TOrYstSzERzVFef'}})
+    axios.get(`https://cardano-testnet.blockfrost.io/api/v0/txs/e963a473e36ab72f62e17c4c41efd66bd5d208cb8c9ac8ef8cbadb9ea1559305/utxos?order=desc`, {headers: {'project_id': 'testnetxR0g77qOcoQ9CZbE5TOrYstSzERzVFef'}})
     .then((response) => {
         console.log(response)
         res.send(response.data)
