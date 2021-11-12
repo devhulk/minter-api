@@ -23,6 +23,7 @@ app.post('/v1/cardano/address/utxos', function (req, res) {
     .then((customerPayments) => {
         res.send(customerPayments)
     })
+    .catch(e => res.send(e))
 
 
 
