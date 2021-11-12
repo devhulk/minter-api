@@ -24,7 +24,7 @@ export default class Transactions {
                 utxos.forEach(utxo => {
                     this.getTXData({mintWalletTX: utxo["tx_hash"], config: options.config})
                     .then((customerPayment) => {
-                        if (customerPayment.amount > 10) {
+                        if (customerPayment.amount >= 10) {
                             customerNFTPayments.push(customerPayment)
                         } else {
                             otherPayments.push(customerPayment)
