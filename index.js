@@ -34,11 +34,12 @@ app.post('/v1/cardano/txs/utxos', function (req, res) {
     let mintWalletTX = body.mintWalletTX
     axios.get(`https://cardano-testnet.blockfrost.io/api/v0/txs/${mintWalletTX}/utxos?order=desc`, {headers: {'project_id': 'testnetxR0g77qOcoQ9CZbE5TOrYstSzERzVFef'}})
     .then((response) => {
-        console.log(response.data)
+        // console.log(response.data)
         let input = response.data.inputs[0]
         let output = response.data.outputs[0]
         let amount = input.address == body.mintWalletAddr ? input.amount[0] : null
         let amountRecieved = {address: input.address , amount: amount.quantity / 1000000}
+        console.log(amountRecieved)
         res.send(amountRecieved)
     })
     .catch(e => res.send(e))
