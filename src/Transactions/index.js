@@ -22,6 +22,7 @@ export default class Transactions {
                 // then I can send that minted pugly to the customer address
                 walletTXs = response.data
                 let payments = this.parseUTXOs(walletTXs)
+                console.log(payments)
                 resolve(payments)
                 // let utxos = walletTXs
                 // let customerNFTPayments = []
