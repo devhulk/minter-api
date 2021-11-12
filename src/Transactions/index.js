@@ -65,6 +65,7 @@ export default class Transactions {
     parseUTXOs(walletTXs) {
 
             let utxos = walletTXs
+            console.log("UTXOS: ", utxos)
             let customerNFTPayments = []
             let promises = []
             utxos.map(utxo => {
