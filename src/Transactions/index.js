@@ -65,6 +65,7 @@ export default class Transactions {
     }
 
     parseUTXOs(options) {
+        console.log("PARSE UTXOS: ", options)
 
             let utxos = options.txs
             console.log("UTXOS: ", utxos)
