@@ -28,7 +28,8 @@ promises.push(
                     promises.push(
                         this.getTXData({mintWalletTX: utxo["tx_hash"], config: options.config})
                         .then((customerPayment) => {
-                                console.log(customerPayment)
+                                customerNFTPayments.push(customerPayment)
+                                console.log(customerNFTPayments)
                                 resolve(customerPayment)
                         })
                         .catch(e => reject(e))
