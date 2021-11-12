@@ -13,7 +13,8 @@ export default class Transactions {
             .then((txs) => {
                 console.log("txs: ", txs)
                 let payments = this.parseUTXOs(txs)
-                resolve(payments)
+                console.log(payments)
+                // resolve(payments)
             })
             .catch(e => reject(e))
 
