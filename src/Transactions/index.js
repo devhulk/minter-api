@@ -18,8 +18,26 @@ export default class Transactions {
                 // then I need to get the address of the customer and the quantity paid and insert that into a series-1-customer collection
                 // then I can mint a pugly (get random pugly series-1-puglies) (minted: false)
                 // then I can send that minted pugly to the customer address
-                // let txids = response.data
-                resolve(response.data)
+                let customerNFTPayments = []
+                let otherPayments = []
+                let utxos = response.data
+                utxos.forEach(utxo => {
+                    this.getTXData({mintWalletTX: utxo["tx_hash"], config: options.config})
+                    .then((tx) => {
+                        let input = tx.data.inputs[0]
+                        // let output = tx.data.outputs[0]
+                        let amount = tx.amount[0]
+                        let customerPayment = {address: input.address , amount: amount.quantity / 1000000 }
+                        if (customerPayment.amount > 10) {
+                            customerNFTPayments.push(customerPayment)
+                        } else {
+                            otherPayments.push(customerPayment)
+                        }
+                        console.log(customerPayment)
+                    })
+                    .catch(e => reject(e))
+                })
+                resolve(customerNFTPayments)
 
                 // repo.createCollection({collection: txsSeriesOne, txs: response.data})
                 // .then((mongo) => {
