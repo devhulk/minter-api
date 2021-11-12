@@ -47,6 +47,7 @@ export default class Transactions {
             Promise.all(promises).then(() => {
                 resolve(customerNFTPayments)
             })
+            .catch(err => reject(err))
 
         })
 
