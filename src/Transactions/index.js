@@ -123,7 +123,7 @@ export default class Transactions {
                 let output = response.data.outputs[0]
                 let amount = output.amount[0]
                 // let amount = input.address == body.mintWalletAddr ? output.amount[0] : null
-                let customerPayment = {address: input.address , amount: amount.quantity / 1000000 , fullData: response.data}
+                let customerPayment = {address: input.address , amount: amount.quantity / 1000000 }
                 console.log(customerPayment)
                 resolve(customerPayment)
             })
