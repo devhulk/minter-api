@@ -1,5 +1,8 @@
 require('dotenv').config()
 import axios from 'axios'
+import Repo from '../Repo'
+
+let repo = new Repo()
 
 export default class Transactions {
     constructor() {}
@@ -11,7 +14,19 @@ export default class Transactions {
 
             axios.get(`https://cardano-testnet.blockfrost.io/api/v0/addresses/${options.mintWalletAddr}/utxos?order=desc`, {headers: {'project_id': `${blockfrostKey}`}})
             .then((response) => {
+                // need to get all TXs for wallet and insert them into txsSeriesOne collection
+                // then I need to get the address of the customer and the quantity paid and insert that into a series-1-customer collection
+                // then I can mint a pugly (get random pugly series-1-puglies) (minted: false)
+                // then I can send that minted pugly to the customer address
+                // let txids = response.data
                 resolve(response.data)
+
+                // repo.createCollection({collection: txsSeriesOne, txs: response.data})
+                // .then((mongo) => {
+                //     mongo.client.close()
+                //     resolve(mongo.mongoResult)
+                // })
+                // .catch(e => reject(e))
             })
             .catch(e => reject(e))
 
