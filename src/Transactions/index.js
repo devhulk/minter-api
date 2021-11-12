@@ -21,6 +21,7 @@ export default class Transactions {
                 walletTXs = response.data
                 this.parseUTXOs(walletTXs)
                 .then((custData) => {
+                    console.log(custData)
                     resolve(custData)
                 })
                 .catch(e => reject(e))
