@@ -114,6 +114,7 @@ export default class Transactions {
 
     getTXData(options) {
         let blockfrostKey = options.config == "testnet" ? process.env.BLOCKFROST_TESTNET : process.env.BLOCKFROST_MAINNET
+        console.log(mintWalletTX)
 
         let promise = new Promise((resolve, reject) => {
             axios.get(`https://cardano-testnet.blockfrost.io/api/v0/txs/${options.mintWalletTX}/utxos?order=desc`, {headers: {'project_id': `${blockfrostKey}`}})
