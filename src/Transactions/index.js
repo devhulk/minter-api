@@ -11,7 +11,6 @@ export default class Transactions {
         let promise = new Promise((resolve, reject) => {
 
             let blockfrostKey = options.config == "testnet" ? process.env.BLOCKFROST_TESTNET : process.env.BLOCKFROST_MAINNET
-            let customerNFTPayments = []
             let otherPayments = []
             let walletTXs = []
             let promises = []
@@ -24,6 +23,7 @@ promises.push(
                 // then I can send that minted pugly to the customer address
                 walletTXs = response.data
                 let utxos = walletTXs
+                let customerNFTPayments = []
                 utxos.forEach(utxo => {
                     promises.push(
                         this.getTXData({mintWalletTX: utxo["tx_hash"], config: options.config})
