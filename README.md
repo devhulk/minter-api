@@ -19,3 +19,23 @@ There are multiple endpoints currently being used for testing. Ideally we will s
 ## Post Command Example
 
 curl -X POST -H "Content-Type: application/json"     -d '{"address": "$mint_wallet_addr", "config": "testnet | mainnet", "metadata": { "asset_id": "testID", "asset_name": "testName", "ipfsLink": "ipfs://test", "amount": "1", "traits": [{"head" : "original"}] }}' http://localhost:3572/v1/cardano/mint/asset
+
+
+## Running the Project
+
+```
+git clone https://github.com/devhulk/minter-api.git
+```
+
+install dependencies
+
+```
+cd minter-api
+npm i
+```
+
+start api
+
+```
+npm start
+```
