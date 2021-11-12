@@ -69,7 +69,7 @@ export default class Transactions {
             let customerNFTPayments = []
             let promises = []
             utxos.map(utxo => {
-                    console.log("ParseUTXOs: ", utxo)
+                    console.log("ParseUTXOs: ", utxo["tx_hash"])
                     promises.push(this.getTXData({mintWalletTX: utxo["tx_hash"], config: options.config}))
                     // .then((customerPayment) => {
                     //         customerNFTPayments.push(customerPayment)
