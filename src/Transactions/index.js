@@ -21,19 +21,21 @@ export default class Transactions {
                 // then I can mint a pugly (get random pugly series-1-puglies) (minted: false)
                 // then I can send that minted pugly to the customer address
                 walletTXs = response.data
-                let utxos = walletTXs
-                let customerNFTPayments = []
-                utxos.forEach(utxo => {
-                    promises.push(
-                        this.getTXData({mintWalletTX: utxo["tx_hash"], config: options.config})
-                        .then((customerPayment) => {
-                                customerNFTPayments.push(customerPayment)
-                                console.log(customerNFTPayments)
-                                // resolve(customerPayment)
-                        })
-                        .catch(e => reject(e))
-                    )
-                })
+                let payments = this.parseUTXOs(walletTXs)
+                resolve(payments)
+                // let utxos = walletTXs
+                // let customerNFTPayments = []
+                // utxos.forEach(utxo => {
+                //     promises.push(
+                //         this.getTXData({mintWalletTX: utxo["tx_hash"], config: options.config})
+                //         .then((customerPayment) => {
+                //                 customerNFTPayments.push(customerPayment)
+                //                 console.log(customerNFTPayments)
+                //                 // resolve(customerPayment)
+                //         })
+                //         .catch(e => reject(e))
+                //     )
+                // })
 
                 // repo.createCollection({collection: txsSeriesOne, txs: response.data})
                 // .then((mongo) => {
@@ -44,15 +46,33 @@ export default class Transactions {
             })
             .catch(e => reject(e))
 
-            Promise.all(promises).then((values) => {
-                console.log(values)
-                resolve(values)
-            })
-            .catch(err => reject(err))
-
         })
 
         return promise
+    }
+
+    parseUTXOs(walletTXs) {
+
+            let utxos = walletTXs
+            let customerNFTPayments = []
+            utxos.forEach(utxo => {
+                promises.push(
+                    this.getTXData({mintWalletTX: utxo["tx_hash"], config: options.config})
+                    .then((customerPayment) => {
+                            customerNFTPayments.push(customerPayment)
+                            console.log(customerNFTPayments)
+                            // resolve(customerPayment)
+                    })
+                    .catch(e => reject(e))
+                )
+            })
+
+            Promise.all(promises).then((values) => {
+                console.log(values)
+                return values
+            })
+            .catch(err => reject(err))
+
     }
 
     getTXData(options) {
