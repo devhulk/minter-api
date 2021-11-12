@@ -7,6 +7,27 @@ let repo = new Repo()
 export default class Transactions {
     constructor() {}
 
+    payments(options) {
+        let promise = new Promise((resolve, reject) => {
+            this.getWalletUTXOS(options)
+            .then((txs) => {
+                console.log("txs: ", txs)
+                this.parseUTXOs(txs)
+                    .then((payments) => {
+                        console.log("payments: ", payments)
+                        payments.then((payment) => {
+                            console.log("payment: ", payment)
+                            resolve(payment) 
+                        })
+                    })
+                    .catch(e => reject(e))
+            })
+            .catch(e => reject(e))
+
+        })
+        return promise
+    }
+
     getWalletUTXOS(options) {
         let promise = new Promise((resolve, reject) => {
 
@@ -18,12 +39,7 @@ export default class Transactions {
                 // then I need to get the address of the customer and the quantity paid and insert that into a series-1-customer collection
                 // then I can mint a pugly (get random pugly series-1-puglies) (minted: false)
                 // then I can send that minted pugly to the customer address
-                this.parseUTXOs(response.data)
-                .then((custData) => {
-                    console.log(custData)
-                    resolve(custData)
-                })
-                .catch(e => reject(e))
+                resolve(response.data)
 
                 // let utxos = walletTXs
                 // let customerNFTPayments = []

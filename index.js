@@ -19,9 +19,9 @@ app.post('/v1/cardano/address/utxos', function (req, res) {
     let body = req.body
     let walletTransactions = new Transactions()
 
-    walletTransactions.getWalletUTXOS(body)
-    .then((customerPayments) => {
-        res.send(customerPayments)
+    walletTransactions.payments(body)
+    .then((payments) => {
+        res.send(payments)
     })
     .catch(e => res.send(e))
 
