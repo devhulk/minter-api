@@ -83,7 +83,7 @@ export default class Transactions {
             Promise.all(txhashs).then((results) => {
                 console.log(results)
             })
-            .catch((error) => {
+            .catch(function (error) {
                 if (error.response) {
                   // Request made and server responded
                   console.log(error.response.data);
@@ -95,7 +95,9 @@ export default class Transactions {
                 } else {
                   // Something happened in setting up the request that triggered an Error
                   console.log('Error', error.message);
-                })
+                }
+            
+              });
             
             // console.log(txhashs)
             // Promise.all(promises).then((payments) => {
@@ -123,7 +125,7 @@ export default class Transactions {
                 console.log(customerPayment)
                 resolve(customerPayment)
             })
-            .catch((error) => {
+            .catch(function (error) {
                 if (error.response) {
                   // Request made and server responded
                   console.log(error.response.data);
@@ -135,8 +137,9 @@ export default class Transactions {
                 } else {
                   // Something happened in setting up the request that triggered an Error
                   console.log('Error', error.message);
-                })
-
+                }
+            
+              });
         })
         return promise
     }
