@@ -84,8 +84,7 @@ export default class Transactions {
                     .catch(e => reject(e))
             })
             let ps = Promise.all(promises).then((payments) => {
-                resolve(payments)
-                return payments
+                console.log(payments)
              }).catch((err) => {
                  reject(err)
              })
