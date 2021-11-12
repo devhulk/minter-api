@@ -12,15 +12,8 @@ export default class Transactions {
             this.getWalletUTXOS(options)
             .then((txs) => {
                 console.log("txs: ", txs)
-                this.parseUTXOs(txs)
-                    .then((payments) => {
-                        console.log("payments: ", payments)
-                        payments.then((payment) => {
-                            console.log("payment: ", payment)
-                            resolve(payment) 
-                        })
-                    })
-                    .catch(e => reject(e))
+                let payments = this.parseUTXOs(txs)
+                resolve(payments)
             })
             .catch(e => reject(e))
 
@@ -70,11 +63,11 @@ export default class Transactions {
     }
 
     parseUTXOs(walletTXs) {
-        let promise = new Promise((resolve, reject) => {
 
             let utxos = walletTXs
             let customerNFTPayments = []
             let promises = utxos.map(utxo => {
+                    console.log("ParseUTXOs: ", utxo)
                     this.getTXData({mintWalletTX: utxo["tx_hash"], config: options.config})
                     .then((customerPayment) => {
                             customerNFTPayments.push(customerPayment)
@@ -83,17 +76,14 @@ export default class Transactions {
                     })
                     .catch(e => reject(e))
             })
-            let ps = Promise.all(promises).then((payments) => {
+            Promise.all(promises).then((payments) => {
                 console.log(payments)
+                return payments
              }).catch((err) => {
-                 reject(err)
+                 console.log(err)
              })
 
-             resolve(ps)
 
-        })
-
-        return promise
 
     }
 
