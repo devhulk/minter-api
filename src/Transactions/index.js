@@ -12,7 +12,8 @@ export default class Transactions {
             this.getWalletUTXOS(options)
             .then((txs) => {
                 console.log("txs: ", txs)
-                let payments = this.parseUTXOs({config: options.config, txs})
+                options.txs = txs
+                let payments = this.parseUTXOs(options)
                 console.log(payments)
                 // resolve(payments)
             })
