@@ -37,20 +37,6 @@ export default class Transactions {
                 // then I can send that minted pugly to the customer address
                 resolve(response.data)
 
-                // let utxos = walletTXs
-                // let customerNFTPayments = []
-                // utxos.forEach(utxo => {
-                //     promises.push(
-                //         this.getTXData({mintWalletTX: utxo["tx_hash"], config: options.config})
-                //         .then((customerPayment) => {
-                //                 customerNFTPayments.push(customerPayment)
-                //                 console.log(customerNFTPayments)
-                //                 // resolve(customerPayment)
-                //         })
-                //         .catch(e => reject(e))
-                //     )
-                // })
-
                 // repo.createCollection({collection: txsSeriesOne, txs: response.data})
                 // .then((mongo) => {
                 //     mongo.client.close()
