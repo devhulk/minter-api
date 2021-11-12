@@ -11,9 +11,7 @@ export default class Transactions {
         let promise = new Promise((resolve, reject) => {
 
             let blockfrostKey = options.config == "testnet" ? process.env.BLOCKFROST_TESTNET : process.env.BLOCKFROST_MAINNET
-            let otherPayments = []
             let walletTXs = []
-            let promises = []
             axios.get(`https://cardano-testnet.blockfrost.io/api/v0/addresses/${options.mintWalletAddr}/utxos?order=desc`, {headers: {'project_id': `${blockfrostKey}`}})
             .then((response) => {
                 // need to get all TXs for wallet and insert them into txsSeriesOne collection
@@ -21,9 +19,12 @@ export default class Transactions {
                 // then I can mint a pugly (get random pugly series-1-puglies) (minted: false)
                 // then I can send that minted pugly to the customer address
                 walletTXs = response.data
-                let payments = this.parseUTXOs(walletTXs)
-                console.log(payments)
-                resolve(payments)
+                this.parseUTXOs(walletTXs)
+                .then((custData) => {
+                    resolve(custData)
+                })
+                .catch(e => reject(e))
+
                 // let utxos = walletTXs
                 // let customerNFTPayments = []
                 // utxos.forEach(utxo => {
@@ -53,6 +54,7 @@ export default class Transactions {
     }
 
     parseUTXOs(walletTXs) {
+        let promise = new Promise((resolve, reject) => {
 
             let utxos = walletTXs
             let customerNFTPayments = []
@@ -70,9 +72,12 @@ export default class Transactions {
 
             Promise.all(promises).then((values) => {
                 console.log(values)
-                return values
+                resolve(values)
             })
             .catch(err => reject(err))
+        })
+
+        return promise
 
     }
 
