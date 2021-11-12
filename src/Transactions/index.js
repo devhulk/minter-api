@@ -11,7 +11,7 @@ export default class Transactions {
         let promise = new Promise((resolve, reject) => {
             this.getWalletUTXOS(options)
             .then((txs) => {
-                console.log("txs: ", txs)
+                // console.log("txs: ", txs)
                 options.txs = txs
                 let payments = this.parseUTXOs(options)
                 console.log(payments)
@@ -69,7 +69,7 @@ export default class Transactions {
         console.log("PARSE UTXOS: ", options)
 
             let utxos = options.txs
-            console.log("UTXOS: ", utxos)
+            // console.log("UTXOS: ", utxos)
             let txhashs = utxos.map(utxo => {
                     options.mintWalletTX = utxo["tx_hash"]
                     return this.getTXData(options).then((results) => {
@@ -111,7 +111,7 @@ export default class Transactions {
 
     getTXData(options) {
         let blockfrostKey = options.config == "testnet" ? process.env.BLOCKFROST_TESTNET : process.env.BLOCKFROST_MAINNET
-        console.log(options.mintWalletTX)
+        // console.log(options.mintWalletTX)
 
         let promise = new Promise((resolve, reject) => {
             axios.get(`https://cardano-testnet.blockfrost.io/api/v0/txs/${options.mintWalletTX}/utxos?order=desc`, {headers: {'project_id': `${blockfrostKey}`}})
@@ -121,7 +121,7 @@ export default class Transactions {
                 let amount = output.amount[0]
                 // let amount = input.address == body.mintWalletAddr ? output.amount[0] : null
                 let customerPayment = {address: input.address , amount: amount.quantity / 1000000 }
-                console.log(customerPayment)
+                // console.log(customerPayment)
                 resolve(customerPayment)
             })
             .catch(function (error) {
