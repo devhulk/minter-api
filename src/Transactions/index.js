@@ -83,6 +83,8 @@ export default class Transactions {
             Promise.all(txhashs).then((results) => {
                 console.log(results)
             })
+            .catch(e => e.response.data)
+            
             // console.log(txhashs)
             // Promise.all(promises).then((payments) => {
             //     console.log(payments)
