@@ -66,9 +66,10 @@ export default class Transactions {
 
             let utxos = walletTXs
             console.log("UTXOS: ", utxos)
-            let promises = []
             let txhashs = utxos.map(utxo => {
-                    return utxo["tx_hash"]
+                    return this.getTXData(utxo["tx_hash"]).then((results) => {
+                        return results
+                    })
                     // promises.push(this.getTXData({mintWalletTX: utxo["tx_hash"], config: options.config}))
                     // .then((customerPayment) => {
                     //         customerNFTPayments.push(customerPayment)
@@ -77,7 +78,11 @@ export default class Transactions {
                     // })
                     // .catch(e => reject(e))
             })
-            console.log(txhashs)
+
+            Promise.all(txhashs).then((results) => {
+                console.log(results)
+            })
+            // console.log(txhashs)
             // Promise.all(promises).then((payments) => {
             //     console.log(payments)
             //     return payments
@@ -100,6 +105,7 @@ export default class Transactions {
                 let amount = output.amount[0]
                 // let amount = input.address == body.mintWalletAddr ? output.amount[0] : null
                 let customerPayment = {address: input.address , amount: amount.quantity / 1000000 , fullData: response.data}
+                console.log(customerPayment)
                 resolve(customerPayment)
             })
             .catch(e => reject(e))
