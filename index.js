@@ -38,7 +38,7 @@ app.post('/v1/cardano/txs/utxos', function (req, res) {
         let input = response.data.inputs[0]
         let output = response.data.outputs[0]
         let amount = input.address == body.mintWalletAddr ? input.amount[0] : null
-        let amountRecieved = {address: input.address , amount: amount.quantity / 1000000, fullData: response.data }
+        let amountRecieved = {address: input.address , amount: amount.quantity / 1000000}
         res.send(amountRecieved)
     })
     .catch(e => res.send(e))
