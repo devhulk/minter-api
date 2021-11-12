@@ -82,7 +82,7 @@ export default class Transactions {
             })
 
             Promise.all(txhashs).then((results) => {
-                console.log(results)
+                console.log("Im in the PROMISE ALL: " ,results)
             })
             .catch(function (error) {
                 if (error.response) {
