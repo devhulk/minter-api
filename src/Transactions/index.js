@@ -14,9 +14,9 @@ export default class Transactions {
                 // console.log("txs: ", txs)
                 options.txs = txs
                 let payments = this.parseUTXOs(options, (data) => {
+                    
                     resolve(data)
                 })
-                // resolve(payments)
             })
             .catch(e => reject(e))
 
@@ -52,8 +52,6 @@ export default class Transactions {
     }
 
     parseUTXOs(options, cb) {
-        console.log("PARSE UTXOS: ", options)
-
             let utxos = options.txs
             // console.log("UTXOS: ", utxos)
             let txhashs = utxos.map(utxo => {
@@ -61,17 +59,9 @@ export default class Transactions {
                     return this.getTXData(options).then((results) => {
                         return results
                     })
-                    // promises.push(this.getTXData({mintWalletTX: utxo["tx_hash"], config: options.config}))
-                    // .then((customerPayment) => {
-                    //         customerNFTPayments.push(customerPayment)
-                    //         console.log(customerNFTPayments)
-                    //         return customerPayment
-                    // })
-                    // .catch(e => reject(e))
             })
 
             Promise.all(txhashs).then((results) => {
-                console.log("Im in the PROMISE ALL: " ,results)
                 cb(results)
             })
             .catch(function (error) {
@@ -98,7 +88,7 @@ export default class Transactions {
     getTXData(options) {
         let blockfrostKey = options.config == "testnet" ? process.env.BLOCKFROST_TESTNET : process.env.BLOCKFROST_MAINNET
         // console.log(options.mintWalletTX)
-
+        
         let promise = new Promise((resolve, reject) => {
             axios.get(`https://cardano-testnet.blockfrost.io/api/v0/txs/${options.mintWalletTX}/utxos?order=desc`, {headers: {'project_id': `${blockfrostKey}`}})
             .then((response) => {
@@ -107,6 +97,7 @@ export default class Transactions {
                 let amount = output.amount[0]
                 // let amount = input.address == body.mintWalletAddr ? output.amount[0] : null
                 let customerPayment = {address: input.address , amount: amount.quantity / 1000000 }
+                options.utxos = response.data
                 // console.log(customerPayment)
                 resolve(customerPayment)
             })
