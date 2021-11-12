@@ -9,6 +9,12 @@
 * ./policy folder with policy files (policy.script + policy.skey + policy.vkey + policyID)
 * ./transactions/raw folder
 * ./transactions/signed folder 
+* .env file with 
+BLOCKFROST_TESTNET=$PROJECTAPIKEY
+BLOCKFROST_MAINNET=$PROJECTAPIKEY
+MONGO_URL="$MONGODBCONNECTIONSTRING"
+
+There are multiple endpoints currently being used for testing. Ideally we will support minting assets on the fly and also handling larger "drops" dynamically.  
 
 ## Post Command Example
 

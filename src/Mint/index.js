@@ -255,12 +255,4 @@ console.log(cmd)
 
     }
 
-    // Steps to Mint
-    // 1. Create Wallet with Payment Address
-    // 2. Fund Wallet
-    // 3. Get protocol params
-    // 4. Create Policy Keys and Policy Script
-    // 5. Generate PolicyID
-    // 6. Retrieve token Metadata
-    // 7. Build Raw TX -> Calculate Fee -> Sign TX -> Submit TX
 }
