@@ -18,8 +18,7 @@ export default class Transactions {
                 // then I need to get the address of the customer and the quantity paid and insert that into a series-1-customer collection
                 // then I can mint a pugly (get random pugly series-1-puglies) (minted: false)
                 // then I can send that minted pugly to the customer address
-                walletTXs = response.data
-                this.parseUTXOs(walletTXs)
+                this.parseUTXOs(response.data)
                 .then((custData) => {
                     console.log(custData)
                     resolve(custData)
@@ -64,16 +63,18 @@ export default class Transactions {
                     .then((customerPayment) => {
                             customerNFTPayments.push(customerPayment)
                             console.log(customerNFTPayments)
-                            // resolve(customerPayment)
                             return customerPayment
                     })
                     .catch(e => reject(e))
             })
-            Promise.all(promises).then((payments) => {
+            let ps = Promise.all(promises).then((payments) => {
                 resolve(payments)
+                return payments
              }).catch((err) => {
                  reject(err)
              })
+
+             resolve(ps)
 
         })
 
