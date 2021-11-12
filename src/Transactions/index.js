@@ -56,7 +56,7 @@ export default class Transactions {
                 // })
                 // .catch(e => reject(e))
             })
-            .catch(e => reject(e))
+            .catch(e => reject(e.response.data))
 
         })
 
@@ -109,7 +109,7 @@ export default class Transactions {
                 console.log(customerPayment)
                 resolve(customerPayment)
             })
-            .catch(e => reject(e))
+            .catch(e => reject(e.response.data))
 
         })
         return promise
