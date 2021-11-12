@@ -37,7 +37,7 @@ app.post('/v1/cardano/txs/utxos', function (req, res) {
         console.log(response.data)
         let input = response.data.inputs[0]
         let output = response.data.outputs[0]
-        let amount = output.amount[0]
+        let amount = input.amount[0]
         let amountRecieved = {address: input.address , amount: amount.quantity / 1000000, fullData: response.data }
         res.send(amountRecieved)
     })
