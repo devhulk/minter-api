@@ -48,8 +48,3 @@ export default class Repo {
     }
 
 }
-
-
-let repo = new Repo()
-
-repo.createCollection({collection: 'txsSeriesOne'})
