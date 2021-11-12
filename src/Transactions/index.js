@@ -13,6 +13,7 @@ export default class Transactions {
             let blockfrostKey = options.config == "testnet" ? process.env.BLOCKFROST_TESTNET : process.env.BLOCKFROST_MAINNET
             let customerNFTPayments = []
             let otherPayments = []
+            let walletTXs = []
 
             axios.get(`https://cardano-testnet.blockfrost.io/api/v0/addresses/${options.mintWalletAddr}/utxos?order=desc`, {headers: {'project_id': `${blockfrostKey}`}})
             .then((response) => {
@@ -20,14 +21,7 @@ export default class Transactions {
                 // then I need to get the address of the customer and the quantity paid and insert that into a series-1-customer collection
                 // then I can mint a pugly (get random pugly series-1-puglies) (minted: false)
                 // then I can send that minted pugly to the customer address
-                let utxos = response.data
-                utxos.forEach(utxo => {
-                    this.getTXData({mintWalletTX: utxo["tx_hash"], config: options.config})
-                    .then((customerPayment) => {
-                            customerNFTPayments.push(customerPayment)
-                    })
-                    .catch(e => reject(e))
-                })
+                walletTXs = response.data
 
                 // repo.createCollection({collection: txsSeriesOne, txs: response.data})
                 // .then((mongo) => {
@@ -35,7 +29,20 @@ export default class Transactions {
                 //     resolve(mongo.mongoResult)
                 // })
                 // .catch(e => reject(e))
+            })
+            .then(() => {
+                let utxos = walletTXs
+                utxos.forEach(utxo => {
+                    this.getTXData({mintWalletTX: utxo["tx_hash"], config: options.config})
+                    .then((customerPayment) => {
+                            customerNFTPayments.push(customerPayment)
+                    })
+                    .catch(e => reject(e))
+                })
+            })
+            .then(() => {
                 resolve(customerNFTPayments)
+
             })
             .catch(e => reject(e))
 
