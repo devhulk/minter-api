@@ -15,6 +15,7 @@ export default class Transactions {
                 options.txs = txs
                 let payments = this.parseUTXOs(options)
                 console.log(payments)
+                resolve(payments)
                 // resolve(payments)
             })
             .catch(e => reject(e))
@@ -84,7 +85,8 @@ export default class Transactions {
             })
 
             Promise.all(txhashs).then((results) => {
-                console.log("Im in the PROMISE ALL: " ,results)
+                // console.log("Im in the PROMISE ALL: " ,results)
+                return results
             })
             .catch(function (error) {
                 if (error.response) {
@@ -102,13 +104,6 @@ export default class Transactions {
             
               });
             
-            // console.log(txhashs)
-            // Promise.all(promises).then((payments) => {
-            //     console.log(payments)
-            //     return payments
-            //  }).catch((err) => {
-            //      console.log(err)
-            //  })
 
 
 
