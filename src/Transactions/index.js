@@ -21,14 +21,10 @@ export default class Transactions {
                 // then I can mint a pugly (get random pugly series-1-puglies) (minted: false)
                 // then I can send that minted pugly to the customer address
                 let utxos = response.data
-                await utxos.forEach(utxo => {
+                utxos.forEach(utxo => {
                     this.getTXData({mintWalletTX: utxo["tx_hash"], config: options.config})
                     .then((customerPayment) => {
-                        if (customerPayment.amount >= 10) {
                             customerNFTPayments.push(customerPayment)
-                        } else {
-                            otherPayments.push(customerPayment)
-                        }
                     })
                     .catch(e => reject(e))
                 })
@@ -39,10 +35,10 @@ export default class Transactions {
                 //     resolve(mongo.mongoResult)
                 // })
                 // .catch(e => reject(e))
+                resolve(customerNFTPayments)
             })
             .catch(e => reject(e))
 
-            resolve(customerNFTPayments)
         })
 
         return promise
