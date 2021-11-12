@@ -14,7 +14,6 @@ export default class Transactions {
             let otherPayments = []
             let walletTXs = []
             let promises = []
-promises.push(
             axios.get(`https://cardano-testnet.blockfrost.io/api/v0/addresses/${options.mintWalletAddr}/utxos?order=desc`, {headers: {'project_id': `${blockfrostKey}`}})
             .then((response) => {
                 // need to get all TXs for wallet and insert them into txsSeriesOne collection
@@ -29,8 +28,8 @@ promises.push(
                         this.getTXData({mintWalletTX: utxo["tx_hash"], config: options.config})
                         .then((customerPayment) => {
                                 customerNFTPayments.push(customerPayment)
-                                // console.log(customerNFTPayments)
-                                resolve(customerPayment)
+                                console.log(customerNFTPayments)
+                                // resolve(customerPayment)
                         })
                         .catch(e => reject(e))
                     )
@@ -44,10 +43,9 @@ promises.push(
                 // .catch(e => reject(e))
             })
             .catch(e => reject(e))
-            )
 
             Promise.all(promises).then((values) => {
-                console.log(customerNFTPayments)
+                console.log(values)
                 resolve(values)
             })
             .catch(err => reject(err))
