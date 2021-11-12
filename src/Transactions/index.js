@@ -12,7 +12,7 @@ export default class Transactions {
             this.getWalletUTXOS(options)
             .then((txs) => {
                 console.log("txs: ", txs)
-                let payments = this.parseUTXOs(txs)
+                let payments = this.parseUTXOs({config: options.config, txs})
                 console.log(payments)
                 // resolve(payments)
             })
@@ -63,12 +63,13 @@ export default class Transactions {
         return promise
     }
 
-    parseUTXOs(walletTXs) {
+    parseUTXOs(options) {
 
-            let utxos = walletTXs
+            let utxos = options.txs
             console.log("UTXOS: ", utxos)
             let txhashs = utxos.map(utxo => {
-                    return this.getTXData(utxo["tx_hash"]).then((results) => {
+                    options.mintWalletTX = utxo
+                    return this.getTXData(options).then((results) => {
                         return results
                     })
                     // promises.push(this.getTXData({mintWalletTX: utxo["tx_hash"], config: options.config}))
