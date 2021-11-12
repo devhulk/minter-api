@@ -70,7 +70,7 @@ export default class Transactions {
             let utxos = options.txs
             console.log("UTXOS: ", utxos)
             let txhashs = utxos.map(utxo => {
-                    options.mintWalletTX = utxo
+                    options.mintWalletTX = utxo["tx_hash"]
                     return this.getTXData(options).then((results) => {
                         return results
                     })
