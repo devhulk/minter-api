@@ -13,9 +13,9 @@ export default class Transactions {
             .then((txs) => {
                 // console.log("txs: ", txs)
                 options.txs = txs
-                let payments = this.parseUTXOs(options)
-                console.log(payments)
-                resolve(payments)
+                let payments = this.parseUTXOs(options, (data) => {
+                    resolve(data)
+                })
                 // resolve(payments)
             })
             .catch(e => reject(e))
@@ -65,7 +65,7 @@ export default class Transactions {
         return promise
     }
 
-    parseUTXOs(options) {
+    parseUTXOs(options, cb) {
         console.log("PARSE UTXOS: ", options)
 
             let utxos = options.txs
@@ -86,7 +86,7 @@ export default class Transactions {
 
             Promise.all(txhashs).then((results) => {
                 console.log("Im in the PROMISE ALL: " ,results)
-                return results
+                cb(results)
             })
             .catch(function (error) {
                 if (error.response) {
