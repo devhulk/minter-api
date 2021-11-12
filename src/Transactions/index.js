@@ -8,6 +8,7 @@ export default class Transactions {
     constructor() {}
 
     getWalletUTXOS(options) {
+        let promise = new Promise((resolve, reject) => {
 
             let blockfrostKey = options.config == "testnet" ? process.env.BLOCKFROST_TESTNET : process.env.BLOCKFROST_MAINNET
             let customerNFTPayments = []
@@ -44,12 +45,14 @@ promises.push(
             .catch(e => reject(e))
             )
 
-            Promise.all(promises).then(() => {
-                resolve(customerNFTPayments)
+            Promise.all(promises).then((values) => {
+                resolve(values)
             })
             .catch(err => reject(err))
 
+        })
 
+        return promise
     }
 
     getTXData(options) {
