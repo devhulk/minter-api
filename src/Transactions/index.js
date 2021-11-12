@@ -23,17 +23,12 @@ export default class Transactions {
                 let utxos = response.data
                 utxos.forEach(utxo => {
                     this.getTXData({mintWalletTX: utxo["tx_hash"], config: options.config})
-                    .then((tx) => {
-                        let input = tx.data.inputs[0]
-                        // let output = tx.data.outputs[0]
-                        let amount = tx.amount[0]
-                        let customerPayment = {address: input.address , amount: amount.quantity / 1000000 }
+                    .then((customerPayment) => {
                         if (customerPayment.amount > 10) {
                             customerNFTPayments.push(customerPayment)
                         } else {
                             otherPayments.push(customerPayment)
                         }
-                        console.log(customerPayment)
                     })
                     .catch(e => reject(e))
                 })
@@ -59,14 +54,13 @@ export default class Transactions {
         let promise = new Promise((resolve, reject) => {
             axios.get(`https://cardano-testnet.blockfrost.io/api/v0/txs/${options.mintWalletTX}/utxos?order=desc`, {headers: {'project_id': `${blockfrostKey}`}})
             .then((response) => {
-                console.log(response.data)
                 let input = response.data.inputs[0]
                 let output = response.data.outputs[0]
                 let amount = output.amount[0]
-                let amountRecieved = {address: input.address , amount: amount.quantity / 1000000, fullData: response.data }
-                res.send(amountRecieved)
+                let customerPayment = {address: input.address , amount: amount.quantity / 1000000 }
+                resolve(customerPayment)
             })
-            .catch(e => res.send(e))
+            .catch(e => reject(e))
 
         })
         return promise
