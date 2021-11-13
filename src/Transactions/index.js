@@ -13,13 +13,7 @@ export default class Transactions {
             .then((txs) => {
                 options.txs = txs
                 this.getPayments(options)
-                .then((txs) => {
-                    let payments = []
-                    txs.forEach((tx) => {
-                        if (tx.address == options.mintWalletAddr) {
-                           payments.push(tx) 
-                        }
-                    }) 
+                .then((payments) => {
                     resolve(payments)
                 })
             })
