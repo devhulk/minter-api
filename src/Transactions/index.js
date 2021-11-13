@@ -86,7 +86,7 @@ export default class Transactions {
                 let input = response.data.inputs[0]
                 let output = response.data.outputs[0]
                 let amount = output.amount[0]
-                let customerPayment = {address: input.address , amount: amount.quantity / 1000000, outputs: response.data.outputs }
+                let customerPayment = {address: input.address , amount: amount.quantity / 1000000, outputs: response.data.outputs[0] }
                 options.utxos = response.data
                 resolve(customerPayment)
             })
