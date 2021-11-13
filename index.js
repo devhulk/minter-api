@@ -13,13 +13,27 @@ import Minter from "./src/Mint"
 import Transactions from './src/Transactions'
 import axios from 'axios'
 
-app.post('/v1/cardano/address/utxos', function (req, res) {
+app.post('/v1/cardano/address/payments', function (req, res) {
     let body = req.body
     let walletTransactions = new Transactions()
 
     walletTransactions.payments(body)
     .then((payments) => {
         res.send(payments)
+    })
+    .catch(e => res.send(e))
+
+
+
+})
+
+app.post('/v1/cardano/address/minted', function (req, res) {
+    let body = req.body
+    let walletTransactions = new Transactions()
+
+    walletTransactions.minted(body)
+    .then((mints) => {
+        res.send(mints)
     })
     .catch(e => res.send(e))
 

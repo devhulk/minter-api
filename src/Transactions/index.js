@@ -12,10 +12,22 @@ export default class Transactions {
             this.getWalletUTXOS(options)
             .then((txs) => {
                 options.txs = txs
-                // this.getPayments(options)
-                // .then((payments) => {
-                //     resolve(payments)
-                // })
+                this.getPayments(options)
+                .then((payments) => {
+                    resolve(payments)
+                })
+            })
+            .catch(e => reject(e))
+
+        })
+        return promise
+    }
+
+    minted(options) {
+        let promise = new Promise((resolve, reject) => {
+            this.getWalletUTXOS(options)
+            .then((txs) => {
+                options.txs = txs
                 this.getMinted(options)
                 .then((txs) => {
                     let mints = []
