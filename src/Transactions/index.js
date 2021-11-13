@@ -13,8 +13,12 @@ export default class Transactions {
             .then((txs) => {
                 // console.log("txs: ", txs)
                 options.txs = txs
-                this.parseUTXOs(options, (data) => {
+                // this.parseUTXOs(options, (data) => {
 
+                //     resolve(data)
+                // })
+                this.parseUTXOs(options)
+                .then((data) => {
                     resolve(data)
                 })
             })
@@ -61,7 +65,7 @@ export default class Transactions {
                     })
             })
 
-            Promise.all(txhashs).then((results) => {
+            return Promise.all(txhashs).then((results) => {
                 cb(results)
             })
             .catch(function (error) {
