@@ -12,9 +12,13 @@ export default class Transactions {
             this.getWalletUTXOS(options)
             .then((txs) => {
                 options.txs = txs
-                this.getPayments(options)
-                .then((data) => {
-                    resolve(data)
+                // this.getPayments(options)
+                // .then((payments) => {
+                //     resolve(payments)
+                // })
+                this.getMinted(options)
+                .then((mints) => {
+                    resolve(mints)
                 })
             })
             .catch(e => reject(e))
@@ -24,7 +28,36 @@ export default class Transactions {
     }
 
     getMinted(options) {
+            let utxos = options.txs
+            // console.log("UTXOS: ", utxos)
+            let txhashs = utxos.map(utxo => {
+                    options.mintWalletTX = utxo["tx_hash"]
+                    return this.getTXData(options).then((results) => {
+                        return results.output
+                    })
+            })
 
+            let mintAddressTransactions = Promise.all(txhashs)            
+            .then((outputs) => {
+                console.log(outputs)
+            })
+            .catch(function (error) {
+                if (error.response) {
+                  // Request made and server responded
+                  console.log(error.response.data);
+                  console.log(error.response.status);
+                  console.log(error.response.headers);
+                } else if (error.request) {
+                  // The request was made but no response was received
+                  console.log(error.request);
+                } else {
+                  // Something happened in setting up the request that triggered an Error
+                  console.log('Error', error.message);
+                }
+            
+              });
+
+              return mintAddressTransactions
     }
 
     getWalletUTXOS(options) {
@@ -71,11 +104,8 @@ export default class Transactions {
               });
 
               return mintAddressTransactions
-            
-
-
-
     }
+
 
     getTXData(options) {
         let blockfrostKey = options.config == "testnet" ? process.env.BLOCKFROST_TESTNET : process.env.BLOCKFROST_MAINNET
@@ -84,11 +114,10 @@ export default class Transactions {
             axios.get(`https://cardano-testnet.blockfrost.io/api/v0/txs/${options.mintWalletTX}/utxos?order=desc`, {headers: {'project_id': `${blockfrostKey}`}})
             .then((response) => {
                 // Getting UTXO and parsing input for payment 
-                console.log(response.data)
                 let input = response.data.inputs[0]
                 let output = response.data.outputs[0]
                 let amount = output.amount[0]
-                let customerPayment = {address: input.address , amount: amount.quantity / 1000000, outputs: response.data.outputs[0] }
+                let customerPayment = {address: input.address , amount: amount.quantity / 1000000, output: response.data.outputs[0] }
                 options.utxos = response.data
                 resolve(customerPayment)
             })
