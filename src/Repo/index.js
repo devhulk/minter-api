@@ -47,4 +47,16 @@ export default class Repo {
         })
     }
 
+    updatePayments() {
+        const client = new MongoClient(process.env.MONGO_URL)
+        client.connect((err, client) => {
+            if (err) throw err; 
+    
+            const db = client.db('puglies')
+            const collection = db.collection('payments')
+            // update/upsert/insertMany? payments
+        })
+
+    }
+
 }

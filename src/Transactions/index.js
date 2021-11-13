@@ -11,12 +11,7 @@ export default class Transactions {
         let promise = new Promise((resolve, reject) => {
             this.getWalletUTXOS(options)
             .then((txs) => {
-                // console.log("txs: ", txs)
                 options.txs = txs
-                // this.parseUTXOs(options, (data) => {
-
-                //     resolve(data)
-                // })
                 this.parseUTXOs(options)
                 .then((data) => {
                     resolve(data)
@@ -28,6 +23,10 @@ export default class Transactions {
         return promise
     }
 
+    minted(options) {
+
+    }
+
     getWalletUTXOS(options) {
         let promise = new Promise((resolve, reject) => {
 
@@ -35,18 +34,7 @@ export default class Transactions {
             let walletTXs = []
             axios.get(`https://cardano-testnet.blockfrost.io/api/v0/addresses/${options.mintWalletAddr}/utxos?order=desc`, {headers: {'project_id': `${blockfrostKey}`}})
             .then((response) => {
-                // need to get all TXs for wallet and insert them into txsSeriesOne collection
-                // then I need to get the address of the customer and the quantity paid and insert that into a series-1-customer collection
-                // then I can mint a pugly (get random pugly series-1-puglies) (minted: false)
-                // then I can send that minted pugly to the customer address
                 resolve(response.data)
-
-                // repo.createCollection({collection: txsSeriesOne, txs: response.data})
-                // .then((mongo) => {
-                //     mongo.client.close()
-                //     resolve(mongo.mongoResult)
-                // })
-                // .catch(e => reject(e))
             })
             .catch(e => reject(e.response.data))
 
@@ -55,7 +43,7 @@ export default class Transactions {
         return promise
     }
 
-    parseUTXOs(options, cb) {
+    parseUTXOs(options) {
             let utxos = options.txs
             // console.log("UTXOS: ", utxos)
             let txhashs = utxos.map(utxo => {
@@ -94,6 +82,7 @@ export default class Transactions {
             axios.get(`https://cardano-testnet.blockfrost.io/api/v0/txs/${options.mintWalletTX}/utxos?order=desc`, {headers: {'project_id': `${blockfrostKey}`}})
             .then((response) => {
                 // Getting UTXO and parsing input for payment 
+                console.log(response)
                 let input = response.data.inputs[0]
                 let output = response.data.outputs[0]
                 let amount = output.amount[0]
