@@ -17,7 +17,7 @@ export default class Transactions {
                     let payments = []
                     txs.forEach((tx) => {
                         if (tx.address == options.mintWalletAddr) {
-                           payments.push(tx) 
+                           payments.push(payments) 
                         }
                     }) 
                     resolve(payments)
