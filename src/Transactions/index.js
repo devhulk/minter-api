@@ -65,9 +65,7 @@ export default class Transactions {
                     })
             })
 
-            return Promise.all(txhashs).then((results) => {
-               return results 
-            })
+            return Promise.all(txhashs)            
             .catch(function (error) {
                 if (error.response) {
                   // Request made and server responded
