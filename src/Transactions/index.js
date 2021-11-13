@@ -66,7 +66,7 @@ export default class Transactions {
             })
 
             return Promise.all(txhashs).then((results) => {
-                cb(results)
+               return results 
             })
             .catch(function (error) {
                 if (error.response) {
