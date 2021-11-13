@@ -40,6 +40,7 @@ export default class Transactions {
             let mintAddressTransactions = Promise.all(txhashs)            
             .then((outputs) => {
                 console.log(outputs)
+                return outputs
             })
             .catch(function (error) {
                 if (error.response) {
