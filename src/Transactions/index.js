@@ -105,6 +105,9 @@ export default class Transactions {
             })
 
             let mintAddressTransactions = Promise.all(txhashs)            
+            .then((payments) => {
+                return payments
+            })
             .catch(function (error) {
                 if (error.response) {
                   // Request made and server responded
