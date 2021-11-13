@@ -27,7 +27,7 @@ app.post('/v1/cardano/address/payments', function (req, res) {
 
 })
 
-app.post('/v1/cardano/address/minted', function (req, res) {
+app.post('/v1/cardano/address/mints', function (req, res) {
     let body = req.body
     let walletTransactions = new Transactions()
 
