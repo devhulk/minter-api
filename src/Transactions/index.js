@@ -30,12 +30,6 @@ export default class Transactions {
                 options.txs = txs
                 this.getMinted(options)
                 .then((txs) => {
-                    let mints = []
-                    txs.forEach((tx) => {
-                        if (tx.address !== options.mintWalletAddr) {
-                           mints.push(tx) 
-                        }
-                    }) 
                     resolve(mints)
                 })
             })
@@ -105,7 +99,14 @@ export default class Transactions {
             })
 
             let mintAddressTransactions = Promise.all(txhashs)            
-            .then((payments) => {
+            .then((txInputs) => {
+                let payments = []
+                txInputs.forEach((tx) => {
+                    if (tx.address !== options.mintWalletAddr) {
+                        payments.push(tx) 
+                    }
+                }) 
+
                 return payments
             })
             .catch(function (error) {
