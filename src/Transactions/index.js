@@ -50,8 +50,14 @@ export default class Transactions {
             })
 
             let mintAddressTransactions = Promise.all(txhashs)            
-            .then((outputs) => {
-                return outputs
+            .then((txOutputs) => {
+                let mints = []
+                txOutputs.forEach((txOutput) => {
+                    if (tx.address !== options.mintWalletAddr) {
+                        mints.push(txOutput) 
+                    }
+                }) 
+                return mints
             })
             .catch(function (error) {
                 if (error.response) {
