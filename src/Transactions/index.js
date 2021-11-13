@@ -12,7 +12,7 @@ export default class Transactions {
             this.getWalletUTXOS(options)
             .then((txs) => {
                 options.txs = txs
-                this.parseUTXOs(options)
+                this.getPayments(options)
                 .then((data) => {
                     resolve(data)
                 })
@@ -23,7 +23,7 @@ export default class Transactions {
         return promise
     }
 
-    minted(options) {
+    getMinted(options) {
 
     }
 
@@ -43,7 +43,7 @@ export default class Transactions {
         return promise
     }
 
-    parseUTXOs(options) {
+    getPayments(options) {
             let utxos = options.txs
             // console.log("UTXOS: ", utxos)
             let txhashs = utxos.map(utxo => {
@@ -53,7 +53,7 @@ export default class Transactions {
                     })
             })
 
-            return Promise.all(txhashs)            
+            let mintAddressTransactions = Promise.all(txhashs)            
             .catch(function (error) {
                 if (error.response) {
                   // Request made and server responded
@@ -69,6 +69,8 @@ export default class Transactions {
                 }
             
               });
+
+              return mintAddressTransactions
             
 
 
