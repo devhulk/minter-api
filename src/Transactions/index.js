@@ -53,7 +53,7 @@ export default class Transactions {
             .then((txOutputs) => {
                 let mints = []
                 txOutputs.forEach((txOutput) => {
-                    if (tx.address !== options.mintWalletAddr) {
+                    if (txOutput.address !== options.mintWalletAddr) {
                         mints.push(txOutput) 
                     }
                 }) 
