@@ -17,7 +17,11 @@ export default class Transactions {
                 //     resolve(payments)
                 // })
                 this.getMinted(options)
-                .then((mints) => {
+                .then((txs) => {
+                    console.log(options)
+                    // let mints = txs.forEach((tx) => {
+                    //     if (tx.address)
+                    // }) 
                     resolve(mints)
                 })
             })
@@ -39,7 +43,6 @@ export default class Transactions {
 
             let mintAddressTransactions = Promise.all(txhashs)            
             .then((outputs) => {
-                console.log(outputs)
                 return outputs
             })
             .catch(function (error) {
