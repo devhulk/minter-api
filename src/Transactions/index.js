@@ -13,7 +13,13 @@ export default class Transactions {
             .then((txs) => {
                 options.txs = txs
                 this.getPayments(options)
-                .then((payments) => {
+                .then((txs) => {
+                    let payments = []
+                    txs.forEach((tx) => {
+                        if (tx.address == options.mintWalletAddr) {
+                           payments.push(tx) 
+                        }
+                    }) 
                     resolve(payments)
                 })
             })
@@ -131,11 +137,10 @@ export default class Transactions {
         let promise = new Promise((resolve, reject) => {
             axios.get(`https://cardano-testnet.blockfrost.io/api/v0/txs/${options.mintWalletTX}/utxos?order=desc`, {headers: {'project_id': `${blockfrostKey}`}})
             .then((response) => {
-                // Getting UTXO and parsing input for payment 
                 let input = response.data.inputs[0]
                 let output = response.data.outputs[0]
                 let amount = output.amount[0]
-                let customerPayment = {address: input.address , ada: amount.quantity / 1000000, amount: amount.quantity, output: response.data.outputs[0] }
+                let customerPayment = {address: input.address , ada: `${amount.quantity / 1000000}`, amount: amount.quantity, output: response.data.outputs[0] }
                 options.utxos = response.data
                 resolve(customerPayment)
             })
