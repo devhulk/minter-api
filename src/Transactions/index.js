@@ -18,10 +18,10 @@ export default class Transactions {
                 // })
                 this.getMinted(options)
                 .then((txs) => {
-                    // console.log(options)
-                    let mints = txs.map((tx) => {
+                    let mints = []
+                    txs.forEach((tx) => {
                         if (tx.address !== options.mintWalletAddr) {
-                            return tx
+                           mints.push(tx) 
                         }
                     }) 
                     resolve(mints)
