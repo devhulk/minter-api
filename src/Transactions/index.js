@@ -29,7 +29,7 @@ export default class Transactions {
             .then((txs) => {
                 options.txs = txs
                 this.getMinted(options)
-                .then((txs) => {
+                .then((mints) => {
                     resolve(mints)
                 })
             })
