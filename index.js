@@ -64,58 +64,12 @@ app.get('/v1/cardano/mint/assets', function (req, res) {
 
 app.post('/v1/cardano/mint/asset', function (req, res) {
     let minter = new Minter()
-    let body = req.body
-    let mintData = {request: req.body}
-    minter.getProtocolParams()
-    .then((data) => {
-        mintData.protocolParams = data
+    // let body = req.body
+    // let mintData = {request: req.body}
+    minter.mint(req)
+    .then((mintData) => {
+        res.send(mintData)
     })
-    .then(() => {
-        minter.getMintWalletHash(body)
-        .then((data) => {
-            mintData.mintWalletInfo = data
-        })
-        .then(() => {
-            minter.getPolicyID()
-            .then((policy) => {
-                mintData.policy = policy
-            })
-            .then(() => {
-                minter.getMetaData(mintData)
-                .then((metadata) => {
-                    mintData.metadata = metadata
-                })
-                .then(() => {
-                    minter.buildRawTransaction(mintData)
-                    .then((data) => {
-                        mintData.output = 0
-                    })
-                    .then(() => {
-                        minter.calculateFee(mintData)
-                        .then((data) => {
-                            mintData.fee = data.trim()
-                            minter.buildRawTransaction(mintData)
-                            .then((data) => {
-                                mintData.output = mintData.mintWalletInfo.balance.lovelace - mintData.fee
-                                minter.finalizeTransaction(mintData)
-                                .then((data) => {
-                                    res.send(mintData)
-                                    // send token to other wallet
-                                })
-                                .catch((e) => res.send(`Error: ${e}`))
-                            })
-                            .catch((e) => res.send(`Error: ${e}`))
-                        })
-                        .catch((e) => res.send(`Error: ${e}`))
-                    })
-                    .catch((e) => res.send(`Error: ${e}`) )
-                })
-            })
-            .catch((e) => res.send(`Error: ${e}`))
-        .catch((e) => res.send(`Error: ${e}`))
-        })
-    })
-    .catch((e) => console.log(e))
 })
 
 

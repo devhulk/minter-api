@@ -14,6 +14,11 @@ curl -X POST -H "Content-Type: application/json" \
     -d '{"address": "addr_test1vpfvdy0rvkawm6zz4l3y5fykyagp5r7g300xv7dhrkxs4aq8mt5vq", "config": "testnet", "metadata": { "asset_id": "testID", "asset_name": "testName", "ipfsLink": "ipfs://test", "amount": "1", "traits": [{"head" : "original"}] }}' \
     http://localhost:3572/v1/cardano/mint/asset
 
+# Test second mint asset endpoint
+curl -X POST -H "Content-Type: application/json" \
+    -d '{"address": "addr_test1vpfvdy0rvkawm6zz4l3y5fykyagp5r7g300xv7dhrkxs4aq8mt5vq", "config": "testnet", "metadata": { "asset_id": "testID2", "asset_name": "testName", "ipfsLink": "ipfs://test", "amount": "1", "traits": [{"head" : "original"}] }}' \
+    http://localhost:3572/v1/cardano/mint/asset
+
 # Test mint endpoint
 curl -X POST -H "Content-Type: application/json" \
     -d '{"policy_id": "", "policy_name": "", "asset_id": "", "asset_name": "", "ipfsLink": "", "traits": [] }' \

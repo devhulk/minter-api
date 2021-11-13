@@ -7,6 +7,68 @@ import Metadata from '../Metadata'
 export default class Minter {
     constructor() {}
 
+
+    mint(req) {
+        let promise = new Promise((resolve, reject) => {
+                let body = req.body
+                let mintData = {request: req.body}
+                this.getProtocolParams()
+                .then((data) => {
+                    mintData.protocolParams = data
+                })
+                .then(() => {
+                    this.getMintWalletHash(body)
+                    .then((data) => {
+                        mintData.mintWalletInfo = data
+                    })
+                    .then(() => {
+                        this.getPolicyID()
+                        .then((policy) => {
+                            mintData.policy = policy
+                        })
+                        .then(() => {
+                            this.getMetaData(mintData)
+                            .then((metadata) => {
+                                mintData.metadata = metadata
+                            })
+                            .then(() => {
+                                this.buildRawTransaction(mintData)
+                                .then((data) => {
+                                    mintData.output = 0
+                                })
+                                .then(() => {
+                                    this.calculateFee(mintData)
+                                    .then((data) => {
+                                        mintData.fee = data.trim()
+                                        this.buildRawTransaction(mintData)
+                                        .then((data) => {
+                                            mintData.output = mintData.mintWalletInfo.balance.lovelace - mintData.fee
+                                            this.finalizeTransaction(mintData)
+                                            .then((data) => {
+                                                // res.send(mintData)
+                                            resolve(mintData) 
+                                                // send token to other wallet
+                                            })
+                                            .catch((e) => reject(`Error: ${e}`))
+                                        })
+                                        .catch((e) => reject(`Error: ${e}`))
+                                    })
+                                    .catch((e) => reject(`Error: ${e}`))
+                                })
+                                .catch((e) => reject(`Error: ${e}`) )
+                            })
+                        })
+                        .catch((e) => reject(`Error: ${e}`))
+                    .catch((e) => reject(`Error: ${e}`))
+                    })
+                })
+                .catch((e) => reject(e))
+
+        })
+
+        return promise
+    }
+
     getProtocolParams () {
     // 3. Get protocol params
         let promise = new Promise((resolve, reject) => {
@@ -182,20 +244,17 @@ tokenname="${options.request.metadata.asset_id}"
 slotnumber="${options.policy.slotnumber}"
 
 cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$output+"$tokenamount $policyid.$tokenname" --mint="$tokenamount $policyid.$tokenname" --minting-script-file policy/policy.script --minting-script-file policy/policy.script --invalid-hereafter $slotnumber --out-file ./transactions/raw/$tokenname.raw`
-console.log(cmd)
-        exec(cmd , (err, stdout, stderr) => {
-            if (err) {
-                // console.log(err)
-                reject(err)
-                return;
-            }
-                resolve(stdout)
+            console.log(cmd)
+            exec(cmd , (err, stdout, stderr) => {
+                if (err) {
+                    // console.log(err)
+                    reject(err)
+                    return;
+                }
+                    resolve(stdout)
+            })
         })
 
-
-
-
-        })
         return promise
 
     }
