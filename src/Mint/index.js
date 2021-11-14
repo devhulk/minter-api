@@ -72,38 +72,48 @@ export default class Minter {
 
         let promise = new Promise((resolve, reject) => {
 
-            this.getMintedAssetHash(mintData)
-            .then((mintTXHash) => {
-                mintData.sendData = {}
-                mintData.sendData.mintTXHash = mintTXHash
-                mintData.sendData.output = "0"
-                // this.calculateSendFee(mintData)
-                // .then((sendFee) => {
-                //     mintData.sendData.fee = sendFee
-                    this.buildSendRawTX(mintData)
-                    .then(() => {
-                        this.calculateSendFee(mintData)
-                        .then((sendFee) => {
-                            mintData.sendData.fee = sendFee.trim()
-                            // console.log(mintData.sendData.mintTXHash.balance)
+            this.getProtocolParams()
+            .then((data) => {
+                mintData.protocolParams = data
+            })
+            .then(() => {
+                this.getMintedAssetHash(mintData)
+                    .then((mintTXHash) => {
+                        mintData.sendData = {}
+                        mintData.sendData.mintTXHash = mintTXHash
+                        mintData.sendData.output = "0"
+                        // this.calculateSendFee(mintData)
+                        // .then((sendFee) => {
+                        //     mintData.sendData.fee = sendFee
                             this.buildSendRawTX(mintData)
                             .then(() => {
-                                this.finalizeSendTX(mintData)
-                                .then(() => {
-                                    resolve(mintData) 
+                                this.calculateSendFee(mintData)
+                                .then((sendFee) => {
+                                    mintData.sendData.fee = sendFee.trim()
+                                    // console.log(mintData.sendData.mintTXHash.balance)
+                                    this.buildSendRawTX(mintData)
+                                    .then(() => {
+                                        this.finalizeSendTX(mintData)
+                                        .then(() => {
+                                            resolve(mintData) 
+                                        })
+                                        .catch((e) => reject(e))
+                                    })
+                                    .catch((e) => reject(e))
                                 })
                                 .catch((e) => reject(e))
                             })
                             .catch((e) => reject(e))
-                        })
-                        .catch((e) => reject(e))
+                        // })
+                        // .catch((e) => reject(e))
                     })
                     .catch((e) => reject(e))
-                // })
-                // .catch((e) => reject(e))
+                })
+
             })
             .catch((e) => reject(e))
-        })
+            
+
 
         return promise
 
