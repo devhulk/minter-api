@@ -18,6 +18,7 @@ export default class Minter {
                     mintData.protocolParams = data
                     this.getMintWalletHash(body)
                     .then((data) => {
+                        mintData.mintWalletInfo.name = mintData.request.walletName
                         mintData.mintWalletInfo = data
                         this.getPolicyID()
                         .then((policy) => {
@@ -159,7 +160,7 @@ export default class Minter {
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
             let validTX = {}
-            exec(`cardano-cli query utxo --address $(cat mintWallet/${options.mintWallet.name}/payment.addr) ${network} ${magic} --out-file=txixhash.json`, (err, stdout, stderr) => {
+            exec(`cardano-cli query utxo --address $(cat mintWallet/${options.mintWalletInfo.name}/payment.addr) ${network} ${magic} --out-file=txixhash.json`, (err, stdout, stderr) => {
                 if (err) {
                     reject(err)
                     return;
@@ -297,7 +298,7 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
             let config = options.config
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
-            let cmd = `cardano-cli transaction sign --signing-key-file mintWallet/${options.mintWallet.name}/payment.skey --signing-key-file policy/policy.skey ${network} ${magic} --tx-body-file ./transactions/raw/${options.request.metadata.asset_id}.raw --out-file ./transactions/signed/${options.request.metadata.asset_id}.signed`
+            let cmd = `cardano-cli transaction sign --signing-key-file mintWallet/${options.mintWalletInfo.name}/payment.skey --signing-key-file policy/policy.skey ${network} ${magic} --tx-body-file ./transactions/raw/${options.request.metadata.asset_id}.raw --out-file ./transactions/signed/${options.request.metadata.asset_id}.signed`
             console.log(cmd)
             exec(cmd , (err, stdout, stderr) => {
                 if (err) {
@@ -348,7 +349,7 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
             let validTX = {}
-            exec(`cardano-cli query utxo --address $(cat mintWallet/${options.mintWallet.name}/payment.addr) ${network} ${magic} --out-file=minttxixhash.json`, (err, stdout, stderr) => {
+            exec(`cardano-cli query utxo --address $(cat mintWallet/${options.mintWalletInfo.name}/payment.addr) ${network} ${magic} --out-file=minttxixhash.json`, (err, stdout, stderr) => {
                 if (err) {
                     reject(err)
                     return;
@@ -456,7 +457,7 @@ cardano-cli transaction build-raw --fee "${sendFee}" --tx-in ${options.sendData.
             let config = options.request.config
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
-            let cmd = `cardano-cli transaction sign --signing-key-file mintWallet/${options.mintWallet.name}/payment.skey ${network} ${magic} --tx-body-file ./transactions/raw/${options.request.metadata.asset_id}-send.raw --out-file ./transactions/signed/${options.request.metadata.asset_id}-send.signed`
+            let cmd = `cardano-cli transaction sign --signing-key-file mintWallet/${options.mintWalletInfo.name}/payment.skey ${network} ${magic} --tx-body-file ./transactions/raw/${options.request.metadata.asset_id}-send.raw --out-file ./transactions/signed/${options.request.metadata.asset_id}-send.signed`
             console.log(cmd)
             exec(cmd , (err, stdout, stderr) => {
                 if (err) {
