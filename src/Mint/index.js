@@ -15,8 +15,6 @@ export default class Minter {
                 this.getProtocolParams()
                 .then((data) => {
                     mintData.protocolParams = data
-                })
-                .then(() => {
                     this.getMintWalletHash(body)
                     .then((data) => {
                         mintData.mintWalletInfo = data
