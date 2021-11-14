@@ -115,7 +115,7 @@ export default class Minter {
                     let txhash = data[utxo]
                     console.log(txhash)
                     if ((txhash.value.lovelace / 1000000) >= 5) {
-                        validTX = txhash
+                        validTX = { utxo : txhash }
                         console.log(validTX)
                         break;
                         // validTXs.push(txix)
