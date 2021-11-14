@@ -42,7 +42,6 @@ export default class Transactions {
     getMinted(options) {
             let utxos = options.txs
             // console.log("UTXOS: ", utxos)
-            console.log()
             let txhashs = utxos.map(utxo => {
                     options.mintWalletTX = utxo["tx_hash"]
                     return this.getTXData(options).then((results) => {
