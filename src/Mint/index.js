@@ -394,6 +394,7 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
             let sendFee = options.sendData.fee == undefined ? "0" : options.sendData.fee
             let minterOutput = options.sendData.output == undefined ? "0" : options.sendData.mintWalletInfo.balance.lovelace - sendFee - 2000000
             console.log(options)
+            console.log(minterOutput)
 
                 let cmd = `
                 #!/bin/bash
