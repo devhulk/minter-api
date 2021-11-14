@@ -45,6 +45,7 @@ export default class Transactions {
             let txhashs = utxos.map(utxo => {
                     options.mintWalletTX = utxo["tx_hash"]
                     return this.getTXData(options).then((results) => {
+                        results.output.txHash = utxo["tx_hash"]
                         return results.output
                     })
             })
@@ -102,6 +103,7 @@ export default class Transactions {
             let txhashs = utxos.map(utxo => {
                     options.mintWalletTX = utxo["tx_hash"]
                     return this.getTXData(options).then((results) => {
+                        results.txHash = utxo["tx_hash"]
                         return results
                     })
             })
