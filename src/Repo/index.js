@@ -85,6 +85,7 @@ export default class Repo {
 
     insertMintedNFT(mintData) {
         mintData["_id"] = mintData.txHash
+        console.log("inside repo:")
         let promise = new Promise((resolve, reject) => {
             const client = new MongoClient(process.env.MONGO_URL)
             client.connect((err, client) => {
