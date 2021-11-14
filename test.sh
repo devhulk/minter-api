@@ -12,22 +12,24 @@ curl -X POST -H "Content-Type: application/json" \
 # Test mint asset endpoint
 curl -X POST -H "Content-Type: application/json" \
     -d '{"address": "addr_test1vpfvdy0rvkawm6zz4l3y5fykyagp5r7g300xv7dhrkxs4aq8mt5vq", "config": "testnet", "metadata": { "asset_id": "testID", "asset_name": "testName", "ipfsLink": "ipfs://test", "amount": "1", "traits": [{"head" : "original"}] }}' \
-    http://localhost:3572/v1/cardano/mint/asset
+    http://localhost:3572/v1/cardano/mint/asset | jq
 
 # Test second mint asset endpoint
 curl -X POST -H "Content-Type: application/json" \
     -d '{"address": "addr_test1vpfvdy0rvkawm6zz4l3y5fykyagp5r7g300xv7dhrkxs4aq8mt5vq", "config": "testnet", "metadata": { "asset_id": "testID2", "asset_name": "testName", "ipfsLink": "ipfs://test", "amount": "1", "traits": [{"head" : "original"}] }}' \
-    http://localhost:3572/v1/cardano/mint/asset
+    http://localhost:3572/v1/cardano/mint/asset | jq
 
-# Test mint endpoint
-curl -X POST -H "Content-Type: application/json" \
-    -d '{"policy_id": "", "policy_name": "", "asset_id": "", "asset_name": "", "ipfsLink": "", "traits": [] }' \
-    http://localhost:3572/v1/mint
 
 # Get utxos on address -> returns tx hash
 curl -X POST -H "Content-Type: application/json" \
     -d '{"mintWalletAddr": "addr_test1vpfvdy0rvkawm6zz4l3y5fykyagp5r7g300xv7dhrkxs4aq8mt5vq", "config": "testnet" }' \
-    http://localhost:3572/v1/cardano/address/utxos
+    http://localhost:3572/v1/cardano/address/payments
+
+# Get mints
+curl -X POST -H "Content-Type: application/json" \
+    -d '{"mintWalletAddr": "addr_test1vpfvdy0rvkawm6zz4l3y5fykyagp5r7g300xv7dhrkxs4aq8mt5vq", "config": "testnet" }' \
+    http://localhost:3572/v1/cardano/address/mints
+
 
 # Use tx hash to get inputs and outputs
 curl -X POST -H "Content-Type: application/json" \

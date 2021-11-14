@@ -311,6 +311,64 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
     }
 
     sendToken() {
+        // build tx
+
+            let cmd = `
+            #!/bin/bash
+
+            ## Token Data and PolicyID
+            tokenname="testID"
+            tokenamount="1"
+            slotnumber="42583353" # replaced after step 6
+            script="policy/policy.script"
+            policyid=$(cat ../policy/policyID)
+            Network="--testnet-magic 1097911063"
+            
+            ## Mint Wallet Info (UTXO)
+            #mintaddr="addr_test1vpfvdy0rvkawm6zz4l3y5fykyagp5r7g300xv7dhrkxs4aq8mt5vq"
+            mintaddr="${options.mintWalletInfo.address}"
+            #minterFunds="14817955"
+            #txhash="adee352dcdf4e5c03a71b7ec0a358c1187631e550ff8bdab192aaaa8167ba0ef"
+            #txix="0"
+            txix="${options.mintWalletInfo.txixhash}"
+            #minterFee="176501"
+            # minterOutput=$(expr $minterFunds - $minterFee - 10000000)
+            minterOutput="${fee}"
+            #output="${output}"
+            tokenamount="${options.request.metadata.amount}"
+            policyid="${options.policy.id.trim()}"
+            tokenname="${options.request.metadata.asset_id}"
+            slotnumber="${options.policy.slotnumber}"
+            
+            
+            ## Customer Wallet Info (UTXO)
+            
+            customerAddr="${options.customer.address}"
+            #customerTxHash="ee98d459648c1229d2837ed95849a4d05fdb3c3082c78006bd8622a0a631a3d5"
+            #customerTxix="0"
+            #customerTxix=""
+            customerFunds="11000000"
+            customerOutput="10000000"
+
+            # --tx-in $txhash#$txix  \
+            
+            
+            cardano-cli transaction build-raw \
+                --fee $minterFee \
+                --tx-in $txix  \
+                --tx-out $customerAddr+$customerOutput+"1 $policyid.$tokenname" \
+                --tx-out $mintaddr+$minterOutput \
+                --out-file matx.raw
+            `
+            console.log(cmd)
+            exec(cmd , (err, stdout, stderr) => {
+                if (err) {
+                    // console.log(err)
+                    reject(err)
+                    return;
+                }
+                    resolve(stdout)
+            })
 
     }
 
