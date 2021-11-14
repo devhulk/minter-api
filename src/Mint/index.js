@@ -391,7 +391,7 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
     buildSendRawTX(options) {
         let promise = new Promise((resolve, reject) => {
             console.log(options)
-            let sendFee = options.sendData.fee == undefined ? "0" : options.sendData.fee
+            let sendFee = options.sendData.fee == undefined ? "0" : options.sendData.fee.trim()
             let minterOutput = options.sendData.output == undefined ? "0" : options.sendData.mintWalletInfo.balance.lovelace - sendFee - 2000000
 
                 let cmd = `
