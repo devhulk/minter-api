@@ -120,9 +120,9 @@ export default class Minter {
                         // validTXs.push(txix)
                     }
                 }
-                console.log(validTXs)
+                console.log(validTX)
                 // let balanceObj = data[`${Object.keys(data)[0]}`]
-                let balanceObj = validTXs[0]
+                let balanceObj = validTX
                 let lovelace = balanceObj.value.lovelace
                 let ada = balanceObj.value.lovelace / 1000000
                 let returnObj = {txixhash: Object.keys(data)[0], balance: {lovelace, ada}, address: options.address }
