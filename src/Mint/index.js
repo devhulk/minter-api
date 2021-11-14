@@ -426,13 +426,7 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
                 customerOutput="2000000"
 
                 
-                cardano-cli transaction build-raw \
-                    --fee $minterFee \
-                    --tx-in ${options.sendData.mintTXHash.txixhash}  \
-                    --tx-out $customerAddr+$customerOutput+"1 $policyid.$tokenname" \
-                    --tx-out $mintaddr+$minterOutput \
-                    --out-file ./transactions/raw/${options.request.metadata.asset_id}-send.raw
-                `
+                cardano-cli transaction build-raw --fee $minterFee --tx-in ${options.sendData.mintTXHash.txixhash} --tx-out $customerAddr+$customerOutput+"1 $policyid.$tokenname" --tx-out $mintaddr+$minterOutput --out-file ./transactions/raw/${options.request.metadata.asset_id}-send.raw`
                 exec(cmd , (err, stdout, stderr) => {
                     if (err) {
                         reject(err)
