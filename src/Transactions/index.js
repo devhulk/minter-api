@@ -89,7 +89,7 @@ export default class Transactions {
                 // console.log(response.data[0].amount)
                 resolve(response.data)
             })
-            .catch(e => reject(e.toJson()))
+            .catch(e => reject(e.toJSON()))
 
         })
 
@@ -118,7 +118,7 @@ export default class Transactions {
                 return payments
             })
             .catch(function (error) {
-                reject(error.toJson())
+                reject(error.toJSON())
               });
 
               return mintAddressTransactions
@@ -140,7 +140,7 @@ export default class Transactions {
                 resolve(customerPayment)
             })
             .catch(function (error) {
-                reject(error.toJson())
+                reject(error.toJSON())
               });
         })
         return promise
