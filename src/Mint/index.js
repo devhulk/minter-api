@@ -117,7 +117,7 @@ export default class Minter {
                         validTX[utxo] = info  
                     }
                 }
-                let balanceObj = validTX[`${Object.keys(data)[0]}`]
+                let balanceObj = validTX[`${Object.keys(validTX)[0]}`]
                 let lovelace = balanceObj.value.lovelace
                 let ada = balanceObj.value.lovelace / 1000000
                 let returnObj = {txixhash: Object.keys(validTX)[0], balance: {lovelace, ada}, address: options.address }
