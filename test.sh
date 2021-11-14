@@ -23,12 +23,12 @@ curl -X POST -H "Content-Type: application/json" \
 # Get utxos on address -> returns tx hash
 curl -X POST -H "Content-Type: application/json" \
     -d '{"mintWalletAddr": "addr_test1vpfvdy0rvkawm6zz4l3y5fykyagp5r7g300xv7dhrkxs4aq8mt5vq", "config": "testnet" }' \
-    http://localhost:3572/v1/cardano/address/payments
+    http://localhost:3572/v1/cardano/address/payments | jq
 
 # Get mints
 curl -X POST -H "Content-Type: application/json" \
     -d '{"mintWalletAddr": "addr_test1vpfvdy0rvkawm6zz4l3y5fykyagp5r7g300xv7dhrkxs4aq8mt5vq", "config": "testnet" }' \
-    http://localhost:3572/v1/cardano/address/mints
+    http://localhost:3572/v1/cardano/address/mints | jq
 
 
 # Use tx hash to get inputs and outputs
