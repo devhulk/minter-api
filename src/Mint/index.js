@@ -18,8 +18,8 @@ export default class Minter {
                     mintData.protocolParams = data
                     this.getMintWalletHash(body)
                     .then((data) => {
-                        mintData.mintWalletInfo.name = mintData.request.walletName
                         mintData.mintWalletInfo = data
+                        mintData.mintWalletInfo.name = mintData.request.walletName
                         this.getPolicyID()
                         .then((policy) => {
                             mintData.policy = policy
