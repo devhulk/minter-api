@@ -409,7 +409,7 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
                 #txix="0"
                 # minterOutput=$(expr $minterFunds - $minterFee - 2000000)
                 mintaddr="${options.mintWalletInfo.address}"
-                txix="${options.sendData.mintTXHash}"
+                txix="${options.sendData.mintTXHash.txixhash}"
                 minterOutput="${minterOutput}"
                 minterFee="${sendFee}"
                 
@@ -429,7 +429,6 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
                     --tx-out $mintaddr+$minterOutput \
                     --out-file ./transactions/raw/${options.request.metadata.asset_id}-send.raw
                 `
-                console.log(cmd)
                 exec(cmd , (err, stdout, stderr) => {
                     if (err) {
                         reject(err)
