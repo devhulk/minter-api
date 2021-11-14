@@ -401,32 +401,27 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
             console.log("fee: ", sendFee)
 
                 let cmd = `
-                #!/bin/bash
+#!/bin/bash
 
-                ## Token Data and PolicyID
-                tokenamount="${options.request.metadata.amount}"
-                tokenname="${options.request.metadata.asset_id}"
-                policyid="${options.policy.id.trim()}"
-                
-                ## Mint Wallet Info (UTXO)
-                #mintaddr="addr_test1vpfvdy0rvkawm6zz4l3y5fykyagp5r7g300xv7dhrkxs4aq8mt5vq"
-                #minterFunds="14817955"
-                #txhash="adee352dcdf4e5c03a71b7ec0a358c1187631e550ff8bdab192aaaa8167ba0ef"
-                #txix="0"
-                # minterOutput=$(expr $minterFunds - $minterFee - 2000000)
-                mintaddr="${options.mintWalletInfo.address}"
-                txix="${options.sendData.mintTXHash.txixhash}"
-                minterOutput="${minterOutput}"
-                minterFee="${sendFee}"
-                
-                
-                ## Customer Wallet Info (UTXO)
-                
-                customerAddr="${options.customer.address}"
-                customerOutput="2000000"
+## Token Data and PolicyID
+tokenamount="${options.request.metadata.amount}"
+tokenname="${options.request.metadata.asset_id}"
+policyid="${options.policy.id.trim()}"
 
-                
-                cardano-cli transaction build-raw --fee $minterFee --tx-in ${options.sendData.mintTXHash.txixhash} --tx-out $customerAddr+$customerOutput+"1 $policyid.$tokenname" --tx-out $mintaddr+$minterOutput --out-file ./transactions/raw/${options.request.metadata.asset_id}-send.raw`
+## Mint Wallet Info (UTXO)
+mintaddr="${options.mintWalletInfo.address}"
+txix="${options.sendData.mintTXHash.txixhash}"
+minterOutput="${minterOutput}"
+minterFee="${sendFee}"
+
+
+## Customer Wallet Info (UTXO)
+
+customerAddr="${options.customer.address}"
+customerOutput="2000000"
+
+
+cardano-cli transaction build-raw --fee $minterFee --tx-in ${options.sendData.mintTXHash.txixhash} --tx-out $customerAddr+$customerOutput+"1 $policyid.$tokenname" --tx-out $mintaddr+$minterOutput --out-file ./transactions/raw/${options.request.metadata.asset_id}-send.raw`
                 exec(cmd , (err, stdout, stderr) => {
                     if (err) {
                         reject(err)
