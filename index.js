@@ -34,7 +34,7 @@ app.post('/v1/cardano/address/mints', function (req, res) {
 
     walletTransactions.minted(body)
     .then((mints) => {
-        res.send(JSON.stringify(mints))
+        res.json(mints)
     })
     .catch(e => res.send(e))
 
