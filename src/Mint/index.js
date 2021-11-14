@@ -73,11 +73,6 @@ export default class Minter {
 
         let promise = new Promise((resolve, reject) => {
 
-            this.getProtocolParams()
-            .then((data) => {
-                mintData.protocolParams = data
-            })
-            .then(() => {
                 this.getMintedAssetHash(mintData)
                     .then((mintTXHash) => {
                         mintData.sendData = {}
@@ -110,7 +105,6 @@ export default class Minter {
                         // .catch((e) => reject(e))
                     })
                     .catch((e) => reject(e))
-                })
                 .catch((e) => reject(e))
 
             })
@@ -122,11 +116,11 @@ export default class Minter {
 
     }
 
-    getProtocolParams () {
+    getProtocolParams (options) {
     // 3. Get protocol params
         let promise = new Promise((resolve, reject) => {
 
-            let config = 'testnet'
+            let config = options.request.config 
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
             const params = spawn('cardano-cli', ['query', 'protocol-parameters', network, magic])
