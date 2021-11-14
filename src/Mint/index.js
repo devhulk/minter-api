@@ -405,7 +405,7 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
     buildSendRawTX(options) {
         let promise = new Promise((resolve, reject) => {
             let sendFee = options.sendData.fee == undefined ? "0" : options.sendData.fee
-            let minterOutput = options.sendData.output == undefined ? "0" : options.sendData.mintTXHash.balance.lovelace - sendFee - 3000000
+            let minterOutput = options.sendData.output == undefined ? "0" : options.output - sendFee - 3000000
             options.sendData.output = minterOutput
             console.log(options)
             console.log("MINT Output: ", minterOutput)
@@ -432,7 +432,7 @@ customerAddr="${options.customer.address}"
 customerOutput="3000000"
 
 
-cardano-cli transaction build-raw --fee ${sendFee} --tx-in ${options.sendData.mintTXHash.txixhash} --tx-out ${options.customer.address}+3000000+"1 ${options.policy.id.trim()}.${options.request.metadata.asset_id}" --tx-out ${options.mintWalletInfo.address}+${minterOutput} --out-file ./transactions/raw/${options.request.metadata.asset_id}-send.raw`
+cardano-cli transaction build-raw --fee "${sendFee}" --tx-in ${options.sendData.mintTXHash.txixhash} --tx-out ${options.customer.address}+3000000+"1 ${options.policy.id.trim()}.${options.request.metadata.asset_id}" --tx-out ${options.mintWalletInfo.address}+${minterOutput} --out-file ./transactions/raw/${options.request.metadata.asset_id}-send.raw`
                 exec(cmd , (err, stdout, stderr) => {
                     if (err) {
                         reject(err)
