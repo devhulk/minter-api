@@ -43,10 +43,13 @@ export default class Minter {
                                         this.buildRawTransaction(mintData)
                                         .then((data) => {
                                             mintData.output = mintData.mintWalletInfo.balance.lovelace - mintData.fee
-                                            console.log(mintData)
                                             this.finalizeTransaction(mintData)
                                             .then(() => {
-                                                resolve(mintData)
+                                                this.send(mintData)
+                                                .then((mintData) => {
+                                                    resolve(mintData)
+                                                })
+                                                .catch((e) => reject(`Error: ${e}`))
                                             })
                                             .catch((e) => reject(`Error: ${e}`))
                                         })
