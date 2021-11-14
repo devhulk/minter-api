@@ -117,7 +117,6 @@ export default class Minter {
                     if ((info.value.lovelace / 1000000) >= 5) {
                         validTX[utxo] = info  
                         console.log(validTX)
-                        break;
                         // validTXs.push(txix)
                     }
                 }
