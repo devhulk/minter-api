@@ -42,7 +42,7 @@ export default class Transactions {
     getMinted(options) {
             let utxos = options.txs
             // console.log("UTXOS: ", utxos)
-            console.log(utxos)
+            console.log()
             let txhashs = utxos.map(utxo => {
                     options.mintWalletTX = utxo["tx_hash"]
                     return this.getTXData(options).then((results) => {
@@ -86,6 +86,7 @@ export default class Transactions {
             let walletTXs = []
             axios.get(`https://cardano-testnet.blockfrost.io/api/v0/addresses/${options.mintWalletAddr}/utxos?order=desc`, {headers: {'project_id': `${blockfrostKey}`}})
             .then((response) => {
+                console.log(response.data)
                 resolve(response.data)
             })
             .catch(e => reject(e.response.data))
