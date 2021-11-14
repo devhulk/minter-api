@@ -44,11 +44,9 @@ app.get('/v1/cardano/mints', function (req, res) {
     let repo = new Repo()
     repo.getMintedNFTs()
     .then((repo) => {
-        repo.client.close()
         res.send(response)
     })
     .catch((repo) => {
-        repo.client.close()
         res.send(repo.err)
     })
 })

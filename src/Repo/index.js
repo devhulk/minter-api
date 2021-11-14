@@ -68,10 +68,14 @@ export default class Repo {
                 const db = client.db('puglies')
                 const collection = db.collection('mintsTest')
                 collection.find().toArray()
-                .then((mintedPugs) => {
-                    resolve({result: mintedPugs, client})
+                .then((result) => {
+                    client.close()
+                    resolve(result)
                 })
-                .catch(e => reject({result: e, client}))
+                .catch(e => {
+                    client.close()
+                    reject(e)}
+                    )
             })
         })
 
