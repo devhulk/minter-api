@@ -40,7 +40,7 @@ app.post('/v1/cardano/address/mints', function (req, res) {
 
 })
 
-app.get('/v1/cardano/mints', function (req, res) {
+app.get('/v1/cardano/minted', function (req, res) {
     let repo = new Repo()
     repo.getMintedNFTs()
     .then((repo) => {
@@ -48,6 +48,17 @@ app.get('/v1/cardano/mints', function (req, res) {
     })
     .catch((repo) => {
         res.send(repo.err)
+    })
+})
+
+app.post('/v1/cardano/minted', function (req, res) {
+    let repo = new Repo()
+    repo.insertMintedNFT()
+    .then((results) => {
+        res.send(results)
+    })
+    .catch((err) => {
+        res.send(err)
     })
 })
 
