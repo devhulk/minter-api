@@ -12,7 +12,7 @@ export default class Minter {
         let promise = new Promise((resolve, reject) => {
                 let body = req.body
                 let mintData = {request: req.body}
-                this.getProtocolParams()
+                this.getProtocolParams(mintData)
                 .then((data) => {
                     mintData.protocolParams = data
                     this.getMintWalletHash(body)
@@ -118,6 +118,7 @@ export default class Minter {
 
     getProtocolParams (options) {
     // 3. Get protocol params
+        
         let promise = new Promise((resolve, reject) => {
 
             let config = options.request.config 
