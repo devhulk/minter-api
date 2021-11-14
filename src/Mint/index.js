@@ -3,6 +3,7 @@ import { resolve } from 'dns';
 import { exit, stderr } from 'process';
 const fs = require('fs');
 import Metadata from '../Metadata'
+import Repo from '../Repo';
 
 export default class Minter {
     constructor() {}
@@ -35,9 +36,20 @@ export default class Minter {
                                             mintData.output = mintData.mintWalletInfo.balance.lovelace - mintData.fee
                                             this.finalizeTransaction(mintData)
                                             .then(() => {
-                                                this.send(mintData)
-                                                .then((mintData) => {
-                                                    resolve(mintData)
+                                                // insert mint into mongodb
+                                                let repo = new Repo
+                                                repo.insertMintedNFT(mintData)
+                                                .then((repoData) => {
+                                                    repoData.client.close()
+                                                    let result = repoData.result
+                                                    repo.getMintedNFTs(result)
+                                                    .then((repoData) => {
+                                                        repoData.client.close()
+                                                        let result = repoData.result
+                                                        resolve(result)
+                                                    })
+                                                    .catch((e) => reject(`Error: ${e}`))
+
                                                 })
                                                 .catch((e) => reject(`Error: ${e}`))
                                             })

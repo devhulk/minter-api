@@ -59,4 +59,43 @@ export default class Repo {
 
     }
 
+    getMintedNFTs(mintData) {
+        let promise = new Promise((resolve, reject) => {
+            const client = new MongoClient(process.env.MONGO_URL)
+            client.connect((err, client) => {
+                if (err) reject(err); 
+        
+                const db = client.db('puglies')
+                const collection = db.collection('mintsTest')
+                collection.find().toArray()
+                .then((mintedPugs) => {
+                    resolve(mintedPugs)
+                })
+                .catch(e => reject(e))
+            })
+        })
+
+        return promise
+    }
+
+    insertMintedNFT(mintData) {
+        let promise = new Promise((resolve, reject) => {
+            const client = new MongoClient(process.env.MONGO_URL)
+            client.connect((err, client) => {
+                if (err) reject(err); 
+        
+                const db = client.db('puglies')
+                const collection = db.collection('mintsTest')
+                collection.insertOne(mintData, (err, result) =>  {
+                    if (err) reject(err)
+
+                    resolve({result, client})
+                })
+            })
+        })
+
+        return promise
+
+    }
+
 }
