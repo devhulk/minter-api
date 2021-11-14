@@ -349,10 +349,10 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
                     }
                 }
                 let balanceObj = validTX[`${Object.keys(validTX)[0]}`]
-                console.log(balanceObj)
                 let lovelace = balanceObj.value.lovelace
                 let ada = balanceObj.value.lovelace / 1000000
                 let returnObj = {txixhash: Object.keys(validTX)[0], balance: {lovelace, ada}, address: options.address }
+                console.log(returnObj)
 
                 resolve(returnObj)
                 return;
@@ -406,7 +406,7 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
             #txix="0"
             # minterOutput=$(expr $minterFunds - $minterFee - 2000000)
             mintaddr="${options.mintWalletInfo.address}"
-            txix="${options.mintWalletInfo.mintTXHash}"
+            txix="${options.sendData.mintTXHash}"
             minterOutput="${minterOutput}"
             minterFee="${sendFee}"
             
