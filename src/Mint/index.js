@@ -114,12 +114,12 @@ export default class Minter {
                 for (const utxo in data) {
                     let txhash = data[utxo]
                     console.log(txhash["value"])
-                    if ((txhash.value / 1000000) >= 5) {
+                    if ((txhash.value.lovelace / 1000000) >= 5) {
                         validTX = data[txhash]
+                        console.log(validTX)
                         break;
                         // validTXs.push(txix)
                     }
-                        console.log(val)
                 }
                 console.log(validTX)
                 // let balanceObj = data[`${Object.keys(data)[0]}`]
