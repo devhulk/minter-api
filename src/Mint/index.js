@@ -327,7 +327,7 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
     getMintedAssetHash(options) {
         let promise = new Promise((resolve, reject) => {
 
-            console.log(options)
+            console.log(options.body)
             let config = options.request.config
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
