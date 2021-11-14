@@ -440,7 +440,7 @@ cardano-cli transaction build-raw --fee $minterFee --tx-in ${options.sendData.mi
 
     finalizeSendTX(options) {
         let promise = new Promise((resolve, reject) => {
-            let config = options.config
+            let config = options.request.config
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
             let cmd = `cardano-cli transaction sign --signing-key-file mintWallet/payment.skey ${network} ${magic} --tx-body-file ./transactions/raw/${options.request.metadata.asset_id}-send.raw --out-file ./transactions/signed/${options.request.metadata.asset_id}-send.signed`
