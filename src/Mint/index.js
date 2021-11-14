@@ -113,11 +113,12 @@ export default class Minter {
                 let data = JSON.parse(file)
                 console.log(data)
                 for (const txix in data) {
-                    let val = txix["value"]
-                    console.log(val)
-                    if ((val.lovelace / 1000000) >= 5) {
-                        validTXs.push(txix)
-                    }
+                    console.log(txix)
+                    // let val = txix["value"]
+                    // console.log(val)
+                    // if ((val.lovelace / 1000000) >= 5) {
+                    //     validTXs.push(txix)
+                    // }
                 }
                 // let balanceObj = data[`${Object.keys(data)[0]}`]
                 let balanceObj = validTXs[0]
