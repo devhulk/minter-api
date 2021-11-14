@@ -111,11 +111,11 @@ export default class Minter {
                 }
                 let file = fs.readFileSync('txixhash.json')
                 let data = JSON.parse(file)
-                for (const txix in data) {
-                    let val = data[txix]
-                    console.log(val["lovelace"])
-                    if ((val.lovelace / 1000000) >= 5) {
-                        validTX = val
+                for (const utxo in data) {
+                    let txhash = data[utxo]
+                    console.log(txhash["value"])
+                    if ((txhash.value / 1000000) >= 5) {
+                        validTX = data[txhash]
                         break;
                         // validTXs.push(txix)
                     }
