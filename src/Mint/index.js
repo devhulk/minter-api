@@ -103,7 +103,7 @@ export default class Minter {
             let config = options.config
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
-            let validTXs = []
+            let validTX = {}
             exec(`cardano-cli query utxo --address $(cat mintWallet/payment.addr) ${network} ${magic} --out-file=txixhash.json`, (err, stdout, stderr) => {
                 if (err) {
                     reject(err)
@@ -113,11 +113,14 @@ export default class Minter {
                 let data = JSON.parse(file)
                 for (const txix in data) {
                     let val = data[txix]
-                    console.log(val)
                     if ((val.lovelace / 1000000) >= 5) {
-                        validTXs.push(txix)
+                        console.log(val)
+                        validTX = val
+                        break;
+                        // validTXs.push(txix)
                     }
                 }
+                console.log(validTXs)
                 // let balanceObj = data[`${Object.keys(data)[0]}`]
                 let balanceObj = validTXs[0]
                 let lovelace = balanceObj.value.lovelace
