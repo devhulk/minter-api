@@ -44,10 +44,8 @@ export default class Minter {
                                         .then((data) => {
                                             mintData.output = mintData.mintWalletInfo.balance.lovelace - mintData.fee
                                             this.finalizeTransaction(mintData)
-                                            .then((data) => {
-                                                // res.send(mintData)
-                                            resolve(mintData) 
-                                                // send token to other wallet
+                                            .then(() => {
+                                                resolve(mintData)
                                             })
                                             .catch((e) => reject(`Error: ${e}`))
                                         })
@@ -67,6 +65,43 @@ export default class Minter {
         })
 
         return promise
+    }
+
+    send(mintData) {
+
+        let promise = new Promise((resolve, reject) => {
+
+            this.getMintedAssetHash(mintData)
+            .then((mintTXHash) => {
+                mintData.sendData.mintTXHash = mintTXHash
+                // this.calculateSendFee(mintData)
+                // .then((sendFee) => {
+                //     mintData.sendData.fee = sendFee
+                    this.buildSendRawTX((mintData) => {
+                        this.calculateSendFee(mintData)
+                        .then((sendFee) => {
+                            mintData.sendData.fee = sendFee
+                            this.buildSendRawTX(mintData)
+                            .then(() => {
+                                this.finalizeSendTX(mintData)
+                                .then(() => {
+                                    resolve(mintData) 
+                                })
+                                .catch((e) => reject(e))
+                            })
+                            .catch((e) => reject(e))
+                        })
+                        .catch((e) => reject(e))
+                    })
+                    .catch((e) => reject(e))
+                // })
+                // .catch((e) => reject(e))
+            })
+            .catch((e) => reject(e))
+        })
+
+        return promise
+
     }
 
     getProtocolParams () {
@@ -132,35 +167,6 @@ export default class Minter {
 
     }
 
-    getCustomerWalletHash(options) {
-        let promise = new Promise((resolve, reject) => {
-
-            let config = options.config
-            let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
-            let magic = network == '--testnet-magic' ? '1097911063' : ''
-            exec(`cardano-cli query utxo --address ${options.customerAddress} ${network} ${magic} --out-file=txixhash.json`, (err, stdout, stderr) => {
-                if (err) {
-                    reject(err)
-                    return;
-                }
-                let file = fs.readFileSync('txixhash.json')
-                let data = JSON.parse(file)
-                let balanceObj = data[`${Object.keys(data)[0]}`]
-                let lovelace = balanceObj.value.lovelace
-                let ada = balanceObj.value.lovelace / 1000000
-
-
-                let returnObj = {txixhash: Object.keys(data)[0], balance: {lovelace, ada}, address: options.address }
-
-                resolve(returnObj)
-                return;
-            })
-        })
-        return promise
-
-
-
-    }
 
 
     getPolicyID() {
@@ -279,10 +285,10 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
                     reject(err)
                     return;
                 }
-                console.log(options)
+                // console.log(options)
                 this.submitTransaction(options)
                 .then((data) => {
-                    resolve(stdout)
+                    resolve(data)
                 })
                 .catch(e => reject(e))
                 return
@@ -317,45 +323,96 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
 
     }
 
-    sendToken() {
+    getMintedAssetHash(options) {
+        let promise = new Promise((resolve, reject) => {
+
+            let config = options.config
+            let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
+            let magic = network == '--testnet-magic' ? '1097911063' : ''
+            let validTX = {}
+            exec(`cardano-cli query utxo --address $(cat mintWallet/payment.addr) ${network} ${magic} --out-file=minttxixhash.json`, (err, stdout, stderr) => {
+                if (err) {
+                    reject(err)
+                    return;
+                }
+                let file = fs.readFileSync('minttxixhash.json')
+                let data = JSON.parse(file)
+                for (const utxo in data) {
+                    let info = data[utxo]
+                    console.log(info)
+                    let policyID = options.policy.id
+                    if (info.value[policyID]) {
+                        console.log(info)
+                        validTX[utxo] = info  
+                        break;
+                    }
+                }
+                let balanceObj = validTX[`${Object.keys(validTX)[0]}`]
+                let lovelace = balanceObj.value.lovelace
+                let ada = balanceObj.value.lovelace / 1000000
+                let returnObj = {txixhash: Object.keys(validTX)[0], balance: {lovelace, ada}, address: options.address }
+
+                resolve(returnObj)
+                return;
+            })
+        })
+        return promise
+
+
+
+    }
+    calculateSendFee(options) {
+        let promise = new Promise((resolve, reject) => {
+            let config = options.request.config
+            let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
+            let magic = network == '--testnet-magic' ? '1097911063' : ''
+            let cmd = `cardano-cli transaction calculate-min-fee --tx-body-file ./transactions/raw/${options.request.metadata.asset_id}-send.raw --tx-in-count 1 --tx-out-count 2 --witness-count 1 --protocol-params-file=protocol.json ${network} ${magic} | cut -d " " -f1`
+            exec(cmd, (err, stdout, stderr) => {
+                if (err) {
+                    reject(err)
+                    return;
+                }
+
+                resolve(stdout)
+                return;
+            })
+
+        })
+
+        return promise
+
+
+    }
+
+    buildSendRawTX(options) {
         // build tx
+        let sendFee = options.sendData.fee == undefined ? "0" : options.sendData.fee
+        let minterOutput = options.sendData.output == undefined ? "0" : options.sendData.mintWalletInfo.balance.lovelace - sendFee - 2000000
 
             let cmd = `
             #!/bin/bash
 
             ## Token Data and PolicyID
-            tokenname="testID"
-            tokenamount="1"
-            slotnumber="42583353" # replaced after step 6
-            script="policy/policy.script"
-            policyid=$(cat ../policy/policyID)
-            Network="--testnet-magic 1097911063"
+            tokenamount="${options.request.metadata.amount}"
+            tokenname="${options.request.metadata.asset_id}"
+            policyid="${options.policy.id.trim()}"
             
             ## Mint Wallet Info (UTXO)
             #mintaddr="addr_test1vpfvdy0rvkawm6zz4l3y5fykyagp5r7g300xv7dhrkxs4aq8mt5vq"
-            mintaddr="${options.mintWalletInfo.address}"
             #minterFunds="14817955"
             #txhash="adee352dcdf4e5c03a71b7ec0a358c1187631e550ff8bdab192aaaa8167ba0ef"
             #txix="0"
-            txix="${options.mintWalletInfo.txixhash}"
-            #minterFee="176501"
-            # minterOutput=$(expr $minterFunds - $minterFee - 10000000)
-            minterOutput="${fee}"
-            #output="${output}"
-            tokenamount="${options.request.metadata.amount}"
-            policyid="${options.policy.id.trim()}"
-            tokenname="${options.request.metadata.asset_id}"
-            slotnumber="${options.policy.slotnumber}"
+            # minterOutput=$(expr $minterFunds - $minterFee - 2000000)
+            mintaddr="${options.mintWalletInfo.address}"
+            txix="${options.mintWalletInfo.mintTXHash}"
+            minterOutput="${minterOutput}"
+            minterFee="${sendFee}"
             
             
             ## Customer Wallet Info (UTXO)
             
             customerAddr="${options.customer.address}"
-            #customerTxHash="ee98d459648c1229d2837ed95849a4d05fdb3c3082c78006bd8622a0a631a3d5"
-            #customerTxix="0"
-            #customerTxix=""
-            customerFunds="11000000"
-            customerOutput="10000000"
+            customerOutput="2000000"
 
             # --tx-in $txhash#$txix  \
             
@@ -365,17 +422,67 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
                 --tx-in $txix  \
                 --tx-out $customerAddr+$customerOutput+"1 $policyid.$tokenname" \
                 --tx-out $mintaddr+$minterOutput \
-                --out-file matx.raw
+                --out-file ./transactions/raw/${options.request.metadata.asset_id}-send.raw
             `
             console.log(cmd)
             exec(cmd , (err, stdout, stderr) => {
                 if (err) {
-                    // console.log(err)
                     reject(err)
                     return;
                 }
                     resolve(stdout)
             })
+
+    }
+
+    finalizeSendTX(options) {
+        let promise = new Promise((resolve, reject) => {
+            let config = options.config
+            let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
+            let magic = network == '--testnet-magic' ? '1097911063' : ''
+            let cmd = `cardano-cli transaction sign --signing-key-file mintWallet/payment.skey ${network} ${magic} --tx-body-file ./transactions/raw/${options.request.metadata.asset_id}-send.raw --out-file ./transactions/signed/${options.request.metadata.asset_id}-send.signed`
+            console.log(cmd)
+            exec(cmd , (err, stdout, stderr) => {
+                if (err) {
+                    console.log(err)
+                    reject(err)
+                    return;
+                }
+                console.log(options)
+                this.submitTransaction(options)
+                .then((data) => {
+                    resolve(stdout)
+                })
+                .catch(e => reject(e))
+                return
+
+            })
+            
+        })
+        return promise
+
+    }
+
+    submitSendTX(options) {
+        let promise = new Promise((resolve, reject) => {
+            let config = options.request.config
+            let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
+            let magic = network == '--testnet-magic' ? '1097911063' : ''
+            let cmd = `cardano-cli transaction submit --tx-file ./transactions/signed/${options.request.metadata.asset_id}-send.signed ${network} ${magic}`
+            console.log(cmd)
+            exec(cmd , (err, stdout, stderr) => {
+                if (err) {
+                    console.log(err)
+                    reject(err)
+                    return;
+                }
+                resolve(stdout)
+                return
+
+            })
+            
+        })
+        return promise
 
     }
 

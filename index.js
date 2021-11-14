@@ -37,8 +37,26 @@ app.post('/v1/cardano/address/mints', function (req, res) {
     })
     .catch(e => res.send(e))
 
+})
 
+app.post('/v1/cardano/mint/asset', function (req, res) {
+    let minter = new Minter()
+    minter.mint(req)
+    .then((mintData) => {
+        res.send(JSON.stringify(mintData))
+    })
+})
 
+app.post('/v1/cardano/mint/sendAsset', function (req, res) {
+    let minter = new Minter()
+    minter.send(req)
+    .then((mintData) => {
+        res.send(mintData)
+    })
+})
+
+app.get('/v1/cardano/mint/assets', function (req, res) {
+    let minter = new Minter()
 })
 
 app.post('/v1/cardano/txs/utxos', function (req, res) {
@@ -55,21 +73,6 @@ app.post('/v1/cardano/txs/utxos', function (req, res) {
     })
     .catch(e => res.send(e))
 
-})
-
-
-app.get('/v1/cardano/mint/assets', function (req, res) {
-    let minter = new Minter()
-})
-
-app.post('/v1/cardano/mint/asset', function (req, res) {
-    let minter = new Minter()
-    // let body = req.body
-    // let mintData = {request: req.body}
-    minter.mint(req)
-    .then((mintData) => {
-        res.send(mintData)
-    })
 })
 
 
