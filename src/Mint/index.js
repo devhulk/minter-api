@@ -76,11 +76,11 @@ export default class Minter {
             .then((mintTXHash) => {
                 mintData.sendData = {}
                 mintData.sendData.mintTXHash = mintTXHash
-                mintData.sendData.fee = 0
                 // this.calculateSendFee(mintData)
                 // .then((sendFee) => {
                 //     mintData.sendData.fee = sendFee
-                    this.buildSendRawTX((mintData) => {
+                    this.buildSendRawTX(mintData)
+                    .then((mintData) => {
                         this.calculateSendFee(mintData)
                         .then((sendFee) => {
                             mintData.sendData.fee = sendFee
