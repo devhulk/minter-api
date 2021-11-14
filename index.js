@@ -53,6 +53,7 @@ app.post('/v1/cardano/mint/sendAsset', function (req, res) {
     .then((mintData) => {
         res.send(mintData)
     })
+    .catch((e) => res.send(e))
 })
 
 app.get('/v1/cardano/mint/assets', function (req, res) {
