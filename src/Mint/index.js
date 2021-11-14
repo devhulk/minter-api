@@ -113,9 +113,9 @@ export default class Minter {
                 let data = JSON.parse(file)
                 for (const utxo in data) {
                     let txhash = data[utxo]
-                    console.log(txhash["value"])
+                    console.log(txhash)
                     if ((txhash.value.lovelace / 1000000) >= 5) {
-                        validTX = utxo
+                        validTX = txhash
                         console.log(validTX)
                         break;
                         // validTXs.push(txix)
