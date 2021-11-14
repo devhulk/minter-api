@@ -84,6 +84,7 @@ export default class Minter {
                         this.calculateSendFee(mintData)
                         .then((sendFee) => {
                             mintData.sendData.fee = sendFee.trim()
+                            console.log(mintData.sendData.balance)
                             this.buildSendRawTX(mintData)
                             .then(() => {
                                 this.finalizeSendTX(mintData)
