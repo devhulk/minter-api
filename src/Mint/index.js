@@ -350,6 +350,7 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
                     }
                 }
                 let balanceObj = validTX[`${Object.keys(validTX)[0]}`]
+                console.log(balanceObj)
                 let lovelace = balanceObj.value.lovelace
                 let ada = balanceObj.value.lovelace / 1000000
                 let returnObj = {txixhash: Object.keys(validTX)[0], balance: {lovelace, ada}, address: options.address }
