@@ -398,6 +398,7 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
             options.sendData.output = minterOutput
             console.log(options)
             console.log("MINT Output: ", minterOutput)
+            console.log("fee: ", sendFee)
 
                 let cmd = `
                 #!/bin/bash
@@ -429,7 +430,7 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
                 
                 cardano-cli transaction build-raw \
                     --fee $minterFee \
-                    --tx-in $txix  \
+                    --tx-in ${options.mintWalletInfo.address}  \
                     --tx-out $customerAddr+$customerOutput+"1 $policyid.$tokenname" \
                     --tx-out $mintaddr+$minterOutput \
                     --out-file ./transactions/raw/${options.request.metadata.asset_id}-send.raw
