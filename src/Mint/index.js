@@ -110,6 +110,7 @@ export default class Minter {
                     })
                     .catch((e) => reject(e))
                 })
+                .catch((e) => reject(e))
 
             })
             .catch((e) => reject(e))
