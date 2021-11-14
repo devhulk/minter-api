@@ -451,14 +451,14 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
             let cmd = `cardano-cli transaction sign --signing-key-file mintWallet/payment.skey ${network} ${magic} --tx-body-file ./transactions/raw/${options.request.metadata.asset_id}-send.raw --out-file ./transactions/signed/${options.request.metadata.asset_id}-send.signed`
-            console.log(cmd)
+            // console.log(cmd)
             exec(cmd , (err, stdout, stderr) => {
                 if (err) {
                     console.log(err)
                     reject(err)
                     return;
                 }
-                console.log(options)
+                // console.log(options)
                 this.submitTransaction(options)
                 .then((data) => {
                     resolve(stdout)
@@ -479,7 +479,7 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
             let cmd = `cardano-cli transaction submit --tx-file ./transactions/signed/${options.request.metadata.asset_id}-send.signed ${network} ${magic}`
-            console.log(cmd)
+            // console.log(cmd)
             exec(cmd , (err, stdout, stderr) => {
                 if (err) {
                     console.log(err)
