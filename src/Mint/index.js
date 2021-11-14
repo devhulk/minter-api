@@ -80,7 +80,7 @@ export default class Minter {
                 // .then((sendFee) => {
                 //     mintData.sendData.fee = sendFee
                     this.buildSendRawTX(mintData)
-                    .then((mintData) => {
+                    .then(() => {
                         this.calculateSendFee(mintData)
                         .then((sendFee) => {
                             mintData.sendData.fee = sendFee
