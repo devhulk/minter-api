@@ -327,6 +327,7 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
     getMintedAssetHash(options) {
         let promise = new Promise((resolve, reject) => {
 
+            console.log(options)
             let config = options.request.config
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
@@ -364,7 +365,7 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
     }
     calculateSendFee(options) {
         let promise = new Promise((resolve, reject) => {
-            let config = options.request.config
+            let config = options.config
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
             let cmd = `cardano-cli transaction calculate-min-fee --tx-body-file ./transactions/raw/${options.request.metadata.asset_id}-send.raw --tx-in-count 1 --tx-out-count 2 --witness-count 1 --protocol-params-file=protocol.json ${network} ${magic} | cut -d " " -f1`
