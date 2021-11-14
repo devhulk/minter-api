@@ -112,7 +112,8 @@ export default class Minter {
                 let file = fs.readFileSync('txixhash.json')
                 let data = JSON.parse(file)
                 for (const txix in data) {
-                    let val = data[txix].value
+                    let val = data[txix]
+                    console.log(val)
                     if ((val.lovelace / 1000000) >= 5) {
                         validTXs.push(txix)
                     }
