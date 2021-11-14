@@ -430,7 +430,7 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
                 
                 cardano-cli transaction build-raw \
                     --fee $minterFee \
-                    --tx-in ${options.mintWalletInfo.address}  \
+                    --tx-in ${options.sendData.mintTXHash.txixhash}  \
                     --tx-out $customerAddr+$customerOutput+"1 $policyid.$tokenname" \
                     --tx-out $mintaddr+$minterOutput \
                     --out-file ./transactions/raw/${options.request.metadata.asset_id}-send.raw
