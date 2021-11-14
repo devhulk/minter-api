@@ -40,6 +40,7 @@ export default class Minter {
                                     this.calculateFee(mintData)
                                     .then((data) => {
                                         mintData.fee = data.trim()
+                                        console.log(mintData)
                                         this.buildRawTransaction(mintData)
                                         .then((data) => {
                                             mintData.output = mintData.mintWalletInfo.balance.lovelace - mintData.fee

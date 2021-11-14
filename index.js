@@ -43,7 +43,7 @@ app.post('/v1/cardano/mint/asset', function (req, res) {
     let minter = new Minter()
     minter.mint(req)
     .then((mintData) => {
-        res.send(JSON.stringify(mintData))
+        res.send(mintData)
     })
 })
 
