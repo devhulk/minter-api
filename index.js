@@ -12,6 +12,7 @@ app.use(bodyParser.json())
 import Minter from "./src/Mint"
 import Transactions from './src/Transactions'
 import axios from 'axios'
+import Repo from './src/Repo'
 
 app.post('/v1/cardano/address/payments', function (req, res) {
     let body = req.body
@@ -37,6 +38,19 @@ app.post('/v1/cardano/address/mints', function (req, res) {
     })
     .catch(e => res.send(e))
 
+})
+
+app.get('/v1/cardano/mints', function (req, res) {
+    let repo = new Repo()
+    repo.getMintedNFTs()
+    .then((repo) => {
+        repo.client.close()
+        res.send(response)
+    })
+    .catch((repo) => {
+        repo.client.close()
+        res.send(repo.err)
+    })
 })
 
 app.post('/v1/cardano/mint/asset', function (req, res) {
