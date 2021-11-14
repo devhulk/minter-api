@@ -53,7 +53,7 @@ app.get('/v1/cardano/minted', function (req, res) {
 
 app.post('/v1/cardano/minted', function (req, res) {
     let repo = new Repo()
-    repo.insertMintedNFT()
+    repo.insertMintedNFT(req.body)
     .then((results) => {
         res.send(results)
     })
