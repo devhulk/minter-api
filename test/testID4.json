@@ -1,0 +1,79 @@
+{
+  "request": {
+    "address": "addr_test1vpfvdy0rvkawm6zz4l3y5fykyagp5r7g300xv7dhrkxs4aq8mt5vq",
+    "config": "testnet",
+    "metadata": {
+      "asset_id": "testID4",
+      "asset_name": "testName",
+      "ipfsLink": "ipfs://test",
+      "amount": "1",
+      "traits": [
+        null
+      ]
+    }
+  },
+  "protocolParams": {
+    "txFeePerByte": 44,
+    "minUTxOValue": null,
+    "decentralization": 0,
+    "utxoCostPerWord": 34482,
+    "stakePoolDeposit": 500000000,
+    "poolRetireMaxEpoch": 18,
+    "extraPraosEntropy": null,
+    "collateralPercentage": 150,
+    "stakePoolTargetNum": 500,
+    "maxBlockBodySize": 65536,
+    "minPoolCost": 340000000,
+    "maxTxSize": 16384,
+    "treasuryCut": 0.2,
+    "maxBlockExecutionUnits": {
+      "memory": 50000000,
+      "steps": 40000000000
+    },
+    "maxCollateralInputs": 3,
+    "maxValueSize": 5000,
+    "maxBlockHeaderSize": 1100,
+    "maxTxExecutionUnits": {
+      "memory": 10000000,
+      "steps": 10000000000
+    },
+    "costModels": {
+      "PlutusScriptV1": [
+        null
+      ]
+    },
+    "protocolVersion": {
+      "minor": 0,
+      "major": 6
+    },
+    "txFeeFixed": 155381,
+    "stakeAddressDeposit": 2000000,
+    "monetaryExpansion": 0.003,
+    "poolPledgeInfluence": 0.3,
+    "executionUnitPrices": {
+      "priceSteps": 7.21e-05,
+      "priceMemory": 0.0577
+    }
+  },
+  "mintWalletInfo": {
+    "txixhash": "d1233613d17773bcf3eae2462d9083ea7b4cd01064750cb09c4e22669d799e23#0",
+    "balance": {
+      "lovelace": 8817867,
+      "ada": 8.817867
+    },
+    "address": "addr_test1vpfvdy0rvkawm6zz4l3y5fykyagp5r7g300xv7dhrkxs4aq8mt5vq"
+  },
+  "policy": {
+    "id": "1f9202548139a0441973dd92264d1542f72112d2a8a6cc10482dd226",
+    "slotnumber": 42583353
+  },
+  "metadata": {
+    "721": {
+      "1f9202548139a0441973dd92264d1542f72112d2a8a6cc10482dd226": [
+        null
+      ]
+    }
+  },
+  "output": 8635734,
+  "fee": "182133"
+}
