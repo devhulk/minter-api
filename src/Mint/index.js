@@ -425,8 +425,6 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
                 customerAddr="${options.customer.address}"
                 customerOutput="2000000"
 
-                # --tx-in $txhash#$txix  \
-                
                 
                 cardano-cli transaction build-raw \
                     --fee $minterFee \
