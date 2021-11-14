@@ -137,8 +137,10 @@ export default class Minter {
                     if (err) {
                         reject(err)
                     }
+
+                    resolve(JSON.parse(data))
+
                 })
-                resolve(JSON.parse(data))
             })
 
             params.stderr.on('data', (data) => {
