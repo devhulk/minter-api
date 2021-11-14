@@ -58,7 +58,7 @@ export default class Transactions {
                     // }
                     mints.push(txOutput)
                 }) 
-                return mints
+                return JSON.stringify(mints)
             })
             .catch(function (error) {
                 if (error.response) {
