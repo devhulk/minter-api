@@ -168,7 +168,7 @@ export default class Minter {
                 let data = JSON.parse(file)
                 for (const utxo in data) {
                     let info = data[utxo]
-                    if ((info.value.lovelace / 1000000) >= 5) {
+                    if ((info.value.lovelace / 1000000) >= 10) {
                         validTX[utxo] = info  
                     }
                 }
