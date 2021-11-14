@@ -14,6 +14,9 @@
       ]
     }
   },
+  "customer": {
+    "address": "addr_test1vz484qzv0wdfgrtlp40ntyjz4963pe8g4v8xfvn86u8ezcg43zu7s"
+  },
 "mintWalletInfo": {
 "txixhash": "8389a5b28e8b133db09c3a7ba5b3693c5cc1378c9a16ec7bca39fb22a9d1730e#1",
 "balance": {
