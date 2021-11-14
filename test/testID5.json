@@ -1,0 +1,48 @@
+{
+"request": {
+    "address": "addr_test1vpfvdy0rvkawm6zz4l3y5fykyagp5r7g300xv7dhrkxs4aq8mt5vq",
+    "config": "testnet",
+    "metadata": {
+      "asset_id": "testID5",
+      "asset_name": "testName",
+      "ipfsLink": "ipfs://test",
+      "amount": "1",
+      "traits": [
+        {
+          "head": "original"
+        }
+      ]
+    }
+  },
+"mintWalletInfo": {
+"txixhash": "8389a5b28e8b133db09c3a7ba5b3693c5cc1378c9a16ec7bca39fb22a9d1730e#1",
+"balance": {
+  "lovelace": 5641806,
+  "ada": 5.641806
+},
+"address": "addr_test1vpfvdy0rvkawm6zz4l3y5fykyagp5r7g300xv7dhrkxs4aq8mt5vq"
+},
+"policy": {
+"id": "1f9202548139a0441973dd92264d1542f72112d2a8a6cc10482dd226\n",
+"slotnumber": 42583353
+},
+"metadata": {
+"721": {
+  "1f9202548139a0441973dd92264d1542f72112d2a8a6cc10482dd226": {
+    "testID5": {
+      "name": "testName",
+      "mediaType": "image/png",
+      "image": "ipfs://test",
+      "traits": [
+        {
+          "head": "original"
+        }
+      ],
+      "amount": "1"
+    }
+  }
+}
+},
+"output": 5459673,
+"fee": "182133"
+}
