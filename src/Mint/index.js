@@ -160,7 +160,7 @@ export default class Minter {
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
             let validTX = {}
-            exec(`cardano-cli query utxo --address $(cat mintWallet/${options.mintWalletInfo.name}/payment.addr) ${network} ${magic} --out-file=txixhash.json`, (err, stdout, stderr) => {
+            exec(`cardano-cli query utxo --address $(cat mintWallet/${options.walletName}/payment.addr) ${network} ${magic} --out-file=txixhash.json`, (err, stdout, stderr) => {
                 if (err) {
                     reject(err)
                     return;
