@@ -114,11 +114,11 @@ export default class Minter {
                 for (const txix in data) {
                     let val = data[txix]
                     if ((val.lovelace / 1000000) >= 5) {
-                        console.log(val)
                         validTX = val
                         break;
                         // validTXs.push(txix)
                     }
+                        console.log(val)
                 }
                 console.log(validTX)
                 // let balanceObj = data[`${Object.keys(data)[0]}`]
