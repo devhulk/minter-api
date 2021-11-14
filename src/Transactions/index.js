@@ -89,7 +89,7 @@ export default class Transactions {
                 // console.log(response.data[0].amount)
                 resolve(response.data)
             })
-            .catch(e => reject(e.response.data))
+            .catch(e => reject(e.toJson()))
 
         })
 
@@ -118,19 +118,7 @@ export default class Transactions {
                 return payments
             })
             .catch(function (error) {
-                if (error.response) {
-                  // Request made and server responded
-                  console.log(error.response.data);
-                  console.log(error.response.status);
-                  console.log(error.response.headers);
-                } else if (error.request) {
-                  // The request was made but no response was received
-                  console.log(error.request);
-                } else {
-                  // Something happened in setting up the request that triggered an Error
-                  console.log('Error', error.message);
-                }
-            
+                reject(error.toJson())
               });
 
               return mintAddressTransactions
@@ -152,19 +140,7 @@ export default class Transactions {
                 resolve(customerPayment)
             })
             .catch(function (error) {
-                if (error.response) {
-                  // Request made and server responded
-                  console.log(error.response.data);
-                  console.log(error.response.status);
-                  console.log(error.response.headers);
-                } else if (error.request) {
-                  // The request was made but no response was received
-                  console.log(error.request);
-                } else {
-                  // Something happened in setting up the request that triggered an Error
-                  console.log('Error', error.message);
-                }
-            
+                reject(error.toJson())
               });
         })
         return promise
