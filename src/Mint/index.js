@@ -18,23 +18,15 @@ export default class Minter {
                     this.getMintWalletHash(body)
                     .then((data) => {
                         mintData.mintWalletInfo = data
-                    })
-                    .then(() => {
                         this.getPolicyID()
                         .then((policy) => {
                             mintData.policy = policy
-                        })
-                        .then(() => {
                             this.getMetaData(mintData)
                             .then((metadata) => {
                                 mintData.metadata = metadata
-                            })
-                            .then(() => {
                                 this.buildRawTransaction(mintData)
                                 .then((data) => {
                                     mintData.output = 0
-                                })
-                                .then(() => {
                                     this.calculateFee(mintData)
                                     .then((data) => {
                                         mintData.fee = data.trim()
@@ -57,12 +49,13 @@ export default class Minter {
                                 })
                                 .catch((e) => reject(`Error: ${e}`) )
                             })
+                            .catch((e) => reject(`Error: ${e}`))
                         })
                         .catch((e) => reject(`Error: ${e}`))
-                    .catch((e) => reject(`Error: ${e}`))
                     })
+                    .catch((e) => reject(e))
                 })
-                .catch((e) => reject(e))
+                .catch((e) => reject(`Error: ${e}`))
 
         })
 
@@ -326,10 +319,8 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
                 if (err) {
                     console.log(err)
                     reject(err)
-                    return;
                 }
                 resolve(stdout)
-                return
 
             })
             
