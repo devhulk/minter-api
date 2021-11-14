@@ -341,7 +341,7 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
                 for (const utxo in data) {
                     let info = data[utxo]
                     // console.log(info)
-                    let policyID = options.policy.id
+                    let policyID = options.policy.id.trim()
                     if (info.value[policyID]) {
                         console.log(info)
                         validTX[utxo] = info  
