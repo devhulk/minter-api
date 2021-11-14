@@ -74,6 +74,7 @@ export default class Minter {
 
             this.getMintedAssetHash(mintData)
             .then((mintTXHash) => {
+                mintData.sendData = {}
                 mintData.sendData.mintTXHash = mintTXHash
                 // this.calculateSendFee(mintData)
                 // .then((sendFee) => {
@@ -343,7 +344,7 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
                     // console.log(info)
                     let policyID = options.policy.id.trim()
                     if (info.value[policyID]) {
-                        console.log(info)
+                        // console.log(info)
                         validTX[utxo] = info  
                         break;
                     }
@@ -351,7 +352,7 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
                 let balanceObj = validTX[`${Object.keys(validTX)[0]}`]
                 let lovelace = balanceObj.value.lovelace
                 let ada = balanceObj.value.lovelace / 1000000
-                let returnObj = {txixhash: Object.keys(validTX)[0], balance: {lovelace, ada}, address: options.address }
+                let returnObj = {txixhash: Object.keys(validTX)[0], balance: {lovelace, ada}, address: options.mintWalletInfo.address }
                 console.log(returnObj)
 
                 resolve(returnObj)
