@@ -421,7 +421,7 @@ customerAddr="${options.customer.address}"
 customerOutput="3000000"
 
 
-cardano-cli transaction build-raw --fee $minterFee --tx-in ${options.sendData.mintTXHash.txixhash} --tx-out ${options.customer.address}+3000000+"1 ${options.policy.id.trim()}.${options.request.metadata.asset_id}" --tx-out ${options.mintWalletInfo.address}+${minterOutput} --out-file ./transactions/raw/${options.request.metadata.asset_id}-send.raw`
+cardano-cli transaction build-raw --fee ${sendFee} --tx-in ${options.sendData.mintTXHash.txixhash} --tx-out ${options.customer.address}+3000000+"1 ${options.policy.id.trim()}.${options.request.metadata.asset_id}" --tx-out ${options.mintWalletInfo.address}+${minterOutput} --out-file ./transactions/raw/${options.request.metadata.asset_id}-send.raw`
                 exec(cmd , (err, stdout, stderr) => {
                     if (err) {
                         reject(err)
