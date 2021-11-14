@@ -46,6 +46,7 @@ export default class Transactions {
                     options.mintWalletTX = utxo["tx_hash"]
                     return this.getTXData(options).then((results) => {
                         results.output.txHash = utxo["tx_hash"]
+                        results.output.payingAddress = utxo["address"]
                         return results.output
                     })
             })
