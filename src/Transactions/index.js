@@ -86,7 +86,7 @@ export default class Transactions {
             let walletTXs = []
             axios.get(`https://cardano-testnet.blockfrost.io/api/v0/addresses/${options.mintWalletAddr}/utxos?order=desc`, {headers: {'project_id': `${blockfrostKey}`}})
             .then((response) => {
-                console.log(response.data)
+                console.log(response.data[0].amount)
                 resolve(response.data)
             })
             .catch(e => reject(e.response.data))
