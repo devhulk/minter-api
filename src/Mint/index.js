@@ -21,24 +21,18 @@ export default class Minter {
         let promise = new Promise((resolve, reject) => {
             console.log('in deliver')
             let options = req.body
-            this.sendProtocol()
+            this.sendProtocol(options)
             .then(() => {
-                console.log('in sendProtocol')
                 this.sendRaw(options)
                 .then(() => {
-                    console.log('in sendRaw 1')
                     this.sendFee(options)
                     .then((options) => {
-                        console.log('in sendFee 1')
                         this.sendRaw(options)
                         .then(() => {
-                            console.log('in sendRaw 2')
                             this.signSendTX(options)
                             .then(() => {
-                                console.log('in signSendTX 2')
                                 this.submitSend(options)
                                 .then((status) => {
-                                    console.log('in submitSend')
                                     resolve(status)
                                 })
                                 .catch(e => reject(e))
@@ -557,10 +551,10 @@ cardano-cli transaction build-raw --fee "${sendFee}" --tx-in ${options.sendData.
 
     }
 
-    sendProtocol() {
+    sendProtocol(options) {
         let promise = new Promise((resolve, reject) => {
 
-            let config = options.request.config 
+            let config = options.config 
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
             const params = spawn('cardano-cli', ['query', 'protocol-parameters', network, magic])
