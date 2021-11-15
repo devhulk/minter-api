@@ -35,7 +35,7 @@ export default class Minter {
                                 this.submitSend(options)
                                 .then((status) => {
                                     console.log(status)
-                                    resolve(status)
+                                    resolve({status})
                                 })
                                 .catch(e => reject(e))
                             })
