@@ -127,6 +127,7 @@ export default class Repo {
     }
 
     updateMintedNFTS(mintData) {
+        console.log("In update minted NFT function")
         // mintData["_id"] = mintData.txHash
         let promise = new Promise((resolve, reject) => {
             const client = new MongoClient(process.env.MONGO_URL)
@@ -149,6 +150,7 @@ export default class Repo {
     }
 
     updatePayments(payments) {
+        console.log("In update payments NFT function")
         let promise = new Promise((resolve, reject) => {
             const client = new MongoClient(process.env.MONGO_URL)
             client.connect((err, client) => {
@@ -169,6 +171,7 @@ export default class Repo {
 
     }
     updateSent(payments) {
+        console.log("In update sent NFT function")
         let promise = new Promise((resolve, reject) => {
             const client = new MongoClient(process.env.MONGO_URL)
             client.connect((err, client) => {
