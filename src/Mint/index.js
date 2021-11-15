@@ -285,7 +285,7 @@ address="${options.mintWalletInfo.address}"
 output="${output}"
 tokenamount="${options.request.metadata.amount}"
 policyid="${options.policy.id.trim()}"
-tokenname="${options.request.metadata.asset_id}"
+tokenname="${options.request.metadata.name}"
 slotnumber="${options.policy.slotnumber}"
 
 cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$output+"$tokenamount $policyid.$tokenname" --mint="$tokenamount $policyid.$tokenname" --minting-script-file policy/policy.script --minting-script-file policy/policy.script --invalid-hereafter $slotnumber --out-file ./transactions/raw/$tokenname.raw`
