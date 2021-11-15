@@ -28,12 +28,10 @@ export default class Minter {
                     this.sendFee(options)
                     .then((options) => {
                         this.sendRaw(options)
-                        console.log('inside second raw')
                         .then((stdout) => {
-                            console.log(stdout)
                             this.signSendTX(options)
                             .then((stdout) => {
-                            console.log('inside sign')
+                                console.log('inside sign')
                                 console.log(stdout)
                                 this.submitSend(options)
                                 .then((status) => {
