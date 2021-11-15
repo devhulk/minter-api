@@ -565,7 +565,7 @@ cardano-cli transaction build-raw --fee "${sendFee}" --tx-in ${options.sendData.
             const params = spawn('cardano-cli', ['query', 'protocol-parameters', network, magic])
 
             params.stdout.on('data', (data) => {
-                console.log("ProtocolData: ", data)
+                console.log("ProtocolData: ", data.toString())
                 fs.writeFile('protocol.json', data, err => {
                     if (err) {
                         reject(err)
