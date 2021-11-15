@@ -73,7 +73,7 @@ export default class Minter {
             })
 
             params.stderr.on('data', (data) => {
-                console.error("Error: ", data)
+                console.error("Error: ", data.toString())
                 reject(data)
             })
 
