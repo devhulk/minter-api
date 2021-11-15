@@ -571,7 +571,7 @@ cardano-cli transaction build-raw --fee "${sendFee}" --tx-in ${options.sendData.
                         reject(err)
                     }
 
-                    resolve(data)
+                    resolve(data.toString())
 
                 })
             })
