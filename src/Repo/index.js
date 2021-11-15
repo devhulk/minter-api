@@ -5,29 +5,6 @@ const { MongoClient } = mongodb
 export default class Repo {
     constructor() {}
 
-    async init() {
-    }
-
-    async createCollection(options) {
-        let promise = new Promise((resolve, reject) => {
-            const client = new MongoClient(process.env.MONGO_URL)
-            client.connect((err, client) => {
-                if (err) throw err; 
-        
-                const db = client.db('puglies')
-                db.collection(options.collection).insertMany(options.txs, (err, result) => {
-                    if (err) reject(err);
-
-                    resolve({mongoResult: result, client})
-                })
-            })
-
-        })
-
-        return promise
-
-    }
-
     getRandomNFT() {
         const client = new MongoClient(process.env.MONGO_URL)
         client.connect((err, client) => {
@@ -47,26 +24,15 @@ export default class Repo {
         })
     }
 
-    updatePayments() {
-        const client = new MongoClient(process.env.MONGO_URL)
-        client.connect((err, client) => {
-            if (err) throw err; 
-    
-            const db = client.db('puglies')
-            const collection = db.collection('payments')
-            // update/upsert/insertMany? payments
-        })
 
-    }
-
-    getMintedNFTs(mintData) {
+    getMintedNFTs() {
         let promise = new Promise((resolve, reject) => {
             const client = new MongoClient(process.env.MONGO_URL)
             client.connect((err, client) => {
                 if (err) reject(err); 
         
                 const db = client.db('puglies')
-                const collection = db.collection('mintsTest')
+                const collection = db.collection('testMints')
                 collection.find().toArray()
                 .then((result) => {
                     console.log(result)
@@ -83,7 +49,55 @@ export default class Repo {
         return promise
     }
 
-    insertMintedNFT(mintData) {
+    getPayments() {
+        let promise = new Promise((resolve, reject) => {
+            const client = new MongoClient(process.env.MONGO_URL)
+            client.connect((err, client) => {
+                if (err) reject(err); 
+        
+                const db = client.db('puglies')
+                const collection = db.collection('testPayments')
+                collection.find().toArray()
+                .then((result) => {
+                    console.log(result)
+                    resolve(result)
+                    client.close()
+                })
+                .catch(e => {
+                    reject(e)
+                    client.close()
+                })
+            })
+        })
+
+        return promise
+    }
+
+    getSent() {
+        let promise = new Promise((resolve, reject) => {
+            const client = new MongoClient(process.env.MONGO_URL)
+            client.connect((err, client) => {
+                if (err) reject(err); 
+        
+                const db = client.db('puglies')
+                const collection = db.collection('testSentOrders')
+                collection.find().toArray()
+                .then((result) => {
+                    console.log(result)
+                    resolve(result)
+                    client.close()
+                })
+                .catch(e => {
+                    reject(e)
+                    client.close()
+                })
+            })
+        })
+
+        return promise
+    }
+
+    updateMintedNFTS(mintData) {
         // mintData["_id"] = mintData.txHash
         let promise = new Promise((resolve, reject) => {
             const client = new MongoClient(process.env.MONGO_URL)
@@ -105,7 +119,7 @@ export default class Repo {
 
     }
 
-    insertPayments(payments) {
+    updatePayments(payments) {
         let promise = new Promise((resolve, reject) => {
             const client = new MongoClient(process.env.MONGO_URL)
             client.connect((err, client) => {
@@ -113,6 +127,26 @@ export default class Repo {
         
                 const db = client.db('puglies')
                 const collection = db.collection('testPayments')
+                collection.insertMany(payments, { ordered: false }, (err, result) =>  {
+                    if (err) reject(err)
+
+                    client.close()
+                    resolve(result)
+                })
+            })
+        })
+
+        return promise
+
+    }
+    updateSent(payments) {
+        let promise = new Promise((resolve, reject) => {
+            const client = new MongoClient(process.env.MONGO_URL)
+            client.connect((err, client) => {
+                if (err) reject(err); 
+        
+                const db = client.db('puglies')
+                const collection = db.collection('testSentOrders')
                 collection.insertMany(payments, { ordered: false }, (err, result) =>  {
                     if (err) reject(err)
 

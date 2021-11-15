@@ -43,33 +43,47 @@ app.post('/v1/cardano/address/mints', function (req, res) {
 app.get('/v1/cardano/minted', function (req, res) {
     let repo = new Repo()
     repo.getMintedNFTs()
-    .then((repo) => {
+    .then((response) => {
         res.send(response)
     })
-    .catch((repo) => {
-        res.send(repo.err)
+    .catch((err) => {
+        res.send(err)
     })
 })
 
 app.post('/v1/cardano/minted', function (req, res) {
     let repo = new Repo()
-    repo.insertMintedNFT(req.body)
+    repo.updateMintedNFTS(req.body)
     .then((results) => {
         res.send(results)
     })
     .catch((err) => {
-        res.send(err)
+        // res.send(err)
+        console.log(err)
     })
 })
 
 app.post('/v1/cardano/payments', function (req, res) {
     let repo = new Repo()
-    repo.insertPayments(req.body)
+    repo.updatePayments(req.body)
     .then((results) => {
         res.send(results)
     })
     .catch((err) => {
-        res.send(err)
+        // res.send(err)
+        console.log(err)
+    })
+})
+
+app.post('/v1/cardano/orders/sent', function (req, res) {
+    let repo = new Repo()
+    repo.updateSent(req.body)
+    .then((results) => {
+        res.send(results)
+    })
+    .catch((err) => {
+        // res.send(err)
+        console.log(err)
     })
 })
 
