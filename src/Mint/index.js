@@ -9,14 +9,6 @@ export default class Minter {
     constructor() {}
 
 
-    // mint(req) {
-    //     let promise = new Promise((resolve, reject) => {
-    //         let mintData = req.body
-
-    //         this.getProtocolParams(mintData)
-    //     })
-    //     return promise
-    // }
     deliver(req) {
         let promise = new Promise((resolve, reject) => {
             let options = req.body
@@ -116,25 +108,8 @@ export default class Minter {
                                             mintData.output = mintData.mintWalletInfo.balance.lovelace - mintData.fee
                                             this.finalizeTransaction(mintData)
                                             resolve(mintData)
-                                            // .then(() => {
-                                            //     // insert mint into mongodb
-                                            //     let repo = new Repo
-                                            //     repo.insertMintedNFT(mintData)
-                                            //     .then((repoData) => {
-                                            //         repoData.client.close()
-                                            //         let result = repoData.result
-                                            //         repo.getMintedNFTs(result)
-                                            //         .then((repoData) => {
-                                            //             repoData.client.close()
-                                            //             let result = repoData.result
-                                            //             resolve(result)
-                                            //         })
-                                            //         .catch((e) => reject(`Error: ${e}`))
-
-                                            //     })
-                                            //     .catch((e) => reject(`Error: ${e}`))
-                                            // })
-                                            // .catch((e) => reject(`Error: ${e}`))
+                                            // ideally should be able to mint and send at the same time
+                                            // need to make changes to metadata
                                         })
                                         .catch((e) => reject(`Error: ${e}`))
                                     })
