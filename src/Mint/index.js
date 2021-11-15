@@ -9,6 +9,46 @@ export default class Minter {
     constructor() {}
 
 
+    // mint(req) {
+    //     let promise = new Promise((resolve, reject) => {
+    //         let mintData = req.body
+
+    //         this.getProtocolParams(mintData)
+    //     })
+    //     return promise
+    // }
+
+    getProtocolParams (options) {
+    // 3. Get protocol params
+        
+        let promise = new Promise((resolve, reject) => {
+
+            let config = options.request.config 
+            let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
+            let magic = network == '--testnet-magic' ? '1097911063' : ''
+            const params = spawn('cardano-cli', ['query', 'protocol-parameters', network, magic])
+
+            params.stdout.on('data', (data) => {
+                console.log("ProtocolData: ", data)
+                fs.writeFile('protocol.json', data, err => {
+                    if (err) {
+                        reject(err)
+                    }
+                    let protocol = JSON.parse(data)
+
+                    resolve(protocol)
+
+                })
+            })
+
+            params.stderr.on('data', (data) => {
+                console.error("Error: ", data)
+                reject(data)
+            })
+
+        })
+        return promise
+    }
     mint(req) {
         let promise = new Promise((resolve, reject) => {
                 let body = req.body
@@ -36,25 +76,26 @@ export default class Minter {
                                         .then((data) => {
                                             mintData.output = mintData.mintWalletInfo.balance.lovelace - mintData.fee
                                             this.finalizeTransaction(mintData)
-                                            .then(() => {
-                                                // insert mint into mongodb
-                                                let repo = new Repo
-                                                repo.insertMintedNFT(mintData)
-                                                .then((repoData) => {
-                                                    repoData.client.close()
-                                                    let result = repoData.result
-                                                    repo.getMintedNFTs(result)
-                                                    .then((repoData) => {
-                                                        repoData.client.close()
-                                                        let result = repoData.result
-                                                        resolve(result)
-                                                    })
-                                                    .catch((e) => reject(`Error: ${e}`))
+                                            resolve(mintData)
+                                            // .then(() => {
+                                            //     // insert mint into mongodb
+                                            //     let repo = new Repo
+                                            //     repo.insertMintedNFT(mintData)
+                                            //     .then((repoData) => {
+                                            //         repoData.client.close()
+                                            //         let result = repoData.result
+                                            //         repo.getMintedNFTs(result)
+                                            //         .then((repoData) => {
+                                            //             repoData.client.close()
+                                            //             let result = repoData.result
+                                            //             resolve(result)
+                                            //         })
+                                            //         .catch((e) => reject(`Error: ${e}`))
 
-                                                })
-                                                .catch((e) => reject(`Error: ${e}`))
-                                            })
-                                            .catch((e) => reject(`Error: ${e}`))
+                                            //     })
+                                            //     .catch((e) => reject(`Error: ${e}`))
+                                            // })
+                                            // .catch((e) => reject(`Error: ${e}`))
                                         })
                                         .catch((e) => reject(`Error: ${e}`))
                                     })
@@ -122,36 +163,6 @@ export default class Minter {
 
     }
 
-    getProtocolParams (options) {
-    // 3. Get protocol params
-        
-        let promise = new Promise((resolve, reject) => {
-
-            let config = options.request.config 
-            let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
-            let magic = network == '--testnet-magic' ? '1097911063' : ''
-            const params = spawn('cardano-cli', ['query', 'protocol-parameters', network, magic])
-
-            params.stdout.on('data', (data) => {
-                console.log("ProtocolData: ", data)
-                fs.writeFile('protocol.json', data, err => {
-                    if (err) {
-                        reject(err)
-                    }
-
-                    resolve(JSON.parse(data))
-
-                })
-            })
-
-            params.stderr.on('data', (data) => {
-                console.error("Error: ", data)
-                reject(data)
-            })
-
-        })
-        return promise
-    }
 
     getMintWalletHash(options) {
         let promise = new Promise((resolve, reject) => {
@@ -485,7 +496,7 @@ cardano-cli transaction build-raw --fee "${sendFee}" --tx-in ${options.sendData.
             let config = options.request.config
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
-            let cmd = `cardano-cli transaction submit --tx-file ./transactions/signed/${options.request.metadata.asset_id}-send.signed ${network} ${magic}`
+            let cmd = `cardano-cli transaction submit --tx-file ./transactions/signed/${options.request.metadata.asset_id}send.signed ${network} ${magic}`
             // console.log(cmd)
             exec(cmd , (err, stdout, stderr) => {
                 if (err) {
@@ -502,5 +513,195 @@ cardano-cli transaction build-raw --fee "${sendFee}" --tx-in ${options.sendData.
         return promise
 
     }
+
+    deliver(req) {
+        let promise = new Promise((resolve, reject) => {
+            let options = req.body
+            this.sendProtocol()
+            .then(() => {
+                this.sendRaw(options)
+                .then(() => {
+                    this.sendFee(options)
+                    .then((options) => {
+                        this.sendRaw(options)
+                        .then(() => {
+                            this.signSendTX(options)
+                            .then(() => {
+                                this.submitSend(options)
+                                .then((status) => {
+                                    resolve(status)
+                                })
+                                .catch(e => reject(e))
+                            })
+                            .catch(e => reject(e))
+
+                        })
+                        .catch(e => reject(e))
+                    })
+                    .catch(e => reject(e))
+                })
+                .catch(e => reject(e))
+            })
+            .catch(e => reject(e))
+
+        })
+
+        return promise
+
+    }
+
+    sendProtocol() {
+        let promise = new Promise((resolve, reject) => {
+
+            let config = options.request.config 
+            let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
+            let magic = network == '--testnet-magic' ? '1097911063' : ''
+            const params = spawn('cardano-cli', ['query', 'protocol-parameters', network, magic])
+
+            params.stdout.on('data', (data) => {
+                console.log("ProtocolData: ", data)
+                fs.writeFile('protocol.json', data, err => {
+                    if (err) {
+                        reject(err)
+                    }
+                    let protocol = JSON.parse(data)
+
+                    resolve(protocol)
+
+                })
+            })
+
+            params.stderr.on('data', (data) => {
+                console.error("Error: ", data)
+                reject(data)
+            })
+        })
+
+        return promise
+
+    }
+
+    sendRaw(req) {
+
+        let promise = new Promise((resolve, reject) => {
+            let mint = req.mint
+            let purchase = req.purchase
+            let customerAddr = purchase.customerAddress
+            let walletName = req.walletName
+
+            let walletPath = `./mintWallet/${walletName}`
+            let tokenName = mint.tokenName
+            let tokenAmount = mint.recieved.quantity
+            let policyID = mint.policyID
+            // TODO: Verifiy
+            let network = req.config == 'testnet' ? '--testnet-magic' : '--mainnet'
+            let mintAddr = mint.address
+            let minterFunds = mint.unspent.output
+            let txhash = mint.unspent.txix
+            let minterFee = !req.minterFee ? 0 : req.minterFee
+            let minterOutput = minterFunds - minterFunds - 2000000
+            let rawMintFile = `./transactions/raw/${tokenName}send.raw`
+
+            let cmd = `
+            walletName=${walletName} 
+            walletPath=${walletPath}
+            tokenName=${tokenName}
+            tokenAmount=${tokenAmount}
+            policyID=${policyID}
+            network=${network}
+            mintAddr=${mintAddr}
+            minterFunders=${minterFunds}
+            txhash=${txhash}
+            minterFee=${minterFee}
+            minterOutput=${minterOutput}
+            customerAddr=${customerAddr}
+            customerOutput="2000000"
+
+            cardano-cli transaction build-raw --fee $minterFee --tx-in $txhash  --tx-out $customerAddr+$customerOutput+"1 $policyID.$tokenName" --tx-out $mintAddr+$minterOutput --out-file ${rawMintFile}
+            `
+            exec(cmd , (err, stdout, stderr) => {
+                if (err) {
+                    reject(err)
+                    return;
+
+                }
+                console.log(cmd)
+                    resolve(stdout)
+            })
+
+        })
+
+        return promise
+        
+    }
+
+    sendFee(options) {
+        let promise = new Promise((resolve, reject) => {
+            let config = options.config
+            let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
+            let magic = network == '--testnet-magic' ? '1097911063' : ''
+            let cmd = `cardano-cli transaction calculate-min-fee --tx-body-file ./transactions/raw/${options.tokenName}send.raw --tx-in-count 1 --tx-out-count 2 --witness-count 1 --protocol-params-file=protocol.json ${network} ${magic} | cut -d " " -f1`
+            exec(cmd, (err, stdout, stderr) => {
+                if (err) {
+                    reject(err)
+                    return;
+                }
+                let sendFee = stdout
+                options.minterFee = sendFee
+
+                resolve(options)
+                return;
+            })
+
+        })
+
+        return promise
+
+    }
+
+    signSendTX(options) {
+        let promise = new Promise((resolve, reject) => {
+            let config = options.config
+            let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
+            let magic = network == '--testnet-magic' ? '1097911063' : ''
+            let cmd = `cardano-cli transaction sign --signing-key-file mintWallet/${options.walletName}/payment.skey ${network} ${magic} --tx-body-file ./transactions/raw/${options.tokenName}send.raw --out-file ./transactions/signed/${options.tokenName}send.signed`
+            console.log(cmd)
+            exec(cmd , (err, stdout, stderr) => {
+                if (err) {
+                    console.log(err)
+                    reject(err)
+                    return;
+                }
+                resolve(stdout)
+
+            })
+            
+        })
+        return promise
+
+    }
+
+    submitSend(options) {
+        let promise = new Promise((resolve, reject) => {
+            let config = options.config
+            let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
+            let magic = network == '--testnet-magic' ? '1097911063' : ''
+            let cmd = `cardano-cli transaction submit --tx-file ./transactions/signed/${options.tokenName}send.signed ${network} ${magic}`
+            exec(cmd , (err, stdout, stderr) => {
+                if (err) {
+                    console.log(err)
+                    reject(err)
+                    return;
+                }
+                resolve(stdout)
+                return
+
+            })
+            
+        })
+        return promise
+
+    }
+    
 
 }

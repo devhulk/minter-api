@@ -67,6 +67,17 @@ app.post('/v1/cardano/address/mints', function (req, res) {
 
 })
 
+app.get('/v1/cardano/random/nft', function (req, res) {
+    let repo = new Repo()
+    repo.getRandomNFT()
+    .then((response) => {
+        res.send(response)
+    })
+    .catch((err) => {
+        res.send(err)
+    })
+})
+
 app.get('/v1/cardano/minted', function (req, res) {
     let repo = new Repo()
     repo.getMintedNFTs()

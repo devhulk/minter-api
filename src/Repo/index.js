@@ -5,16 +5,24 @@ const { MongoClient } = mongodb
 export default class Repo {
     constructor() {}
 
-    getRandomNFT() {
+    getRandomNFT(request) {
         const client = new MongoClient(process.env.MONGO_URL)
         client.connect((err, client) => {
             if (err) throw err; 
     
             const db = client.db('puglies')
             db.collection('seriesOne').aggregate([{ $sample: { size: 1 } }]).toArray()
-            .then((doc) => {
-                console.log(JSON.stringify(doc))
-                client.close()
+            .then((nft) => {
+                nft.claim = request
+                this.insertClaimed(nft)
+                .then((result) => {
+                    client.close()
+                    return result
+                })
+                .catch(e => {
+                    console.log(e)
+                    client.close()
+                })
             })
             .catch(e => {
                 console.log(e)
@@ -22,6 +30,27 @@ export default class Repo {
             })
 
         })
+    }
+
+    updateNFT(request, coll) {
+        let promise = new Promise((resolve, reject) => {
+            const client = new MongoClient(process.env.MONGO_URL)
+            client.connect((err, client) => {
+                if (err) reject(err); 
+        
+                const db = client.db('puglies')
+                const collection = db.collection(coll)
+                collection.updateOne(request, { name: request.name }, (err, result) =>  {
+                    if (err) reject(err)
+
+                    client.close()
+                    resolve(result)
+                })
+            })
+        })
+
+        return promise
+
     }
 
 
@@ -148,6 +177,28 @@ export default class Repo {
                 const db = client.db('puglies')
                 const collection = db.collection('testSentOrders')
                 collection.insertMany(payments, { ordered: false }, (err, result) =>  {
+                    if (err) reject(err)
+
+                    client.close()
+                    resolve(result)
+                })
+            })
+        })
+
+        return promise
+
+    }
+
+    insertClaimed(nft) {
+        nft["_id"] = nft.name
+        let promise = new Promise((resolve, reject) => {
+            const client = new MongoClient(process.env.MONGO_URL)
+            client.connect((err, client) => {
+                if (err) reject(err); 
+        
+                const db = client.db('puglies')
+                const collection = db.collection('testClaimed')
+                collection.insertOne(nft, (err, result) =>  {
                     if (err) reject(err)
 
                     client.close()
