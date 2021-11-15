@@ -58,7 +58,7 @@ export default class Minter {
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
             console.log('is this the ticker?', network)
-            const params = spawn('cardano-cli', ['query', 'protocol-parameters', network, magic])
+            const params = spawn('cardano-cli', ['query', 'protocol-parameters', network]) // deleted magic number for testnet
 
             params.stdout.on('data', (data) => {
                 console.log("ProtocolData: ", data)
