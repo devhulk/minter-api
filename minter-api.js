@@ -91,7 +91,8 @@ app.get('/v1/cardano/minted', function (req, res) {
 
 app.post('/v1/cardano/minted', function (req, res) {
     let repo = new Repo()
-    repo.updateMintedNFTS(req.body)
+    let mints = req.body
+    repo.updateMintedNFTS(mints)
     .then((results) => {
         res.send(results)
     })
