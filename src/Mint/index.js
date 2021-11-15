@@ -57,7 +57,6 @@ export default class Minter {
             let config = options.request.config 
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
-            console.log('is this the ticker?', network)
             const params = spawn('cardano-cli', ['query', 'protocol-parameters', network]) // deleted magic number for testnet
 
             params.stdout.on('data', (data) => {
@@ -266,8 +265,8 @@ export default class Minter {
         let promise = new Promise((resolve, reject) => {
             let config = options.request.config
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
-            let magic = network == '--testnet-magic' ? '1097911063' : ''
-            let cmd = `cardano-cli transaction calculate-min-fee --tx-body-file ./transactions/raw/${options.request.metadata.asset_id}.raw --tx-in-count 1 --tx-out-count 1 --witness-count 2 --protocol-params-file=protocol.json ${network} ${magic} | cut -d " " -f1`
+            // let magic = network == '--testnet-magic' ? '1097911063' : ''
+            let cmd = `cardano-cli transaction calculate-min-fee --tx-body-file ./transactions/raw/${options.request.metadata.asset_id}.raw --tx-in-count 1 --tx-out-count 1 --witness-count 2 --protocol-params-file=protocol.json ${network} | cut -d " " -f1` // removed magic
             exec(cmd, (err, stdout, stderr) => {
                 if (err) {
                     reject(err)
