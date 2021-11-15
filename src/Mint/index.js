@@ -514,9 +514,9 @@ cardano-cli transaction build-raw --fee "${sendFee}" --tx-in ${options.sendData.
 
     }
 
-    deliver(body) {
+    deliver(req) {
         let promise = new Promise((resolve, reject) => {
-            let options = body
+            let options = req.body
             this.sendProtocol()
             .then(() => {
                 console.log('in sendProtocol')

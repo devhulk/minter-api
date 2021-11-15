@@ -133,8 +133,8 @@ app.post('/v1/cardano/mint/asset', function (req, res) {
 
 app.post('/v1/cardano/mint/sendAsset', function (req, res) {
     let minter = new Minter()
-    let body = req.body
-    minter.deliver(body)
+    console.log(req.body)
+    minter.deliver(req)
     .then((mintData) => {
         res.send(mintData)
     })
