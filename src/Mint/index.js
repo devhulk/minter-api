@@ -413,7 +413,7 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
             let config = options.config
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
-            let cmd = `cardano-cli transaction calculate-min-fee --tx-body-file ./transactions/raw/${options.request.metadata.asset_id}-send.raw --tx-in-count 1 --tx-out-count 2 --witness-count 1 --protocol-params-file=protocol.json ${network} ${magic} | cut -d " " -f1`
+            let cmd = `cardano-cli transaction calculate-min-fee --tx-body-file ./transactions/raw/${options.request.metadata.name}-send.raw --tx-in-count 1 --tx-out-count 2 --witness-count 1 --protocol-params-file=protocol.json ${network} | cut -d " " -f1` // deleted magic
             exec(cmd, (err, stdout, stderr) => {
                 if (err) {
                     reject(err)
@@ -536,7 +536,7 @@ cardano-cli transaction build-raw --fee "${sendFee}" --tx-in ${options.sendData.
             let config = options.config 
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
-            const params = spawn('cardano-cli', ['query', 'protocol-parameters', network, magic])
+            const params = spawn('cardano-cli', ['query', 'protocol-parameters', network])
 
             params.stdout.on('data', (data) => {
                 console.log("ProtocolData: ", data.toString())
@@ -622,7 +622,7 @@ cardano-cli transaction build-raw --fee "${sendFee}" --tx-in ${options.sendData.
             let config = options.config
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
-            let cmd = `cardano-cli transaction calculate-min-fee --tx-body-file ./transactions/raw/${options.mint.tokenName}send.raw --tx-in-count 1 --tx-out-count 2 --witness-count 1 --protocol-params-file=protocol.json ${network} ${magic} | cut -d " " -f1`
+            let cmd = `cardano-cli transaction calculate-min-fee --tx-body-file ./transactions/raw/${options.mint.tokenName}send.raw --tx-in-count 1 --tx-out-count 2 --witness-count 1 --protocol-params-file=protocol.json ${network} | cut -d " " -f1`
             exec(cmd, (err, stdout, stderr) => {
                 if (err) {
                     reject(err)
@@ -647,7 +647,7 @@ cardano-cli transaction build-raw --fee "${sendFee}" --tx-in ${options.sendData.
             let config = options.config
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
-            let cmd = `cardano-cli transaction sign --signing-key-file mintWallet/${options.walletName}/payment.skey ${network} ${magic} --tx-body-file ./transactions/raw/${options.mint.tokenName}send.raw --out-file ./transactions/signed/${options.mint.tokenName}send.signed`
+            let cmd = `cardano-cli transaction sign --signing-key-file mintWallet/${options.walletName}/payment.skey ${network}  --tx-body-file ./transactions/raw/${options.mint.tokenName}send.raw --out-file ./transactions/signed/${options.mint.tokenName}send.signed`
             console.log(cmd)
             exec(cmd , (err, stdout, stderr) => {
                 if (err) {
@@ -669,7 +669,7 @@ cardano-cli transaction build-raw --fee "${sendFee}" --tx-in ${options.sendData.
             let config = options.config
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
-            let cmd = `cardano-cli transaction submit --tx-file ./transactions/signed/${options.mint.tokenName}send.signed ${network} ${magic}`
+            let cmd = `cardano-cli transaction submit --tx-file ./transactions/signed/${options.mint.tokenName}send.signed ${network}`
             exec(cmd , (err, stdout, stderr) => {
                 if (err) {
                     console.log(err)
