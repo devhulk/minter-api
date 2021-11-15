@@ -19,11 +19,11 @@ export default class Minter {
     // }
     deliver(req) {
         let promise = new Promise((resolve, reject) => {
-            console.log('in deliver')
             let options = req.body
             this.sendProtocol(options)
             .then((protocol) => {
                 options.protocolParams = protocol
+                console.log(options)
                 this.sendRaw(options)
                 .then((stdout) => {
                     console.log(stdout)
