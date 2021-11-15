@@ -700,6 +700,7 @@ cardano-cli transaction build-raw --fee "${sendFee}" --tx-in ${options.sendData.
                     reject(err)
                     return;
                 }
+                console.log(stdout)
                 resolve(stdout)
                 return
 
