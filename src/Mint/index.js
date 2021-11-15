@@ -620,7 +620,7 @@ cardano-cli transaction build-raw --fee "${sendFee}" --tx-in ${options.sendData.
             let config = options.config
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
-            let cmd = `cardano-cli transaction calculate-min-fee --tx-body-file ./transactions/raw/${options.tokenName}send.raw --tx-in-count 1 --tx-out-count 2 --witness-count 1 --protocol-params-file=protocol.json ${network} ${magic} | cut -d " " -f1`
+            let cmd = `cardano-cli transaction calculate-min-fee --tx-body-file ./transactions/raw/${options.mint.tokenName}send.raw --tx-in-count 1 --tx-out-count 2 --witness-count 1 --protocol-params-file=protocol.json ${network} ${magic} | cut -d " " -f1`
             exec(cmd, (err, stdout, stderr) => {
                 if (err) {
                     reject(err)
@@ -667,7 +667,7 @@ cardano-cli transaction build-raw --fee "${sendFee}" --tx-in ${options.sendData.
             let config = options.config
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
-            let cmd = `cardano-cli transaction submit --tx-file ./transactions/signed/${options.tokenName}send.signed ${network} ${magic}`
+            let cmd = `cardano-cli transaction submit --tx-file ./transactions/signed/${options.mint.tokenName}send.signed ${network} ${magic}`
             exec(cmd , (err, stdout, stderr) => {
                 if (err) {
                     console.log(err)
