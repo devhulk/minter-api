@@ -24,12 +24,11 @@ export default class Minter {
             .then((protocol) => {
                 options.protocolParams = protocol
                 this.sendRaw(options)
-                console.log("inside first raw")
                 .then((stdout) => {
-                    console.log(stdout)
                     this.sendFee(options)
                     .then((options) => {
                         this.sendRaw(options)
+                        console.log('inside second raw')
                         .then((stdout) => {
                             console.log(stdout)
                             this.signSendTX(options)
