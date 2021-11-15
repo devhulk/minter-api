@@ -136,7 +136,7 @@ export default class Repo {
                 if (err) reject(err); 
         
                 const db = client.db('puglies')
-                const collection = db.collection('testMints')
+                const collection = db.collection(process.env.MINTED_COLLECTION)
                 collection.insertMany(mintData, { ordered: false }, (err, result) =>  {
                     if (err) reject(err)
 
@@ -158,7 +158,7 @@ export default class Repo {
                 if (err) reject(err); 
         
                 const db = client.db('puglies')
-                const collection = db.collection('testPayments')
+                const collection = db.collection(process.env.PAYMENTS_COLLECTION)
                 collection.insertMany(payments, { ordered: false }, (err, result) =>  {
                     if (err) reject(err)
 
@@ -179,7 +179,7 @@ export default class Repo {
                 if (err) reject(err); 
         
                 const db = client.db('puglies')
-                const collection = db.collection('testSentOrders')
+                const collection = db.collection(process.env.SENT_COLLECTION)
                 collection.insertMany(payments, { ordered: false }, (err, result) =>  {
                     if (err) reject(err)
 
