@@ -23,8 +23,8 @@ export default class Minter {
             this.sendProtocol(options)
             .then((protocol) => {
                 options.protocolParams = protocol
-                console.log(options)
                 this.sendRaw(options)
+                console.log("inside first raw")
                 .then((stdout) => {
                     console.log(stdout)
                     this.sendFee(options)
