@@ -323,7 +323,7 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
             let config = options.config
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
-            let cmd = `cardano-cli transaction sign --signing-key-file mintWallet/${options.mintWalletInfo.name}/payment.skey --signing-key-file policy/policy.skey ${network} ${magic} --tx-body-file ./transactions/raw/${options.request.metadata.asset_id}.raw --out-file ./transactions/signed/${options.request.metadata.asset_id}.signed`
+            let cmd = `cardano-cli transaction sign --signing-key-file mintWallet/${options.mintWalletInfo.name}/payment.skey --signing-key-file policy/policy.skey ${network} ${magic} --tx-body-file ./transactions/raw/${options.request.metadata.name}.raw --out-file ./transactions/signed/${options.request.metadata.name}.signed`
             console.log(cmd)
             exec(cmd , (err, stdout, stderr) => {
                 if (err) {
@@ -351,7 +351,7 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
             let config = options.request.config
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
-            let cmd = `cardano-cli transaction submit --tx-file ./transactions/signed/${options.request.metadata.asset_id}.signed ${network} ${magic}`
+            let cmd = `cardano-cli transaction submit --tx-file ./transactions/signed/${options.request.metadata.name}.signed ${network} ${magic}`
             console.log(cmd)
             exec(cmd , (err, stdout, stderr) => {
                 if (err) {
