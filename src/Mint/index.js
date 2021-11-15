@@ -570,15 +570,14 @@ cardano-cli transaction build-raw --fee "${sendFee}" --tx-in ${options.sendData.
                     if (err) {
                         reject(err)
                     }
-                    let protocol = JSON.parse(data)
 
-                    resolve(protocol)
+                    resolve(data)
 
                 })
             })
 
             params.stderr.on('data', (data) => {
-                console.error("Error: ", data)
+                console.error("Error: ", data.toString())
                 reject(data)
             })
         })
