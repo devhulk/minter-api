@@ -559,6 +559,7 @@ cardano-cli transaction build-raw --fee "${sendFee}" --tx-in ${options.sendData.
     }
 
     sendRaw(req) {
+        console.log('IN SEND RAW TX')
 
         let promise = new Promise((resolve, reject) => {
             let mint = req.mint
@@ -614,6 +615,7 @@ cardano-cli transaction build-raw --fee "${sendFee}" --tx-in ${options.sendData.
     }
 
     sendFee(options) {
+        console.log('IN SEND FEE')
         let promise = new Promise((resolve, reject) => {
             let config = options.config
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
@@ -638,6 +640,7 @@ cardano-cli transaction build-raw --fee "${sendFee}" --tx-in ${options.sendData.
     }
 
     signSendTX(options) {
+        console.log('IN SIGN SEND')
         let promise = new Promise((resolve, reject) => {
             let config = options.config
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
