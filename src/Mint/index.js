@@ -514,9 +514,9 @@ cardano-cli transaction build-raw --fee "${sendFee}" --tx-in ${options.sendData.
 
     }
 
-    deliver(req) {
+    deliver(body) {
         let promise = new Promise((resolve, reject) => {
-            let options = req.body
+            let options = body
             this.sendProtocol()
             .then(() => {
                 this.sendRaw(options)
@@ -585,21 +585,23 @@ cardano-cli transaction build-raw --fee "${sendFee}" --tx-in ${options.sendData.
 
         let promise = new Promise((resolve, reject) => {
             let mint = req.mint
-            let purchase = req.purchase
-            let customerAddr = purchase.customerAddress
+            let payment = req.payment
+            let customerAddr = payment.customerAddress
             let walletName = req.walletName
+
+            // let network = req.config == 'testnet' ? '--testnet-magic' : '--mainnet'
+            // let magic = network == '--testnet-magic' ? '1097911063' : ''
 
             let walletPath = `./mintWallet/${walletName}`
             let tokenName = mint.tokenName
             let tokenAmount = mint.recieved.quantity
             let policyID = mint.policyID
-            // TODO: Verifiy
-            let network = req.config == 'testnet' ? '--testnet-magic' : '--mainnet'
+
             let mintAddr = mint.address
             let minterFunds = mint.unspent.output
             let txhash = mint.unspent.txix
             let minterFee = !req.minterFee ? 0 : req.minterFee
-            let minterOutput = minterFunds - minterFunds - 2000000
+            let minterOutput = minterFunds - minterFee - 2000000
             let rawMintFile = `./transactions/raw/${tokenName}send.raw`
 
             let cmd = `
@@ -608,7 +610,6 @@ cardano-cli transaction build-raw --fee "${sendFee}" --tx-in ${options.sendData.
             tokenName=${tokenName}
             tokenAmount=${tokenAmount}
             policyID=${policyID}
-            network=${network}
             mintAddr=${mintAddr}
             minterFunders=${minterFunds}
             txhash=${txhash}
