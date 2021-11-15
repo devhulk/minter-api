@@ -84,7 +84,7 @@ export default class Repo {
     }
 
     insertMintedNFT(mintData) {
-        mintData["_id"] = mintData.txHash
+        // mintData["_id"] = mintData.txHash
         let promise = new Promise((resolve, reject) => {
             const client = new MongoClient(process.env.MONGO_URL)
             client.connect((err, client) => {
@@ -92,7 +92,7 @@ export default class Repo {
         
                 const db = client.db('puglies')
                 const collection = db.collection('testMints')
-                collection.insertOne(mintData, (err, result) =>  {
+                collection.insertMany(mintData, { ordered: false }, (err, result) =>  {
                     if (err) reject(err)
 
                     client.close()
