@@ -17,6 +17,49 @@ export default class Minter {
     //     })
     //     return promise
     // }
+    deliver(req) {
+        let promise = new Promise((resolve, reject) => {
+            console.log('in deliver')
+            let options = req.body
+            this.sendProtocol()
+            .then(() => {
+                console.log('in sendProtocol')
+                this.sendRaw(options)
+                .then(() => {
+                    console.log('in sendRaw 1')
+                    this.sendFee(options)
+                    .then((options) => {
+                        console.log('in sendFee 1')
+                        this.sendRaw(options)
+                        .then(() => {
+                            console.log('in sendRaw 2')
+                            this.signSendTX(options)
+                            .then(() => {
+                                console.log('in signSendTX 2')
+                                this.submitSend(options)
+                                .then((status) => {
+                                    console.log('in submitSend')
+                                    resolve(status)
+                                })
+                                .catch(e => reject(e))
+                            })
+                            .catch(e => reject(e))
+
+                        })
+                        .catch(e => reject(e))
+                    })
+                    .catch(e => reject(e))
+                })
+                .catch(e => reject(e))
+            })
+            .catch(e => reject(e))
+        })
+        .catch(e => reject(e))
+
+        return promise
+
+    }
+
 
     getProtocolParams (options) {
     // 3. Get protocol params
@@ -510,48 +553,6 @@ cardano-cli transaction build-raw --fee "${sendFee}" --tx-in ${options.sendData.
             })
             
         })
-        return promise
-
-    }
-
-    deliver(req) {
-        let promise = new Promise((resolve, reject) => {
-            let options = req.body
-            this.sendProtocol()
-            .then(() => {
-                console.log('in sendProtocol')
-                this.sendRaw(options)
-                .then(() => {
-                    console.log('in sendRaw 1')
-                    this.sendFee(options)
-                    .then((options) => {
-                        console.log('in sendFee 1')
-                        this.sendRaw(options)
-                        .then(() => {
-                            console.log('in sendRaw 2')
-                            this.signSendTX(options)
-                            .then(() => {
-                                console.log('in signSendTX 2')
-                                this.submitSend(options)
-                                .then((status) => {
-                                    console.log('in submitSend')
-                                    resolve(status)
-                                })
-                                .catch(e => reject(e))
-                            })
-                            .catch(e => reject(e))
-
-                        })
-                        .catch(e => reject(e))
-                    })
-                    .catch(e => reject(e))
-                })
-                .catch(e => reject(e))
-            })
-            .catch(e => reject(e))
-        })
-        .catch(e => reject(e))
-
         return promise
 
     }
