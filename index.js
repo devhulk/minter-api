@@ -62,6 +62,17 @@ app.post('/v1/cardano/minted', function (req, res) {
     })
 })
 
+app.post('/v1/cardano/payments', function (req, res) {
+    let repo = new Repo()
+    repo.insertPayments(req.body)
+    .then((results) => {
+        res.send(results)
+    })
+    .catch((err) => {
+        res.send(err)
+    })
+})
+
 app.post('/v1/cardano/mint/asset', function (req, res) {
     let minter = new Minter()
     console.log(req.body)

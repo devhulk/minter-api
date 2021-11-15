@@ -105,4 +105,25 @@ export default class Repo {
 
     }
 
+    insertPayments(payments) {
+        let promise = new Promise((resolve, reject) => {
+            const client = new MongoClient(process.env.MONGO_URL)
+            client.connect((err, client) => {
+                if (err) reject(err); 
+        
+                const db = client.db('puglies')
+                const collection = db.collection('testPayments')
+                collection.insertMany(payments, { ordered: false }, (err, result) =>  {
+                    if (err) reject(err)
+
+                    client.close()
+                    resolve(result)
+                })
+            })
+        })
+
+        return promise
+
+    }
+
 }
