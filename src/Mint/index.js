@@ -268,11 +268,13 @@ export default class Minter {
             // let magic = network == '--testnet-magic' ? '1097911063' : ''
             let cmd = `cardano-cli transaction calculate-min-fee --tx-body-file ./transactions/raw/${options.request.metadata.asset_id}.raw --tx-in-count 1 --tx-out-count 1 --witness-count 2 --protocol-params-file=protocol.json ${network} | cut -d " " -f1` // removed magic
             exec(cmd, (err, stdout, stderr) => {
+            console.log(cmd)
                 if (err) {
                     reject(err)
                     return;
                 }
 
+                console.log(stdout)
                 resolve(stdout)
                 return;
             })
