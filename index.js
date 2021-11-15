@@ -58,8 +58,7 @@ app.post('/v1/cardano/minted', function (req, res) {
         res.send(results)
     })
     .catch((err) => {
-        // res.send(err)
-        console.log(err)
+        res.send(err)
     })
 })
 
@@ -70,8 +69,7 @@ app.post('/v1/cardano/payments', function (req, res) {
         res.send(results)
     })
     .catch((err) => {
-        // res.send(err)
-        console.log(err)
+        res.send(err)
     })
 })
 
@@ -82,8 +80,7 @@ app.post('/v1/cardano/orders/sent', function (req, res) {
         res.send(results)
     })
     .catch((err) => {
-        // res.send(err)
-        console.log(err)
+        res.send(err)
     })
 })
 
