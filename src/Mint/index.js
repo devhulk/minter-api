@@ -642,7 +642,7 @@ cardano-cli transaction build-raw --fee "${sendFee}" --tx-in ${options.sendData.
             let config = options.config
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
             let magic = network == '--testnet-magic' ? '1097911063' : ''
-            let cmd = `cardano-cli transaction sign --signing-key-file mintWallet/${options.walletName}/payment.skey ${network} ${magic} --tx-body-file ./transactions/raw/${options.tokenName}send.raw --out-file ./transactions/signed/${options.tokenName}send.signed`
+            let cmd = `cardano-cli transaction sign --signing-key-file mintWallet/${options.walletName}/payment.skey ${network} ${magic} --tx-body-file ./transactions/raw/${options.mint.tokenName}send.raw --out-file ./transactions/signed/${options.mint.tokenName}send.signed`
             console.log(cmd)
             exec(cmd , (err, stdout, stderr) => {
                 if (err) {
