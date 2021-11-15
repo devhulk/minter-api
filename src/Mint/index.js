@@ -22,17 +22,22 @@ export default class Minter {
             console.log('in deliver')
             let options = req.body
             this.sendProtocol(options)
-            .then(() => {
+            .then((protocol) => {
+                options.protocolParams = protocol
                 this.sendRaw(options)
-                .then(() => {
+                .then((stdout) => {
+                    console.log(stdout)
                     this.sendFee(options)
                     .then((options) => {
                         this.sendRaw(options)
-                        .then(() => {
+                        .then((stdout) => {
+                            console.log(stdout)
                             this.signSendTX(options)
-                            .then(() => {
+                            .then((stdout) => {
+                                console.log(stdout)
                                 this.submitSend(options)
                                 .then((status) => {
+                                    console.log(status)
                                     resolve(status)
                                 })
                                 .catch(e => reject(e))
