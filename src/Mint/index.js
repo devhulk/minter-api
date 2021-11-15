@@ -519,16 +519,22 @@ cardano-cli transaction build-raw --fee "${sendFee}" --tx-in ${options.sendData.
             let options = body
             this.sendProtocol()
             .then(() => {
+                console.log('in sendProtocol')
                 this.sendRaw(options)
                 .then(() => {
+                    console.log('in sendRaw 1')
                     this.sendFee(options)
                     .then((options) => {
+                        console.log('in sendFee 1')
                         this.sendRaw(options)
                         .then(() => {
+                            console.log('in sendRaw 2')
                             this.signSendTX(options)
                             .then(() => {
+                                console.log('in signSendTX 2')
                                 this.submitSend(options)
                                 .then((status) => {
+                                    console.log('in submitSend')
                                     resolve(status)
                                 })
                                 .catch(e => reject(e))
