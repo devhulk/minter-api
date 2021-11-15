@@ -543,8 +543,8 @@ cardano-cli transaction build-raw --fee "${sendFee}" --tx-in ${options.sendData.
                 .catch(e => reject(e))
             })
             .catch(e => reject(e))
-
         })
+        .catch(e => reject(e))
 
         return promise
 
