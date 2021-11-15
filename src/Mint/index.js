@@ -31,7 +31,6 @@ export default class Minter {
                         .then((stdout) => {
                             this.signSendTX(options)
                             .then((stdout) => {
-                                console.log('inside sign')
                                 console.log(stdout)
                                 this.submitSend(options)
                                 .then((status) => {
