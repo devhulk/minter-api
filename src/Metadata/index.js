@@ -4,6 +4,7 @@ export default class Metadata {
         this.policy_name = data.policy_name
         this.asset_id = data.asset_id
         this.asset_name = data.asset_name
+        this.imageLink = data.imageLink
         this.ipfsLink = data.ipfsLink
         this.traits = data.traits
         this.amount = data.amount
@@ -16,7 +17,8 @@ export default class Metadata {
       "${this.asset_name}": {
         "name": "${this.asset_name}",
         "mediaType": "image/png",
-        "image": "${this.ipfsLink}",
+        "image": "${this.imageLink}",
+        "imageLink": "${this.ipfsLink}",
         "attributes": ${JSON.stringify(this.traits)},
         "amount": "${this.amount}",
         "ticker": "${this.asset_id}"
