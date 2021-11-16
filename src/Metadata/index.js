@@ -13,12 +13,13 @@ export default class Metadata {
         return `{
   "721": {
     "${this.policy_id}": {
-      "${this.asset_id}": {
+      "${this.asset_name}": {
         "name": "${this.asset_name}",
         "mediaType": "image/png",
         "image": "${this.ipfsLink}",
-        "traits": ${JSON.stringify(this.traits)},
-        "amount": "${this.amount}"
+        "attributes": ${JSON.stringify(this.traits)},
+        "amount": "${this.amount}",
+        "ticker": "${this.asset_id}"
       }
     }
   }
