@@ -115,8 +115,9 @@ export default class Transactions {
                     let policyID = txInput.unit.substring(0, 56)
                     let tokenNameHex = txInput.unit.substring(56)
                     let tokenName = hexToUtf8(tokenNameHex)
-                    // let unspent = {output: txOutput.quantity, txix, unspentOutput} 
-                    let unspent = {output: txOutput.quantity, txix} 
+                    let unspentOutput = utxo.unspentOutput
+                    let unspent = {output: txOutput.quantity, txix, unspentOutput } 
+                    // let unspent = {output: txOutput.quantity, txix} 
 
                     let mint =  {address, inputAddress: customerAddress, recieved : txInput, unspent, policyID, tokenName, sentStatus: ""}
                     mint["_id"] = txHash
@@ -139,11 +140,12 @@ export default class Transactions {
                     let customerAddress = utxo.inputAddress
                     let payment = txInput.quantity / 1000000
                     let txOutput = utxo.amount[utxo.output_index]
-                    // let unspent = {output: txOutput.quantity, txix} 
-                    let unspent = {output: txOutput.quantity, txix} 
+                    // let unspent = {output: txOutput.quantity, txix, } 
+                    let unspentOutput = utxo.unspentOutput
+                    let unspent = {output: txOutput.quantity, txix, unspentOutput } 
 
                     if (payment >= 20) {
-                        let validPayment = {txHash, customerAddress, payment, recievingAddress: utxo.address, lovelace: txInput.quantity, txix, unspent}
+                        let validPayment = {txHash, customerAddress, payment, recievingAddress: utxo.address, lovelace: txInput.quantity, txix, unspent, unspentOutput}
                         validPayment["_id"] = txHash
                         paymentsReceived.push(validPayment)
                         return validPayment
