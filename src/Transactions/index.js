@@ -206,13 +206,14 @@ export default class Transactions {
                 let input = response.data.inputs[0]
                 let output = response.data.outputs[0]
                 let amount = output.amount[0]
-                let customerPayment = {address: input.address , ada: amount.quantity / 1000000, amount: amount.quantity, output: response.data.outputs[0], unspentOutput: response.data.output[1] == undefined ? "" : response.data.output[1] }
+                let customerPayment = {address: input.address , ada: amount.quantity / 1000000, amount: amount.quantity, output: response.data.outputs[0] }
                 // console.log(customerPayment)
                 options.utxos = response.data
                 resolve(customerPayment)
             })
             .catch(function (error) {
                 reject(console.log(error.response))
+                throw Error(error.response)
               });
         })
         return promise
