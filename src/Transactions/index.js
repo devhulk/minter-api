@@ -30,7 +30,10 @@ export default class Transactions {
                 options.txs = txs
                 this.getAllUTXOS(options)
                 .then((utxos) => {
-                    resolve(utxos)
+                    this.parseUTXOS(utxos)
+                    .then((utxos) => {
+                        resolve(utxos)
+                    })
                 })
             })
             .catch(e => reject(e))
@@ -51,16 +54,17 @@ export default class Transactions {
                     })
             })
 
-            let mintAddressTransactions = Promise.all(txhashs)            
-            .then((txOutputs) => {
-                let mints = []
-                txOutputs.forEach((txOutput) => {
+            let allUTXOS = Promise.all(txhashs)            
+            .then((utxos) => {
+                // let mints = []
+                // txOutputs.forEach((txOutput) => {
                     // if (txOutput.address !== options.mintWalletAddr) {
                     //     mints.push(txOutput) 
                     // }
-                    mints.push(txOutput)
-                }) 
-                return JSON.stringify(mints)
+                //     mints.push(txOutput)
+                // }) 
+                // return JSON.stringify(utxos)
+                return utxos
             })
             .catch(function (error) {
                 if (error.response) {
@@ -78,7 +82,7 @@ export default class Transactions {
             
               });
 
-              return mintAddressTransactions
+              return allUTXOS
     }
 
     getWalletTXS(options) {
@@ -97,6 +101,83 @@ export default class Transactions {
 
         return promise
     }
+
+    parseUTXOS(utxos) {
+        console.log('inside parseUTXOS')
+        let promise = new Promise((resolve, reject) => {
+            // const txs = JSON.parse(response.data)
+            const convert = (from, to) => str => Buffer.from(str, from).toString(to)
+            const utf8ToHex = convert('utf8', 'hex')
+            const hexToUtf8 = convert('hex', 'utf8')
+
+            let sent = []
+            let minted = []
+            let paymentsReceived = []
+            let validUTXOs = []
+
+            let dropMonitor = {} 
+
+            utxos.map((utxo) => {
+                if (utxo.amount.length >= 2) {
+                    let address = utxo.address
+                    let customerAddress = utxo.inputAddress
+                    let txInput = utxo.amount[1]
+                    let txHash = utxo["txHash"]
+                    let txOutput = utxo.amount[utxo.output_index]
+                    let txix = `${txHash}#${utxo.output_index}` 
+                    let policyID = txInput.unit.substring(0, 56)
+                    let tokenNameHex = txInput.unit.substring(56)
+                    let tokenName = hexToUtf8(tokenNameHex)
+                    let unspent = {output: txOutput.quantity, txix} 
+
+                    let mint =  {address, inputAddress: customerAddress, recieved : txInput, unspent, policyID, tokenName, sentStatus: ""}
+                    mint["_id"] = txHash
+
+                    if (address != utxo.inputAddress) {
+                        mint.sentStatus = true
+                        sent.push(mint)
+                    } else {
+                        mint.sentStatus = false
+                        minted.push(mint)
+                    }
+                    return mint
+
+                } else {
+
+                    let address = utxo.address
+                    let txHash = utxo["txHash"]
+                    let txInput = utxo.amount[0]
+                    let txix = `${txHash}#${utxo.output_index}` 
+                    let customerAddress = utxo.inputAddress
+                    let payment = txInput.quantity / 1000000
+                    let txOutput = utxo.amount[utxo.output_index]
+                    let unspent = {output: txOutput.quantity, txix} 
+
+                    if (payment >= 20) {
+                        let validPayment = {txHash, customerAddress, payment, recievingAddress: utxo.address, lovelace: txInput.quantity, txix, unspent}
+                        validPayment["_id"] = txHash
+                        paymentsReceived.push(validPayment)
+                        return validPayment
+
+                    } else {
+                        let invalidPayment = {txHash, address, customerAddress, status: "Payment below 20ADA", unspent}
+                        invalidPayment["_id"] = txHash
+                        validUTXOs.push(invalidPayment) 
+                        return invalidPayment 
+                    }
+                } 
+            })
+            dropMonitor.payments = paymentsReceived 
+            dropMonitor.minted =  minted
+            dropMonitor.sent =  sent
+            dropMonitor.validUTXOs = sent
+
+            resolve(dropMonitor)
+            return dropMonitor
+        })
+
+        return promise
+        }
 
     getPayments(options) {
             let utxos = options.txs
