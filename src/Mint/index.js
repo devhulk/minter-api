@@ -7,7 +7,6 @@ export default class Minter {
     constructor() {}
 
     getProtocolParams (options) {
-    // 3. Get protocol params
         
         let promise = new Promise((resolve, reject) => {
 
@@ -54,7 +53,7 @@ export default class Minter {
                         this.getPolicyID()
                         .then((policy) => {
                             mintData.policy = policy
-                            this.getMetaData(mintData)
+                            this.createMetaData(mintData)
                             .then((metadata) => {
                                 mintData.metadata = metadata
                                 this.buildRawTransaction(mintData)
@@ -194,13 +193,13 @@ export default class Minter {
 
     }
 
-    getMetaData(data) {
+    createMetaData(data) {
     // 6. Retrieve token Metadata
     let promise = new Promise((resolve, reject) => {
         let id = data.policy.id.trim()
-        let dataHandler = new Metadata({policy_id: id, asset_id: data.request.metadata.name, asset_name: data.request.metadata.id, imageLink: data.request.metadata.imageLink, ipfsLink: data.request.metadata.image, traits: data.request.metadata.traits, amount: data.request.metadata.amount})
+        let dataHandler = new Metadata({policy_id: id, name: data.request.metadata.name, ticker: data.request.metadata.id, imageLink: data.request.metadata.imageLink, image: data.request.metadata.image, attributes: data.request.metadata.attributes, amount: data.request.metadata.amount})
         let metadata = dataHandler.format()
-        fs.writeFile('metadata.json', metadata, err => {
+        fs.writeFile(`metadata/${data.request.metadata.name}.json`, metadata, err => {
             if (err) {
                 reject(err)
             }
@@ -217,7 +216,7 @@ export default class Minter {
     calculateFee(options) {
         let promise = new Promise((resolve, reject) => {
             let config = options.request.config
-            let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
+            let network = config == 'testnet' ? '--testnet-magic 1097911063' : '--mainnet' // added magic number right to --testnet-magic flag
             // let magic = network == '--testnet-magic' ? '1097911063' : ''
             let cmd = `cardano-cli transaction calculate-min-fee --tx-body-file ./transactions/raw/${options.request.metadata.name}.raw --tx-in-count 1 --tx-out-count 1 --witness-count 2 --protocol-params-file=protocol.json ${network} | cut -d " " -f1` // removed magic
             exec(cmd, (err, stdout, stderr) => {

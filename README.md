@@ -9,6 +9,7 @@
 * ./policy folder with policy files (policy.script + policy.skey + policy.vkey + policyID)
 * ./transactions/raw folder
 * ./transactions/signed folder 
+* ./metadata folder
 * .env file with 
 BLOCKFROST_TESTNET=$PROJECTAPIKEY
 BLOCKFROST_MAINNET=$PROJECTAPIKEY

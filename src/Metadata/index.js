@@ -2,11 +2,11 @@ export default class Metadata {
     constructor(data) {
         this.policy_id = data.policy_id
         this.policy_name = data.policy_name
-        this.asset_id = data.asset_id
-        this.asset_name = data.asset_name
+        this.name = data.name
+        this.ticker = data.ticker
         this.imageLink = data.imageLink
-        this.ipfsLink = data.ipfsLink
-        this.traits = data.traits
+        this.image = data.image
+        this.attributes = data.attributes
         this.amount = data.amount
     }
 
@@ -14,14 +14,14 @@ export default class Metadata {
         return `{
   "721": {
     "${this.policy_id}": {
-      "${this.asset_id}": {
-        "name": "${this.asset_id}",
+      "${this.name}": {
+        "name": "${this.name}",
         "mediaType": "image/png",
-        "image": "${this.imageLink}",
+        "image": "${this.image}",
         "imageLink": "${this.ipfsLink}",
         "attributes": ${JSON.stringify(this.traits)},
         "amount": "${this.amount}",
-        "ticker": "${this.asset_name}"
+        "ticker": "${this.ticker}"
       }
     }
   }

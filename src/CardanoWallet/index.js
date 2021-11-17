@@ -2,7 +2,7 @@ import axios from "axios"
 const bip39 = require('bip39')
 
 
-export default class Cardano {
+export default class CardanoWallet {
     constructor() {}
 
     createWallet(options) {
