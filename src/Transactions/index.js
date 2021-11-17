@@ -118,6 +118,8 @@ export default class Transactions {
             let dropMonitor = {} 
 
             utxos.map((utxo) => {
+                console.log(utxo)
+                throw Error()
                 if (utxo.amount.length >= 2) {
                     let address = utxo.address
                     let customerAddress = utxo.inputAddress
