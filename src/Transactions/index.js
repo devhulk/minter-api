@@ -1,5 +1,6 @@
 require('dotenv').config()
 import axios from 'axios'
+import json from 'body-parser/lib/types/json'
 import Repo from '../Repo'
 
 let repo = new Repo()
@@ -64,7 +65,7 @@ export default class Transactions {
                 //     mints.push(txOutput)
                 // }) 
                 // return JSON.stringify(utxos)
-                return utxos
+                return JSON.stringify(utxos)
             })
             .catch(function (error) {
                 if (error.response) {
