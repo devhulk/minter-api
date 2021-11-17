@@ -210,10 +210,9 @@ export default class Transactions {
                 let input = response.data.inputs[0]
                 let output = response.data.outputs[0]
                 let unspentOutput = response.data.outputs[1]
-                unspentOutput = unspentOutput.amount.quantity
-                // delete unspentOutput.address
-                // delete unspentOutput.output_index
-                // delete unspentOutput.data_hash
+                delete unspentOutput.address
+                delete unspentOutput.output_index
+                delete unspentOutput.data_hash
                 let amount = output.amount[0]
                 let customerPayment = {address: input.address , ada: amount.quantity / 1000000, amount: amount.quantity, output: response.data.outputs[0], unspentOutput }
                 // console.log(customerPayment)
