@@ -226,7 +226,7 @@ export default class Transactions {
                 resolve(customerPayment)
             })
             .catch(function (error) {
-                reject(error.toJSON())
+                reject(console.log(error.response))
               });
         })
         return promise
