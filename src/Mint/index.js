@@ -1,53 +1,10 @@
 const { spawn, exec } = require('child_process');
-import { resolve } from 'dns';
-import { exit, stderr } from 'process';
 const fs = require('fs');
 import Metadata from '../Metadata'
 import Repo from '../Repo';
 
 export default class Minter {
     constructor() {}
-
-
-    deliver(req) {
-        let promise = new Promise((resolve, reject) => {
-            let options = req.body
-            this.sendProtocol(options)
-            .then((protocol) => {
-                options.protocolParams = protocol
-                this.sendRaw(options)
-                .then((stdout) => {
-                    this.sendFee(options)
-                    .then((options) => {
-                        this.sendRaw(options)
-                        .then((stdout) => {
-                            this.signSendTX(options)
-                            .then((stdout) => {
-                                console.log(stdout)
-                                this.submitSend(options)
-                                .then((status) => {
-                                    console.log(status)
-                                    resolve({status})
-                                })
-                                .catch(e => reject(e))
-                            })
-                            .catch(e => reject(e))
-
-                        })
-                        .catch(e => reject(e))
-                    })
-                    .catch(e => reject(e))
-                })
-                .catch(e => reject(e))
-            })
-            .catch(e => reject(e))
-        })
-        .catch(e => reject(e))
-
-        return promise
-
-    }
-
 
     getProtocolParams (options) {
     // 3. Get protocol params
@@ -56,8 +13,8 @@ export default class Minter {
 
             let config = options.request.config 
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
-            let magic = network == '--testnet-magic' ? '1097911063' : ''
-            const params = spawn('cardano-cli', ['query', 'protocol-parameters', network]) // deleted magic number for testnet
+            let magic = network == '--testnet-magic' ? '1097911063' : null // changing from '' to nil. If this doesn't work change to exec
+            const params = spawn('cardano-cli', ['query', 'protocol-parameters', network, magic]) // deleted magic number for testnet
 
             params.stdout.on('data', (data) => {
                 console.log("ProtocolData: ", data)
@@ -80,6 +37,9 @@ export default class Minter {
         })
         return promise
     }
+
+
+
     mint(req) {
         let promise = new Promise((resolve, reject) => {
                 let body = req.body
@@ -130,52 +90,45 @@ export default class Minter {
         return promise
     }
 
-    send(mintData) {
-
+    deliver(req) {
         let promise = new Promise((resolve, reject) => {
-
-                this.getMintedAssetHash(mintData)
-                    .then((mintTXHash) => {
-                        mintData.sendData = {}
-                        mintData.sendData.mintTXHash = mintTXHash
-                        mintData.sendData.output = "0"
-                        // this.calculateSendFee(mintData)
-                        // .then((sendFee) => {
-                        //     mintData.sendData.fee = sendFee
-                            this.buildSendRawTX(mintData)
-                            .then(() => {
-                                this.calculateSendFee(mintData)
-                                .then((sendFee) => {
-                                    mintData.sendData.fee = sendFee.trim()
-                                    // console.log(mintData.sendData.mintTXHash.balance)
-                                    console.log(mintData)
-                                    this.buildSendRawTX(mintData)
-                                    .then(() => {
-                                        this.finalizeSendTX(mintData)
-                                        .then(() => {
-                                            resolve(mintData) 
-                                        })
-                                        .catch((e) => reject(e))
-                                    })
-                                    .catch((e) => reject(e))
+            let options = req.body
+            this.sendProtocol(options)
+            .then((protocol) => {
+                options.protocolParams = protocol
+                this.sendRaw(options)
+                .then((stdout) => {
+                    this.sendFee(options)
+                    .then((options) => {
+                        this.sendRaw(options)
+                        .then((stdout) => {
+                            this.signSendTX(options)
+                            .then((stdout) => {
+                                console.log(stdout)
+                                this.submitSend(options)
+                                .then((status) => {
+                                    console.log(status)
+                                    resolve({status})
                                 })
-                                .catch((e) => reject(e))
+                                .catch(e => reject(e))
                             })
-                            .catch((e) => reject(e))
-                        // })
-                        // .catch((e) => reject(e))
+                            .catch(e => reject(e))
+
+                        })
+                        .catch(e => reject(e))
                     })
-                    .catch((e) => reject(e))
-                .catch((e) => reject(e))
-
+                    .catch(e => reject(e))
+                })
+                .catch(e => reject(e))
             })
-            .catch((e) => reject(e))
-            
-
+            .catch(e => reject(e))
+        })
+        .catch(e => reject(e))
 
         return promise
 
     }
+
 
 
     getMintWalletHash(options) {
@@ -369,174 +322,13 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
 
     }
 
-    getMintedAssetHash(options) {
-        let promise = new Promise((resolve, reject) => {
-
-            let config = options.request.config
-            let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
-            let magic = network == '--testnet-magic' ? '1097911063' : ''
-            let validTX = {}
-            exec(`cardano-cli query utxo --address $(cat mintWallet/${options.mintWalletInfo.name}/payment.addr) ${network} ${magic} --out-file=minttxixhash.json`, (err, stdout, stderr) => {
-                if (err) {
-                    reject(err)
-                    return;
-                }
-                let file = fs.readFileSync('minttxixhash.json')
-                let data = JSON.parse(file)
-                for (const utxo in data) {
-                    let info = data[utxo]
-                    // console.log(info)
-                    let policyID = options.policy.id.trim()
-                    if (info.value[policyID]) {
-                        // console.log(info)
-                        validTX[utxo] = info  
-                        break;
-                    }
-                }
-                let balanceObj = validTX[`${Object.keys(validTX)[0]}`]
-                let lovelace = balanceObj.value.lovelace
-                let ada = balanceObj.value.lovelace / 1000000
-                let returnObj = {txixhash: Object.keys(validTX)[0], balance: {lovelace, ada}, address: options.mintWalletInfo.address }
-                console.log(returnObj)
-
-                resolve(returnObj)
-                return;
-            })
-        })
-        return promise
-
-
-
-    }
-    calculateSendFee(options) {
-        let promise = new Promise((resolve, reject) => {
-            let config = options.config
-            let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
-            let magic = network == '--testnet-magic' ? '1097911063' : ''
-            let cmd = `cardano-cli transaction calculate-min-fee --tx-body-file ./transactions/raw/${options.request.metadata.name}-send.raw --tx-in-count 1 --tx-out-count 2 --witness-count 1 --protocol-params-file=protocol.json ${network} | cut -d " " -f1` // deleted magic
-            exec(cmd, (err, stdout, stderr) => {
-                if (err) {
-                    reject(err)
-                    return;
-                }
-                console.log(stdout)
-
-                resolve(stdout)
-                return;
-            })
-
-        })
-
-        return promise
-
-
-    }
-
-    buildSendRawTX(options) {
-        let promise = new Promise((resolve, reject) => {
-            let sendFee = options.sendData.fee == undefined ? "0" : options.sendData.fee
-            let minterOutput = options.sendData.output == undefined ? "0" : options.output - sendFee - 3000000
-            options.sendData.output = minterOutput
-            console.log(options)
-            console.log("MINT Output: ", minterOutput)
-            console.log("fee: ", sendFee)
-
-                let cmd = `
-#!/bin/bash
-
-## Token Data and PolicyID
-tokenamount="${options.request.metadata.amount}"
-tokenname="${options.request.metadata.asset_id}"
-policyid="${options.policy.id.trim()}"
-
-## Mint Wallet Info (UTXO)
-mintaddr="${options.mintWalletInfo.address}"
-txix="${options.sendData.mintTXHash.txixhash}"
-minterOutput="${minterOutput}"
-minterFee="${sendFee}"
-
-
-## Customer Wallet Info (UTXO)
-
-customerAddr="${options.customer.address}"
-customerOutput="3000000"
-
-
-cardano-cli transaction build-raw --fee "${sendFee}" --tx-in ${options.sendData.mintTXHash.txixhash} --tx-out ${options.customer.address}+3000000+"1 ${options.policy.id.trim()}.${options.request.metadata.asset_id}" --tx-out ${options.mintWalletInfo.address}+${minterOutput} --out-file ./transactions/raw/${options.request.metadata.asset_id}-send.raw`
-                exec(cmd , (err, stdout, stderr) => {
-                    if (err) {
-                        reject(err)
-                        return;
-
-                    }
-                    console.log(cmd)
-                        resolve(stdout)
-                })
-
-            })
-
-            return promise
-
-    }
-
-    finalizeSendTX(options) {
-        let promise = new Promise((resolve, reject) => {
-            let config = options.request.config
-            let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
-            let magic = network == '--testnet-magic' ? '1097911063' : ''
-            let cmd = `cardano-cli transaction sign --signing-key-file mintWallet/${options.mintWalletInfo.name}/payment.skey ${network} ${magic} --tx-body-file ./transactions/raw/${options.request.metadata.asset_id}-send.raw --out-file ./transactions/signed/${options.request.metadata.asset_id}-send.signed`
-            console.log(cmd)
-            exec(cmd , (err, stdout, stderr) => {
-                if (err) {
-                    console.log(err)
-                    reject(err)
-                    return;
-                }
-                // console.log(options)
-                this.submitTransaction(options)
-                .then((data) => {
-                    resolve(stdout)
-                })
-                .catch(e => reject(e))
-                return
-
-            })
-            
-        })
-        return promise
-
-    }
-
-    submitSendTX(options) {
-        let promise = new Promise((resolve, reject) => {
-            let config = options.request.config
-            let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
-            let magic = network == '--testnet-magic' ? '1097911063' : ''
-            let cmd = `cardano-cli transaction submit --tx-file ./transactions/signed/${options.request.metadata.asset_id}send.signed ${network} ${magic}`
-            // console.log(cmd)
-            exec(cmd , (err, stdout, stderr) => {
-                if (err) {
-                    console.log(err)
-                    reject(err)
-                    return;
-                }
-                resolve(stdout)
-                return
-
-            })
-            
-        })
-        return promise
-
-    }
-
     sendProtocol(options) {
         let promise = new Promise((resolve, reject) => {
 
             let config = options.config 
             let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
-            let magic = network == '--testnet-magic' ? '1097911063' : ''
-            const params = spawn('cardano-cli', ['query', 'protocol-parameters', network])
+            let magic = network == '--testnet-magic' ? '1097911063' : null // changing from '' to nil
+            const params = spawn('cardano-cli', ['query', 'protocol-parameters', network, magic])
 
             params.stdout.on('data', (data) => {
                 console.log("ProtocolData: ", data.toString())
@@ -620,8 +412,8 @@ cardano-cli transaction build-raw --fee "${sendFee}" --tx-in ${options.sendData.
         console.log('IN SEND FEE')
         let promise = new Promise((resolve, reject) => {
             let config = options.config
-            let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
-            let magic = network == '--testnet-magic' ? '1097911063' : ''
+            let network = config == 'testnet' ? '--testnet-magic 1097911063' : '--mainnet'
+            // let magic = network == '--testnet-magic' ? '1097911063' : ''
             let cmd = `cardano-cli transaction calculate-min-fee --tx-body-file ./transactions/raw/${options.mint.tokenName}send.raw --tx-in-count 1 --tx-out-count 2 --witness-count 1 --protocol-params-file=protocol.json ${network} | cut -d " " -f1`
             exec(cmd, (err, stdout, stderr) => {
                 if (err) {
@@ -645,8 +437,8 @@ cardano-cli transaction build-raw --fee "${sendFee}" --tx-in ${options.sendData.
         console.log('IN SIGN SEND')
         let promise = new Promise((resolve, reject) => {
             let config = options.config
-            let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
-            let magic = network == '--testnet-magic' ? '1097911063' : ''
+            let network = config == 'testnet' ? '--testnet-magic 1097911063' : '--mainnet'
+            // let magic = network == '--testnet-magic' ? '1097911063' : ''
             let cmd = `cardano-cli transaction sign --signing-key-file mintWallet/${options.walletName}/payment.skey ${network}  --tx-body-file ./transactions/raw/${options.mint.tokenName}send.raw --out-file ./transactions/signed/${options.mint.tokenName}send.signed`
             console.log(cmd)
             exec(cmd , (err, stdout, stderr) => {
@@ -667,8 +459,8 @@ cardano-cli transaction build-raw --fee "${sendFee}" --tx-in ${options.sendData.
     submitSend(options) {
         let promise = new Promise((resolve, reject) => {
             let config = options.config
-            let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
-            let magic = network == '--testnet-magic' ? '1097911063' : ''
+            let network = config == 'testnet' ? '--testnet-magic 1097911063' : '--mainnet'
+            // let magic = network == '--testnet-magic' ? '1097911063' : ''
             let cmd = `cardano-cli transaction submit --tx-file ./transactions/signed/${options.mint.tokenName}send.signed ${network}`
             exec(cmd , (err, stdout, stderr) => {
                 if (err) {
