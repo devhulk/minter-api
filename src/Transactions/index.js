@@ -9,7 +9,7 @@ export default class Transactions {
 
     payments(options) {
         let promise = new Promise((resolve, reject) => {
-            this.getWalletUTXOS(options)
+            this.getWalletTXS(options)
             .then((txs) => {
                 options.txs = txs
                 this.getPayments(options)
@@ -23,14 +23,14 @@ export default class Transactions {
         return promise
     }
 
-    minted(options) {
+    utxos(options) {
         let promise = new Promise((resolve, reject) => {
-            this.getWalletUTXOS(options)
+            this.getWalletTXS(options)
             .then((txs) => {
                 options.txs = txs
-                this.getMinted(options)
-                .then((mints) => {
-                    resolve(mints)
+                this.getAllUTXOS(options)
+                .then((utxos) => {
+                    resolve(utxos)
                 })
             })
             .catch(e => reject(e))
@@ -39,7 +39,7 @@ export default class Transactions {
         return promise
     }
 
-    getMinted(options) {
+    getAllUTXOS(options) {
             let utxos = options.txs
             // console.log("UTXOS: ", utxos)
             let txhashs = utxos.map(utxo => {
@@ -81,7 +81,7 @@ export default class Transactions {
               return mintAddressTransactions
     }
 
-    getWalletUTXOS(options) {
+    getWalletTXS(options) {
         let promise = new Promise((resolve, reject) => {
 
             let blockfrostKey = options.config == "testnet" ? process.env.BLOCKFROST_TESTNET : process.env.BLOCKFROST_MAINNET

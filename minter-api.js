@@ -54,13 +54,13 @@ app.post('/v1/cardano/address/payments', function (req, res) {
 
 })
 
-app.post('/v1/cardano/address/mints', function (req, res) {
+app.post('/v1/cardano/address/utxos', function (req, res) {
     let body = req.body
     let walletTransactions = new Transactions()
 
-    walletTransactions.minted(body)
-    .then((mints) => {
-        res.json(mints)
+    walletTransactions.utxos(body)
+    .then((utxos) => {
+        res.json(utxos)
     })
     .catch(e => res.send(e))
 
