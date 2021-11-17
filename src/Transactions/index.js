@@ -209,8 +209,7 @@ export default class Transactions {
                 resolve(response.data)
             })
             .catch(function (error) {
-                reject(console.log(error.response))
-                throw Error(error.response)
+                reject(error.response)
               });
         })
         return promise
