@@ -201,18 +201,18 @@ export default class Transactions {
 
     getWalletUTXOS(options) {
 
-        let blockfrostKey = options.config == "testnet" ? process.env.BLOCKFROST_TESTNET : process.env.BLOCKFROST_MAINNET
-        
         let promise = new Promise((resolve, reject) => {
-            axios.get(`https://cardano-${options.config}.blockfrost.io/api/v0/txs/${options.mintWalletTX}/utxos?order=desc`, {headers: {'project_id': `${blockfrostKey}`}})
+
+            let blockfrostKey = options.config == "testnet" ? process.env.BLOCKFROST_TESTNET : process.env.BLOCKFROST_MAINNET
+            axios.get(`https://cardano-${options.config}.blockfrost.io/api/v0/addresses/${options.mintWalletAddr}/utxos?order=desc`, {headers: {'project_id': `${blockfrostKey}`}})
             .then((response) => {
+                // console.log(response.data[0].amount)
                 resolve(response.data)
             })
-            .catch(function (error) {
-                console.log(error.response)
-                reject(error.response)
-              });
+            .catch(e => reject(e.toJSON()))
+
         })
+
         return promise
     }
 
