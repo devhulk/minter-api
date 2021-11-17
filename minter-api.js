@@ -60,7 +60,7 @@ app.post('/v1/cardano/address/utxos', function (req, res) {
 
     walletTransactions.utxos(body)
     .then((utxos) => {
-        res.json(utxos)
+        res.json(JSON.stringify(utxos))
     })
     .catch(e => res.send(e))
 
