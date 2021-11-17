@@ -214,7 +214,7 @@ export default class Transactions {
                 delete unspentOutput.output_index
                 delete unspentOutput.data_hash
                 let amount = output.amount[0]
-                let customerPayment = {address: input.address , ada: amount.quantity / 1000000, amount: amount.quantity, output: response.data.outputs[0], unspentOutput: unspentOutput.amount.quantity }
+                let customerPayment = {address: input.address , ada: amount.quantity / 1000000, amount: amount.quantity, output: response.data.outputs[0], unspentOutput: unspentOutput["amount"] }
                 // console.log(customerPayment)
                 options.utxos = response.data
                 resolve(customerPayment)
