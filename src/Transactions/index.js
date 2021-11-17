@@ -118,8 +118,6 @@ export default class Transactions {
             let dropMonitor = {} 
 
             utxos.map((utxo) => {
-                console.log(utxo)
-                throw Error()
                 if (utxo.amount.length >= 2) {
                     let address = utxo.address
                     let customerAddress = utxo.inputAddress
@@ -217,6 +215,8 @@ export default class Transactions {
         let promise = new Promise((resolve, reject) => {
             axios.get(`https://cardano-${options.config}.blockfrost.io/api/v0/txs/${options.mintWalletTX}/utxos?order=desc`, {headers: {'project_id': `${blockfrostKey}`}})
             .then((response) => {
+                console.log(response.data)
+                throw Error()
                 let input = response.data.inputs[0]
                 let output = response.data.outputs[0]
                 let amount = output.amount[0]
