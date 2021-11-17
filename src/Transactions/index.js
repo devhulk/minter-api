@@ -50,6 +50,7 @@ export default class Transactions {
                     return this.getTXData(options).then((results) => {
                         results.output.txHash = utxo["tx_hash"]
                         results.output.inputAddress = results.address
+                        results.output.unspentOutput = results.unspentOutput
                         return results.output
                     })
             })
