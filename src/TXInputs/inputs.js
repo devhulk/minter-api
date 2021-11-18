@@ -32,7 +32,7 @@ export default class WalletTXInputs {
                 return tokens
             })
 
-            return amounts
+            return amounts[0]
     }
     getFirstInputAmount() {
         let input = new WalletTXInput(this.txinputs[0])
