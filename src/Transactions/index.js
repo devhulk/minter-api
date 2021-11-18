@@ -267,7 +267,7 @@ export default class Transactions {
             axios.get(`https://cardano-${options.config}.blockfrost.io/api/v0/txs/${options.mintWalletTX}/utxos?order=desc`, {headers: {'project_id': `${blockfrostKey}`}})
             .then((response) => {
                 console.log(options)
-                walletUTXO = response.data 
+                let walletUTXO = response.data 
                 let txOutputs = new TXOutputs(walletUTXO.outputs)
                 let txInputs = new TXInputs(walletUTXO.inputs)
                 let input = txInputs.get()
