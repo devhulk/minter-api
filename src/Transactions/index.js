@@ -276,9 +276,9 @@ export default class Transactions {
                 console.log(input.address)
                 console.log(output.address)
                 if ( input.address == options.mintWalletAddr && output.address == input.address) {
-                    walletUTXO.sent = true
-                } else if (input.address == options.mintWalletAddr && output.address != input.address) {
                     walletUTXO.mint = true
+                } else if (input.address == options.mintWalletAddr && output.address != input.address) {
+                    walletUTXO.sent = true
                 }
                 console.log(walletUTXO)
                 // console.log(txOutputs.get())
