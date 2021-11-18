@@ -211,7 +211,7 @@ export default class Transactions {
                 let formattedUTXOS = utxos.map((utxo) => {
                     utxo.txix = `${utxo.tx_hash}#${utxo.tx_index}`
                     let amount = utxo.amount[0]
-                    utxo.amount = amount.quantity
+                    utxo.unspent = amount.quantity
                     delete utxo.block
                     delete utxo.data_hash
                     delete utxo.tx_hash
