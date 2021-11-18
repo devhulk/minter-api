@@ -272,7 +272,8 @@ export default class Transactions {
                 let txInputs = new TXInputs(walletUTXO.inputs)
                 let input = txInputs.get()
                 let output = txOutputs.getFirst()
-                console.log(input)
+                console.log(output)
+                console.log(input.address)
                 console.log(output.address)
                 if ( input.address == options.mintWalletAddr && output.address == input.address) {
                     walletUTXO.sent = true
