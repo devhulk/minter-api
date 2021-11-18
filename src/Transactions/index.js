@@ -271,28 +271,28 @@ export default class Transactions {
                 // console.log(walletUTXO)
                 let txOutputs = new TXOutputs(walletUTXO.outputs)
                 let txInputs = new TXInputs(walletUTXO.inputs)
-                let input = txInputs.getFirst()
-                let output = txOutputs.getFirst()
+                let firstInput = txInputs.getFirst()
+                let firstOutput = txOutputs.getFirst()
                 let unspent = txOutputs.getSecond() 
                 walletUTXO.unspent = unspent
                 // console.log(output)
                 // console.log(input.address)
                 // console.log(output.address)
-                if ( input.address == options.mintWalletAddr && output.address == input.address) {
+                if ( firstInput.address == options.mintWalletAddr && firstOutput.address == firstInput.address) {
                     walletUTXO.mint = true
                     console.log(walletUTXO)
-                } else if (input.address == options.mintWalletAddr && unspent.address != input.address) {
+                } else if (firstInput.address == options.mintWalletAddr && unspent.address != firstInput.address) {
                     walletUTXO.sent = true
                     console.log(walletUTXO)
                 }
                 // console.log(txOutputs.get())
                 // console.log(txInputs.get())
                 throw Error()
-                // let input = response.data.inputs[0]
-                // let output = response.data.outputs[0]
-                // let unspent = response.data.outputs[1]
-                // let unspentAmount = unspent["amount"]
-                // let unspentOutput = unspentAmount[0]
+                let input = response.data.inputs[0]
+                let output = response.data.outputs[0]
+                let unspent = response.data.outputs[1]
+                let unspentAmount = unspent["amount"]
+                let unspentOutput = unspentAmount[0]
                 delete unspentOutput.address
                 delete unspentOutput.output_index
                 delete unspentOutput.data_hash
