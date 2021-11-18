@@ -1,6 +1,7 @@
 require('dotenv').config()
 import axios from 'axios'
 import Repo from '../Repo'
+import TXInputs from '../TXInputs/inputs'
 import TXOutputs from '../TXOutputs/outputs'
 
 
@@ -267,7 +268,9 @@ export default class Transactions {
             .then((response) => {
                 console.log(response.data)
                 let txOutputs = new TXOutputs(response.data.outputs)
+                let txInputs = new TXInputs(response.data.inputs)
                 console.log(txOutputs.get())
+                console.log(txInputs.get())
                 throw Error()
                 let input = response.data.inputs[0]
                 let output = response.data.outputs[0]
