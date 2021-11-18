@@ -266,12 +266,14 @@ export default class Transactions {
         let promise = new Promise((resolve, reject) => {
             axios.get(`https://cardano-${options.config}.blockfrost.io/api/v0/txs/${options.mintWalletTX}/utxos?order=desc`, {headers: {'project_id': `${blockfrostKey}`}})
             .then((response) => {
-                console.log(options)
+                // console.log(options)
                 let walletUTXO = response.data 
                 let txOutputs = new TXOutputs(walletUTXO.outputs)
                 let txInputs = new TXInputs(walletUTXO.inputs)
                 let input = txInputs.get()
                 let output = txOutputs.getFirst()
+                console.log(input.address)
+                console.log(output.address)
                 if ( input.address == options.mintWalletAddr && output.address == input.address) {
                     walletUTXO.sent = true
                 } else if (input.address == options.mintWalletAddr && output.address != input.address) {
