@@ -267,7 +267,7 @@ export default class Transactions {
             .then((response) => {
                 console.log(response.data)
                 let txOutputs = new TXOutputs(response.data.outputs)
-                console.log(txOutputs)
+                console.log(txOutputs.get())
                 throw Error()
                 let input = response.data.inputs[0]
                 let output = response.data.outputs[0]
