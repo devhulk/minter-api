@@ -23,12 +23,11 @@ export default class WalletTXInputs {
 
     getInputAmounts() {
         let tokenObj = {}
-        let amounts = this.txinputs.forEach((input) => {
+        let amounts = this.txinputs.map((input) => {
                 let txinput = new WalletTXInput(input)
-                // console.log(txinput.amount)
+                console.log(txinput.amount)
                 return txinput.amount
             })
-        console.log(amounts)
         let tokens = amounts.map((token) => {
             console.log(token)
             tokenObj[token.unit] = token.quantity
