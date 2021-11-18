@@ -132,7 +132,7 @@ export default class Repo {
         // mintData["_id"] = mintData.txHash
         let promise = new Promise((resolve, reject) => {
             if (mintData.length == 0) {
-                resolve({status: "No mints in wallet"})
+                console.log({status: "No mints in wallet"})
             } else {
                 const client = new MongoClient(process.env.MONGO_URL)
                 client.connect((err, client) => {
