@@ -25,7 +25,6 @@ export default class Transactions {
     utxos(options) {
         let repo = new Repo()
         let runResults = {}
-        let utxos = []
         let promise = new Promise((resolve, reject) => {
             this.getWalletTXS(options)
             .then((txs) => {
@@ -52,7 +51,7 @@ export default class Transactions {
                         repo.updateSent(utxos.payments)
                         .then((results) => {
                             runResults.sentResults = results
-                            resolve(runResults)
+                            resolve(utxos)
                         })
                         .catch((e) => reject(e))
                     })
