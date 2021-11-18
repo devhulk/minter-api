@@ -282,6 +282,8 @@ export default class Transactions {
                     walletUTXO.mint = true
                 } else if (firstInput.address == options.mintWalletAddr && unspent.address != firstInput.address) {
                     walletUTXO.sent = true
+                } else {
+                    walletUTXO.payment = true 
                 }
                     console.log(walletUTXO)
                 // console.log(txOutputs.get())
