@@ -216,6 +216,7 @@ export default class Transactions {
                     delete utxo.data_hash
                     delete utxo.tx_hash
                     delete utxo.tx_index
+                    delete utxo.output_index
                     return utxo
                 })
                 resolve(formattedUTXOS)
