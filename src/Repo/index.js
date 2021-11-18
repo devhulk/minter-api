@@ -131,19 +131,24 @@ export default class Repo {
         console.log(mintData)
         // mintData["_id"] = mintData.txHash
         let promise = new Promise((resolve, reject) => {
-            const client = new MongoClient(process.env.MONGO_URL)
-            client.connect((err, client) => {
-                if (err) reject(err); 
-        
-                const db = client.db('puglies')
-                const collection = db.collection(process.env.MINTED_COLLECTION)
-                collection.insertMany(mintData, { ordered: false }, (err, result) =>  {
-                    if (err) reject(err)
+            if (mintData == []) {
+                resolve({status: "No mints in wallet"})
+            } else {
+                const client = new MongoClient(process.env.MONGO_URL)
+                client.connect((err, client) => {
+                    if (err) reject(err); 
+            
+                    const db = client.db('puglies')
+                    const collection = db.collection(process.env.MINTED_COLLECTION)
+                    collection.insertMany(mintData, { ordered: false }, (err, result) =>  {
+                        if (err) reject(err)
 
-                    client.close()
-                    resolve(result)
+                        client.close()
+                        resolve(result)
+                    })
                 })
-            })
+
+            }
         })
 
         return promise
@@ -153,40 +158,50 @@ export default class Repo {
     updatePayments(payments) {
         console.log("In update payments NFT function")
         let promise = new Promise((resolve, reject) => {
-            const client = new MongoClient(process.env.MONGO_URL)
-            client.connect((err, client) => {
-                if (err) reject(err); 
-        
-                const db = client.db('puglies')
-                const collection = db.collection(process.env.PAYMENTS_COLLECTION)
-                collection.insertMany(payments, { ordered: false }, (err, result) =>  {
-                    if (err) reject(err)
+            if (payments == []) {
+                resolve({status: "No payments in wallet"})
+            } else {
+                const client = new MongoClient(process.env.MONGO_URL)
+                client.connect((err, client) => {
+                    if (err) reject(err); 
+            
+                    const db = client.db('puglies')
+                    const collection = db.collection(process.env.PAYMENTS_COLLECTION)
+                    collection.insertMany(payments, { ordered: false }, (err, result) =>  {
+                        if (err) reject(err)
 
-                    client.close()
-                    resolve(result)
+                        client.close()
+                        resolve(result)
+                    })
                 })
-            })
+
+            }
         })
 
         return promise
 
     }
-    updateSent(payments) {
+    updateSent(sent) {
         console.log("In update sent NFT function")
         let promise = new Promise((resolve, reject) => {
-            const client = new MongoClient(process.env.MONGO_URL)
-            client.connect((err, client) => {
-                if (err) reject(err); 
-        
-                const db = client.db('puglies')
-                const collection = db.collection(process.env.SENT_COLLECTION)
-                collection.insertMany(payments, { ordered: false }, (err, result) =>  {
-                    if (err) reject(err)
+            if (sent == []) {
+                resolve({status: "No payments in wallet"})
+            } else {
+                const client = new MongoClient(process.env.MONGO_URL)
+                client.connect((err, client) => {
+                    if (err) reject(err); 
+            
+                    const db = client.db('puglies')
+                    const collection = db.collection(process.env.SENT_COLLECTION)
+                    collection.insertMany(sent, { ordered: false }, (err, result) =>  {
+                        if (err) reject(err)
 
-                    client.close()
-                    resolve(result)
+                        client.close()
+                        resolve(result)
+                    })
                 })
-            })
+
+            }
         })
 
         return promise
