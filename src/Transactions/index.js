@@ -271,15 +271,18 @@ export default class Transactions {
                 let txOutputs = new TXOutputs(walletUTXO.outputs)
                 let txInputs = new TXInputs(walletUTXO.inputs)
                 let input = txInputs.get()
-                if ( input.address == options.mintWalletAddr) {
+                let outputs = txOutputs.get()
+                if ( input.address == options.mintWalletAddr && outputs[0].address == input.address) {
+                    walletUTXO.sent = true
+                } else if (input.address == options.mintWalletAddr && outputs[0].address != input.address) {
                     walletUTXO.mint = true
                 }
                 console.log(walletUTXO)
-                console.log(txOutputs.get())
-                console.log(txInputs.get())
+                // console.log(txOutputs.get())
+                // console.log(txInputs.get())
                 throw Error()
                 // let input = response.data.inputs[0]
-                let output = response.data.outputs[0]
+                // let output = response.data.outputs[0]
                 let unspent = response.data.outputs[1]
                 let unspentAmount = unspent["amount"]
                 let unspentOutput = unspentAmount[0]
