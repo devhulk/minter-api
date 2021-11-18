@@ -141,7 +141,7 @@ export default class Repo {
                     const db = client.db('puglies')
                     const collection = db.collection(process.env.MINTED_COLLECTION)
                     collection.insertMany(mintData, { ordered: false }, (err, result) =>  {
-                        if (err) reject(err)
+                        if (err) console.log(err)
 
                         client.close()
                         resolve(result)
