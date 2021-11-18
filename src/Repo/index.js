@@ -127,8 +127,6 @@ export default class Repo {
     }
 
     updateMintedNFTS(mintData) {
-        console.log("In update minted NFT function")
-        console.log(mintData)
         // mintData["_id"] = mintData.txHash
         let promise = new Promise((resolve, reject) => {
             if (mintData.length == 0) {
@@ -158,7 +156,7 @@ export default class Repo {
     updatePayments(payments) {
         console.log("In update payments NFT function")
         let promise = new Promise((resolve, reject) => {
-            if (payments == []) {
+            if (payments.length == 0) {
                 resolve({status: "No payments in wallet"})
             } else {
                 const client = new MongoClient(process.env.MONGO_URL)
@@ -184,7 +182,7 @@ export default class Repo {
     updateSent(sent) {
         console.log("In update sent NFT function")
         let promise = new Promise((resolve, reject) => {
-            if (sent == []) {
+            if (sent.length == 0) {
                 resolve({status: "No payments in wallet"})
             } else {
                 const client = new MongoClient(process.env.MONGO_URL)
