@@ -19,4 +19,10 @@ export default class TXInputs {
         }
 
     }
+
+    getFirst() {
+        let inputs = this.get()
+
+        return inputs[0]
+    }
 }
