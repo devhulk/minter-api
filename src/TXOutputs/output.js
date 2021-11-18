@@ -10,8 +10,8 @@ export default class TXOutput {
         return {
             address: this.address,
             amount: this.amount,
-            outputIndex = this.outpuIndex,
-            dataHash = this.dataHash
+            outputIndex: this.outpuIndex,
+            dataHash: this.dataHash
         }
     }
 }

@@ -11,9 +11,9 @@ export default class TXInput {
         return {
             address: this.address,
             amount: this.amount,
-            outputIndex = this.outpuIndex,
-            collateral = this.collateral,
-            dataHash = this.dataHash
+            outputIndex:  this.outpuIndex,
+            collateral:  this.collateral,
+            dataHash:  this.dataHash
         }
     }
 }
