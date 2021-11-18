@@ -34,7 +34,6 @@ export default class Transactions {
                 .then((utxos) => {
                     this.parseUTXOS(utxos)
                     .then((utxos) => {
-                        console.log(utxos)
                         repo.updateMintedNFTS(utxos.minted)
                         .then((results) => {
                             runResults.mintResults = results
