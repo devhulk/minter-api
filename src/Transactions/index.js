@@ -1,6 +1,7 @@
 require('dotenv').config()
 import axios from 'axios'
 import Repo from '../Repo'
+import TXOutputs from '../TXOutputs/outputs'
 
 
 export default class Transactions {
@@ -265,6 +266,8 @@ export default class Transactions {
             axios.get(`https://cardano-${options.config}.blockfrost.io/api/v0/txs/${options.mintWalletTX}/utxos?order=desc`, {headers: {'project_id': `${blockfrostKey}`}})
             .then((response) => {
                 console.log(response.data)
+                let txOutputs = new TXOutputs(response.data.outputs)
+                console.log(txOutputs)
                 throw Error()
                 let input = response.data.inputs[0]
                 let output = response.data.outputs[0]
