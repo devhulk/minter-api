@@ -13,7 +13,6 @@ export default class TXInputs {
             })
 
             return inputs
-
     }
 
     getFirst() {

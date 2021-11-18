@@ -277,9 +277,11 @@ export default class Transactions {
                 walletUTXO.input = firstInput
                 walletUTXO.output = firstOutput
                 walletUTXO.unspent = walletUnspent
+                delete walletUTXO.inputs 
+                delete walletUTXO.outputs
                 // console.log(output)
-                console.log(firstInput.address)
-                console.log(firstOutput.address)
+                // console.log(firstInput.address)
+                // console.log(firstOutput.address)
                 if ( firstInput.address == options.mintWalletAddr && firstOutput.address == firstInput.address) {
                     walletUTXO.mint = true
                 } else if (firstInput.address == options.mintWalletAddr && unspent.address != firstInput.address) {
@@ -287,7 +289,7 @@ export default class Transactions {
                 } else {
                     walletUTXO.payment = true 
                 }
-                    console.log(walletUTXO)
+                console.log(walletUTXO)
                 // console.log(txOutputs.get())
                 // console.log(txInputs.get())
                 throw Error()
