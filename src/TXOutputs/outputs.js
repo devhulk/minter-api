@@ -20,4 +20,11 @@ export default class TXOutputs {
 
         return first
     }
+
+    getSecond() {
+        let outputs = this.get()
+        let second = outputs[1]
+
+        return second
+    }
 }
