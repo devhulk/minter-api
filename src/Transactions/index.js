@@ -277,8 +277,6 @@ export default class Transactions {
                 walletUTXO.input = firstInput
                 walletUTXO.output = firstOutput
                 walletUTXO.unspent = walletUnspent
-                delete walletUTXO.inputs 
-                delete walletUTXO.outputs
                 // console.log(output)
                 // console.log(firstInput.address)
                 // console.log(firstOutput.address)
@@ -289,6 +287,8 @@ export default class Transactions {
                 } else {
                     walletUTXO.payment = true 
                 }
+                delete walletUTXO.inputs 
+                delete walletUTXO.outputs
                 console.log(walletUTXO)
                 // console.log(txOutputs.get())
                 // console.log(txInputs.get())
