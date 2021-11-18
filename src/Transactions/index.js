@@ -25,6 +25,7 @@ export default class Transactions {
     utxos(options) {
         let repo = new Repo()
         let runResults = {}
+        let utxoList = []
         let promise = new Promise((resolve, reject) => {
             this.getWalletTXS(options)
             .then((txs) => {
@@ -33,25 +34,26 @@ export default class Transactions {
                 .then((utxos) => {
                     this.parseUTXOS(utxos)
                     .then((utxos) => {
+                        utxoList = utxos
                         repo.updateMintedNFTS(utxos.minted)
                         .then((results) => {
                             runResults.mintResults = results
                         })
                     })
                     .catch((e) => reject(e))
-                    .then((utxos) => {
-                        repo.updatePayments(utxos.payments)
+                    .then(() => {
+                        repo.updatePayments(utxoList.payments)
                         .then((results) => {
                             runResults.paymentsResults = results
                         })
                         .catch((e) => reject(e))
                     })
                     .catch((e) => reject(e))
-                    .then((utxos) => {
-                        repo.updateSent(utxos.payments)
+                    .then(() => {
+                        repo.updateSent(utxoList.payments)
                         .then((results) => {
                             runResults.sentResults = results
-                            resolve(utxos)
+                            resolve(utxoList)
                         })
                         .catch((e) => reject(e))
                     })
