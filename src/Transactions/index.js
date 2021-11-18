@@ -263,7 +263,6 @@ export default class Transactions {
         let promise = new Promise((resolve, reject) => {
             axios.get(`https://cardano-${options.config}.blockfrost.io/api/v0/txs/${options.mintWalletTX}/utxos?order=desc`, {headers: {'project_id': `${blockfrostKey}`}})
             .then((response) => {
-                console.log(JSON.stringify(response.data))
                 let input = response.data.inputs[0]
                 let output = response.data.outputs[0]
                 let unspent = response.data.outputs[1]
