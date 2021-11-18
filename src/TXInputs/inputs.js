@@ -22,17 +22,17 @@ export default class WalletTXInputs {
     }
 
     getInputAmounts() {
+        let tokenObj = {}
         let amounts = this.txinputs.map((input) => {
                 let txinput = new WalletTXInput(input)
                 let tokens = txinput.amount.map((token) => {
-                    let tokenObj = {}
                     tokenObj[token.unit] = token.quantity
                     return tokenObj
                 })
                 return tokens
             })
 
-            return amounts[0]
+            return amounts
     }
     getFirstInputAmount() {
         let input = new WalletTXInput(this.txinputs[0])
