@@ -25,6 +25,7 @@ export default class Transactions {
     utxos(options) {
         let repo = new Repo()
         let runResults = {}
+        let utxos = []
         let promise = new Promise((resolve, reject) => {
             this.getWalletTXS(options)
             .then((txs) => {
@@ -33,6 +34,7 @@ export default class Transactions {
                 .then((utxos) => {
                     this.parseUTXOS(utxos)
                     .then((utxos) => {
+                        console.log(utxos)
                         repo.updateMintedNFTS(utxos.minted)
                         .then((results) => {
                             runResults.mintResults = results
