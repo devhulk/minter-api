@@ -33,7 +33,7 @@ export default class WalletTXInputs {
     getPayment() {
         let input = new WalletTXInput(this.txinputs[0])
 
-        let payment = input.amount[0]
+        let payment = input.amount
         
         return payment
     }
