@@ -284,8 +284,10 @@ export default class Transactions {
                 // console.log(firstOutput.address)
                 if ( firstInput.address == options.mintWalletAddr && firstOutput.address == firstInput.address) {
                     walletUTXO.mint = true
+                    console.log(walletUTXO)
                 } else if (firstInput.address == options.mintWalletAddr && unspent.address != firstInput.address) {
                     walletUTXO.sent = true
+                    console.log(walletUTXO)
                 } else {
                     walletUTXO.payment = true 
                     console.log(walletUTXO)
