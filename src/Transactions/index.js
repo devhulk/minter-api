@@ -207,7 +207,18 @@ export default class Transactions {
             axios.get(`https://cardano-${options.config}.blockfrost.io/api/v0/addresses/${options.mintWalletAddr}/utxos?order=desc`, {headers: {'project_id': `${blockfrostKey}`}})
             .then((response) => {
                 // console.log(response.data[0].amount)
-                resolve(response.data)
+                let utxos = response.data
+                let formattedUTXOS = utxos.map((utxo) => {
+                    utxo.txix = `${utxo.tx_hash}#${utxo.tx_index}`
+                    let amount = utxo.amount[0]
+                    utxo.amount = amount.quantity
+                    delete utxo.block
+                    delete utxo.data_hash
+                    delete utxo.tx_hash
+                    delete utxo.tx_index
+                    return utxo
+                })
+                resolve(formattedUTXOS)
             })
             .catch(e => reject(e.toJSON()))
 
