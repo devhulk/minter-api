@@ -19,6 +19,6 @@ export default class TXInputs {
     getFirst() {
         let inputs = this.txinputs 
 
-        return inputs[0]
+        return new TXInput(inputs[0])
     }
 }
