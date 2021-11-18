@@ -2,7 +2,6 @@ require('dotenv').config()
 import axios from 'axios'
 import Repo from '../Repo'
 
-let repo = new Repo()
 
 export default class Transactions {
     constructor() {}
@@ -24,6 +23,8 @@ export default class Transactions {
     }
 
     utxos(options) {
+        let repo = new Repo()
+        let runResults = {}
         let promise = new Promise((resolve, reject) => {
             this.getWalletTXS(options)
             .then((txs) => {
@@ -32,14 +33,46 @@ export default class Transactions {
                 .then((utxos) => {
                     this.parseUTXOS(utxos)
                     .then((utxos) => {
-                        resolve(utxos)
+                        repo.updateMintedNFTS(utxos.minted)
+                        .then((results) => {
+                            runResults.mintResults = results
+                        })
                     })
+                    .catch((e) => reject(e))
+                    .then((utxos) => {
+                        repo.updatePayments(utxos.payments)
+                        .then((results) => {
+                            runResults.paymentsResults = results
+                        })
+                        .catch((e) => reject(e))
+                    })
+                    .catch((e) => reject(e))
+                    .then((utxos) => {
+                        repo.updateSent(utxos.payments)
+                        .then((results) => {
+                            runResults.sentResults = results
+                            resolve(runResults)
+                        })
+                        .catch((e) => reject(e))
+                    })
+                    .catch(e => reject(e))
                 })
+                .catch(e => reject(e))
             })
             .catch(e => reject(e))
 
         })
         return promise
+    }
+
+    mongoUpdates(utxos) {
+
+        // let mintResults = repo.updateMintedNFTS(utxos.minted)
+        //                 .then((results) => {
+        //                     runResults.mintResults = results
+        //                 })
+
+        // return Promise.all()
     }
 
     getAllUTXOS(options) {
@@ -100,7 +133,6 @@ export default class Transactions {
             let sent = []
             let minted = []
             let paymentsReceived = []
-            let validUTXOs = []
 
             let dropMonitor = {} 
 
@@ -150,12 +182,7 @@ export default class Transactions {
                         paymentsReceived.push(validPayment)
                         return validPayment
 
-                    } else {
-                        let invalidPayment = {txHash, address, customerAddress, status: "Payment below 20ADA", unspent}
-                        invalidPayment["_id"] = txHash
-                        validUTXOs.push(invalidPayment) 
-                        return invalidPayment 
-                    }
+                    }                 
                 } 
             })
             dropMonitor.payments = paymentsReceived 

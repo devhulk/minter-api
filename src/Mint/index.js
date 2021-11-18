@@ -1,5 +1,6 @@
 const { spawn, exec } = require('child_process');
 const fs = require('fs');
+import { Transaction } from 'mongodb';
 import Metadata from '../Metadata'
 import Repo from '../Repo';
 
@@ -133,31 +134,37 @@ export default class Minter {
     getMintWalletHash(options) {
         let promise = new Promise((resolve, reject) => {
 
-            let config = options.config
-            let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
-            let magic = network == '--testnet-magic' ? '1097911063' : ''
-            let validTX = {}
-            exec(`cardano-cli query utxo --address $(cat mintWallet/${options.walletName}/payment.addr) ${network} ${magic} --out-file=txixhash.json`, (err, stdout, stderr) => {
-                if (err) {
-                    reject(err)
-                    return;
-                }
-                let file = fs.readFileSync('txixhash.json')
-                let data = JSON.parse(file)
-                for (const utxo in data) {
-                    let info = data[utxo]
-                    if ((info.value.lovelace / 1000000) >= 10) {
-                        validTX[utxo] = info  
-                    }
-                }
-                let balanceObj = validTX[`${Object.keys(validTX)[0]}`]
-                let lovelace = balanceObj.value.lovelace
-                let ada = balanceObj.value.lovelace / 1000000
-                let returnObj = {txixhash: Object.keys(validTX)[0], balance: {lovelace, ada}, address: options.address }
+            // let config = options.config
+            // let network = config == 'testnet' ? '--testnet-magic' : '--mainnet'
+            // let magic = network == '--testnet-magic' ? '1097911063' : ''
+            // let validTX = {}
+            // exec(`cardano-cli query utxo --address $(cat mintWallet/${options.walletName}/payment.addr) ${network} ${magic} --out-file=txixhash.json`, (err, stdout, stderr) => {
+            //     if (err) {
+            //         reject(err)
+            //         return;
+            //     }
+            //     let file = fs.readFileSync('txixhash.json')
+            //     let data = JSON.parse(file)
+            //     for (const utxo in data) {
+            //         let info = data[utxo]
+            //         if ((info.value.lovelace / 1000000) >= 10) {
+            //             validTX[utxo] = info  
+            //         }
+            //     }
+            //     let balanceObj = validTX[`${Object.keys(validTX)[0]}`]
+                let lovelace = utxo.unspent 
+                let ada = lovelace / 1000000
+                let utxo = wallet.getWalletUTXOS(req)
+                .then((utxos) => {
+                    let utxo = utxos[Math.floor(Math.random() * utxos.length)];
+                    return utxo
+                })
+                //Object.keys(validTX)[0]
+                let returnObj = {txixhash: utxo.txix, balance: {lovelace, ada}, address: options.address }
 
                 resolve(returnObj)
                 return;
-            })
+            // })
         })
         return promise
 
@@ -355,6 +362,14 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
         console.log('IN SEND RAW TX')
 
         let promise = new Promise((resolve, reject) => {
+            // get valid utxo from wallet, update mint data 
+            let wallet = new Transaction() 
+            let utxo = wallet.getWalletUTXOS(req)
+            .then((utxos) => {
+                let utxo = utxos[Math.floor(Math.random() * utxos.length)];
+                return utxo
+            })
+
             let mint = req.mint
             let payment = req.payment
             let customerAddr = payment.customerAddress
@@ -369,8 +384,8 @@ cardano-cli transaction build-raw --fee $fee --tx-in $txix --tx-out $address+$ou
             let policyID = mint.policyID
 
             let mintAddr = mint.address
-            let minterFunds = mint.unspent.output
-            let txhash = mint.unspent.txix
+            let minterFunds = utxo.unspent //mint.unspent.output
+            let txhash = utxo.txix // mint.unspent.txix
             let minterFee = !req.minterFee ? 0 : req.minterFee
             let minterOutput = minterFunds - minterFee - 2000000
             let rawMintFile = `./transactions/raw/${tokenName}send.raw`
