@@ -21,7 +21,7 @@ export default class WalletTXInputs {
         return new WalletTXInput(inputs[0])
     }
 
-    getPayments() {
+    getInputAmounts() {
             let inputs = this.txinputs.map((input) => {
                 let txinput = new WalletTXInput(input)
                 let tokens = txinput.amount
@@ -30,10 +30,10 @@ export default class WalletTXInputs {
 
             return inputs
     }
-    getPayment() {
+    getFirstInputAmount() {
         let input = new WalletTXInput(this.txinputs[0])
 
-        let payment = input.amount
+        let payment = input.amount[0]
         
         return payment
     }

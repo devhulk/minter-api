@@ -277,8 +277,8 @@ export default class Transactions {
                 walletUTXO.payment = firstInput
                 walletUTXO.assetsReceived = firstOutput
                 walletUTXO.reciept = walletUnspent
-                let paymentAmount = txInputs.getPayment()
-                console.log(paymentAmount)
+                let inputAmounts = txInputs.getInputAmounts()
+                console.log(inputAmounts)
                 // console.log(output)
                 // console.log(firstInput.address)
                 // console.log(firstOutput.address)
