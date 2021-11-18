@@ -288,10 +288,10 @@ export default class Transactions {
                     walletUTXO.sent = true
                 } else {
                     walletUTXO.payment = true 
+                    console.log(walletUTXO)
                 }
                 delete walletUTXO.inputs 
                 delete walletUTXO.outputs
-                console.log(walletUTXO)
                 // console.log(txOutputs.get())
                 // console.log(txInputs.get())
                 throw Error()
