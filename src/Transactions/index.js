@@ -268,6 +268,7 @@ export default class Transactions {
             .then((response) => {
                 // console.log(options)
                 let walletUTXO = response.data 
+                console.log(walletUTXO)
                 let txOutputs = new TXOutputs(walletUTXO.outputs)
                 let txInputs = new TXInputs(walletUTXO.inputs)
                 let input = txInputs.get()
@@ -282,7 +283,7 @@ export default class Transactions {
                 } else if (input.address == options.mintWalletAddr && unspent.address != input.address) {
                     walletUTXO.sent = true
                 }
-                console.log(walletUTXO)
+                // console.log(walletUTXO)
                 // console.log(txOutputs.get())
                 // console.log(txInputs.get())
                 throw Error()
