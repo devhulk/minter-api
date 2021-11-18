@@ -273,8 +273,8 @@ export default class Transactions {
                 let txInputs = new TXInputs(walletUTXO.inputs)
                 let firstInput = txInputs.getFirst()
                 let firstOutput = txOutputs.getFirst()
-                let unspent = txOutputs.getSecond() 
-                walletUTXO.unspent = unspent
+                let walletUnspent = txOutputs.getSecond() 
+                walletUTXO.unspent = walletUnspent
                 // console.log(output)
                 // console.log(input.address)
                 // console.log(output.address)
