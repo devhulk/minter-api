@@ -278,7 +278,7 @@ export default class Transactions {
                 console.log(txOutputs.get())
                 console.log(txInputs.get())
                 throw Error()
-                let input = response.data.inputs[0]
+                // let input = response.data.inputs[0]
                 let output = response.data.outputs[0]
                 let unspent = response.data.outputs[1]
                 let unspentAmount = unspent["amount"]
