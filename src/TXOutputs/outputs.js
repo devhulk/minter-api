@@ -1,13 +1,13 @@
-import TXOutput from "./output"
+import WalletTXOutput from "./output"
 
-export default class TXOutputs {
+export default class WalletTXOutputs {
     constructor(txoutputs) {
         this.txoutputs = txoutputs
     }
 
     get() {
         let outputs = this.txoutputs.map((output) => {
-            let txoutput = new TXOutput(output)
+            let txoutput = new WalletTXOutput(output)
             return txoutput
         })
 

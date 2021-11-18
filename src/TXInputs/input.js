@@ -1,4 +1,4 @@
-export default class TXInput {
+export default class WalletTXInput {
     constructor(txinput) {
         this.address = txinput.address
         this.amount = txinput.amount

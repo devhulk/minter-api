@@ -1,4 +1,4 @@
-export default class TXOutput {
+export default class WalletTXOutput {
     constructor(txoutput) {
         this.address = txoutput.address
         this.amount = txoutput.amount

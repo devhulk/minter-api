@@ -1,14 +1,14 @@
 
-import TXInput from "./input"
+import WalletTXInput from "./input"
 
-export default class TXInputs {
+export default class WalletTXInputs {
     constructor(txinputs) {
         this.txinputs = txinputs
     }
 
     get() {
             let inputs = this.txinputs.map((input) => {
-                let txinput = new TXInput(input)
+                let txinput = new WalletTXInput(input)
                 return txinput
             })
 
@@ -18,6 +18,23 @@ export default class TXInputs {
     getFirst() {
         let inputs = this.txinputs 
 
-        return new TXInput(inputs[0])
+        return new WalletTXInput(inputs[0])
+    }
+
+    getPayments() {
+            let inputs = this.txinputs.map((input) => {
+                let txinput = new WalletTXInput(input)
+                let tokens = txinput.amount
+                return tokens
+            })
+
+            return inputs
+    }
+    getPayment() {
+        let input = new WalletTXInput(this.txinputs[0])
+
+        let payment = input.amount[0]
+        
+        return payment
     }
 }
