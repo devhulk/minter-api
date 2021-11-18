@@ -7,11 +7,16 @@ export default class TXInputs {
     }
 
     get() {
-        let inputs = this.txinputs.map((input) => {
-            let txinput = new TXInput(input)
-            return txinput
-        })
+        if (this.txinputs.length > 1) {
+            let inputs = this.txinputs.map((input) => {
+                let txinput = new TXInput(input)
+                return txinput
+            })
 
-        return inputs
+            return inputs
+        } else {
+            return this.txinputs[0]
+        }
+
     }
 }
