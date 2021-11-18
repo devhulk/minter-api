@@ -13,4 +13,11 @@ export default class TXOutputs {
 
         return outputs
     }
+
+    getFirst() {
+        let outputs = this.get()
+        let first = outputs[0]
+
+        return first
+    }
 }
