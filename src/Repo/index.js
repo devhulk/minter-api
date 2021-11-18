@@ -11,7 +11,7 @@ export default class Repo {
             if (err) throw err; 
     
             const db = client.db('puglies')
-            db.collection('seriesOne').aggregate([{ $sample: { size: 1 } }]).toArray()
+            db.collection(process.env.SERIES).aggregate([{ $sample: { size: 1 } }]).toArray()
             .then((nft) => {
                 nft.claim = request
                 this.insertClaimed(nft)

@@ -62,10 +62,6 @@ app.post('/v1/cardano/address/monitor', function (req, res) {
     .then((monitorResults) => {
         res.json(JSON.stringify(monitorResults))
     })
-    // walletTransactions.getWalletUTXOS(body)
-    // .then((utxos) => {
-    //     res.json(JSON.stringify(utxos))
-    // })
     .catch(e => res.send(e))
 
 })
