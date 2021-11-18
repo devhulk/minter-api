@@ -2,8 +2,8 @@ export default class TXOutput {
     constructor(txoutput) {
         this.address = txoutput.address
         this.amount = txoutput.amount
-        this.outpuIndex = txoutput.outputIndex
-        this.dataHash = txoutput.dataHash
+        this.outpuIndex = txoutput.output_index
+        this.dataHash = txoutput.data_hash
     }
 
     get() {

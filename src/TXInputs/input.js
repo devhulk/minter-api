@@ -2,9 +2,9 @@ export default class TXInput {
     constructor(txinput) {
         this.address = txinput.address
         this.amount = txinput.amount
-        this.outpuIndex = txinput.outputIndex
+        this.outpuIndex = txinput.output_index
         this.collateral = txinput.collateral
-        this.dataHash = txinput.dataHash
+        this.dataHash = txinput.data_hash
     }
 
     get() {
