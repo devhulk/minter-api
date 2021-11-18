@@ -15,7 +15,7 @@ export default class TXInputs {
 
             return inputs
         } else {
-            return new TXInput(this.txinputs[0]).get()
+            return new TXInput(this.txinputs[0])
         }
 
     }
