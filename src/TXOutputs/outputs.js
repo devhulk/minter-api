@@ -15,15 +15,15 @@ export default class WalletTXOutputs {
     }
 
     getFirst() {
-        let outputs = this.get()
-        let first = outputs[0]
+        let outputs = this.txoutputs
+        let first = new WalletTXOutput(outputs[0])
 
         return first
     }
 
     getSecond() {
-        let outputs = this.get()
-        let second = outputs[1]
+        let outputs = this.txoutputs
+        let second = new WalletTXOutput(outputs[1])
 
         return second
     }
