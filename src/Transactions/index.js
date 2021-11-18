@@ -161,7 +161,6 @@ export default class Transactions {
             dropMonitor.payments = paymentsReceived 
             dropMonitor.minted =  minted
             dropMonitor.sent =  sent
-            dropMonitor.validUTXOs = sent
 
             resolve(dropMonitor)
             return dropMonitor
