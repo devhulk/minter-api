@@ -3,3 +3,4 @@ node_modules
 policy/
 package-lock.json
 dist/
+metadata/
