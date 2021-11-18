@@ -212,6 +212,7 @@ export default class Transactions {
                     utxo.txix = `${utxo.tx_hash}#${utxo.tx_index}`
                     let amount = utxo.amount[0]
                     utxo.unspent = amount.quantity
+                    delete utxo.amount
                     delete utxo.block
                     delete utxo.data_hash
                     delete utxo.tx_hash
