@@ -25,7 +25,7 @@ export default class WalletTXInputs {
         let tokenObj = {}
         let amounts = this.txinputs.map((input) => {
                 let txinput = new WalletTXInput(input)
-                console.log(txinput.amount)
+                // console.log(txinput.amount)
                 return txinput.amount
             })
         let tokens = amounts.map((token) => {
