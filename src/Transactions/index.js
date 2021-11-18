@@ -274,9 +274,9 @@ export default class Transactions {
                 let output = txOutputs.getFirst()
                 let unspent = txOutputs.getSecond() 
                 walletUTXO.unspent = unspent
-                console.log(output)
-                console.log(input.address)
-                console.log(output.address)
+                // console.log(output)
+                // console.log(input.address)
+                // console.log(output.address)
                 if ( input.address == options.mintWalletAddr && output.address == input.address) {
                     walletUTXO.mint = true
                 } else if (input.address == options.mintWalletAddr && output.address != input.address) {
