@@ -4,3 +4,11 @@ policy/
 package-lock.json
 dist/
 metadata/
+mintWallet/
+transactions/
+protocol.json
+bash/
+metadata.json
+txixhash.json
+tx*
+
