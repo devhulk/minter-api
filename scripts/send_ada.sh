@@ -34,7 +34,7 @@ fee_array=($raw_fee)
 fee=${fee_array[0]}
 
 echo 'calculating amount to send...'
-amount_to_send=$(expr $utxo_balance - $fee - 1000000)
+amount_to_send=$(expr $utxo_balance - $fee)
 
 echo 'grabbing current slot...'
 slot=$(cardano-cli query tip --mainnet | jq '.slot')
@@ -43,10 +43,10 @@ echo 'adding 200 slots...'
 invalid_hereafter=$(expr $slot + 200)
 
 echo 'building finalized transaction...'
+
 cardano-cli transaction build-raw \
     --tx-in $txi \
     --tx-out $(cat payment_address)+$amount_to_send \
-    --tx-out $(cat wallet_address)+1000000 \
     --invalid-hereafter $invalid_hereafter \
     --fee $fee \
     --out-file tx.raw
